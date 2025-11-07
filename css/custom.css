@@ -1,0 +1,456 @@
+/* Fluid Theme - 卡片式美化定制 + 多作者系统 */
+
+/* 引入 Google Fonts - 现代无衬线 + 优雅衬线组合 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
+
+/* CSS 变量重定义 - 卡片式配色与字体 */
+:root {
+  /* 字体系统 */
+  --font-family-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-serif: 'Merriweather', Georgia, "Times New Roman", serif;
+  
+  /* 卡片式配色 - 浅色模式 */
+  --body-bg-color: #f8fafc;
+  --board-bg-color: #ffffff;
+  --text-color: #1e293b;
+  --sec-text-color: #64748b;
+  --post-text-color: #334155;
+  --post-heading-color: #0f172a;
+  
+  /* 现代蓝色主题 */
+  --post-link-color: #2563eb;
+  --link-hover-color: #1d4ed8;
+  --link-hover-bg-color: #f1f5f9;
+  
+  /* 卡片与边框 */
+  --line-color: #e2e8f0;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --card-radius: 0.75rem;
+  
+  /* 导航与强调色 */
+  --navbar-bg-color: #1e40af;
+  --navbar-text-color: #f8fafc;
+  --subtitle-color: #f8fafc;
+  
+  /* 代码高亮背景 */
+  --highlight-bg-color: #f8fafc;
+  --inlinecode-bg-color: rgba(100, 116, 139, 0.1);
+}
+
+/* 深色模式变量 */
+[data-user-color-scheme="dark"] {
+  --body-bg-color: #0f172a;
+  --board-bg-color: #1e293b;
+  --text-color: #e2e8f0;
+  --sec-text-color: #94a3b8;
+  --post-text-color: #cbd5e1;
+  --post-heading-color: #f1f5f9;
+  
+  --post-link-color: #3b82f6;
+  --link-hover-color: #60a5fa;
+  --link-hover-bg-color: #334155;
+  
+  --line-color: #334155;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  
+  --navbar-bg-color: #0f172a;
+  --highlight-bg-color: #1e293b;
+  --inlinecode-bg-color: rgba(148, 163, 184, 0.2);
+}
+
+/* 全局字体优化 */
+html {
+  font-size: 16px;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+}
+
+body {
+  font-family: var(--font-family-sans-serif);
+  font-weight: 400;
+}
+
+/* 主内容区域 - 卡片容器增强 */
+#board {
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#board:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* 首页文章卡片美化 */
+.index-card {
+  background-color: var(--board-bg-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--line-color);
+}
+
+.index-card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* 文章标题字体 */
+.index-header,
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  font-family: var(--font-family-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* 文章内容优化 */
+.markdown-body {
+  font-family: var(--font-family-sans-serif);
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.markdown-body p {
+  margin-bottom: 1.25rem;
+}
+
+/* 图片卡片化 */
+.index-img img,
+.markdown-body p > img,
+.markdown-body p > a > img,
+.markdown-body figure > img,
+.markdown-body figure > a > img {
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.index-img img:hover,
+.markdown-body img:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: scale(1.02);
+}
+
+/* 代码块卡片化 */
+.markdown-body pre,
+.markdown-body .highlight pre,
+.markdown-body .code-wrapper,
+figure.highlight {
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--line-color);
+  overflow: hidden;
+}
+
+.markdown-body pre code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* 内联代码美化 */
+.markdown-body code:not(pre code) {
+  background-color: var(--inlinecode-bg-color);
+  padding: 0.2em 0.4em;
+  border-radius: 0.375rem;
+  font-size: 0.9em;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* 引用块卡片化 */
+.markdown-body blockquote {
+  background-color: var(--highlight-bg-color);
+  border-left: 4px solid var(--post-link-color);
+  border-radius: 0 var(--card-radius) var(--card-radius) 0;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--card-shadow);
+}
+
+/* 表格卡片化 */
+.markdown-body table {
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--line-color);
+}
+
+/* 导航栏优化 */
+.navbar {
+  backdrop-filter: blur(10px);
+  background-color: rgba(30, 64, 175, 0.9);
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolling-navbar.top-nav-collapse {
+  background-color: var(--navbar-bg-color);
+  backdrop-filter: blur(20px);
+}
+
+/* 侧边栏目录卡片化 */
+.toc-body {
+  background-color: var(--board-bg-color);
+  border-radius: var(--card-radius);
+  padding: 1rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--line-color);
+}
+
+/* 分页器美化 */
+.pagination .page-number,
+.pagination .current,
+.pagination .extend {
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid var(--line-color);
+}
+
+.pagination .page-number:hover,
+.pagination .current {
+  background-color: var(--post-link-color);
+  color: white;
+  box-shadow: var(--card-shadow);
+}
+
+/* 回到顶部按钮卡片化 */
+#scroll-top-button {
+  border-radius: 50%;
+  box-shadow: var(--card-shadow-hover);
+  transition: all 0.3s ease;
+}
+
+#scroll-top-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ========== 简化的作者显示样式 ========== */
+
+/* 文章元信息美化 */
+.post-metas {
+  background-color: var(--highlight-bg-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--card-radius);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--line-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* 作者信息样式 */
+.post-meta .author {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--post-link-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.post-meta .author:hover {
+  color: var(--link-hover-color);
+}
+
+.post-meta .author::before {
+  content: "👤";
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+/* 日期样式 */
+.post-meta .date::before {
+  content: "📅";
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+/* 分类标签样式 */
+.post-meta .category::before {
+  content: "📁";
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+/* 标签样式 */
+.post-meta .tags::before {
+  content: "🏷️";
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  #board {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border-radius: 0.5rem;
+  }
+  
+  .index-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  
+  .markdown-body {
+    font-size: 1rem;
+  }
+  
+  .post-metas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* 加载动画增强 */
+.fade-in-up {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* 链接hover效果增强 */
+a {
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+a:hover {
+  transform: translateY(-1px);
+}
+
+/* 按钮统一样式 */
+.btn, button {
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  box-shadow: var(--card-shadow);
+}
+
+.btn:hover, button:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* 标签页面美化 - 突出作者标签 */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.tag-list-item {
+  background: var(--board-bg-color);
+  border: 2px solid var(--line-color);
+  border-radius: var(--card-radius);
+  padding: 0.75rem 1.5rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--post-link-color);
+  color: var(--post-link-color);
+}
+
+/* 作者标签特殊样式 */
+.tag-list-item[href*="YIKE"],
+.tag-list-item[href*="张三"],
+.tag-list-item[href*="李四"] {
+  background: linear-gradient(135deg, var(--post-link-color), #3b82f6);
+  color: white;
+  border-color: var(--post-link-color);
+  position: relative;
+}
+
+.tag-list-item[href*="YIKE"]:before,
+.tag-list-item[href*="张三"]:before,
+.tag-list-item[href*="李四"]:before {
+  content: "👤 ";
+  margin-right: 0.5rem;
+  font-size: 1.1em;
+}
+
+.tag-list-item[href*="YIKE"]:hover,
+.tag-list-item[href*="张三"]:hover,
+.tag-list-item[href*="李四"]:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  transform: translateY(-3px) scale(1.05);
+  color: white;
+}
+
+/* 标签页面标题美化 */
+.tag-list-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--post-heading-color);
+  margin-bottom: 1rem;
+  border-bottom: 3px solid var(--post-link-color);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* 标签分类显示 */
+.author-tags-section {
+  background: var(--board-bg-color);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: var(--card-shadow);
+  border-left: 4px solid var(--post-link-color);
+}
+
+.author-tags-section h3 {
+  color: var(--post-link-color);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.author-tags-section h3:before {
+  content: "👥";
+  font-size: 1.2em;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .tag-list {
+    gap: 0.75rem;
+  }
+  
+  .tag-list-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .tag-list-title {
+    font-size: 1.5rem;
+  }
+  
+  .author-tags-section {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+}
