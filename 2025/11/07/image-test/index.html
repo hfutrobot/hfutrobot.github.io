@@ -1,0 +1,973 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="图片显示测试 本文档用于测试 Hexo Fluid 主题的图片显示功能，包括不同尺寸、格式、对齐方式和说明文字等。 1. 基本图片显示 1.1 本地图片 使用本地图片资源：   Banner 图片  1.2 网络图片（占位图） 使用占位图片服务测试：   占位图片 800x600  2. 不同尺寸的图片 2.1 小尺寸图片   小图片 200x150  2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片显示测试">
+<meta property="og:url" content="https://hfutrobot.github.io/2025/11/07/image-test/index.html">
+<meta property="og:site_name" content="记事本">
+<meta property="og:description" content="图片显示测试 本文档用于测试 Hexo Fluid 主题的图片显示功能，包括不同尺寸、格式、对齐方式和说明文字等。 1. 基本图片显示 1.1 本地图片 使用本地图片资源：   Banner 图片  1.2 网络图片（占位图） 使用占位图片服务测试：   占位图片 800x600  2. 不同尺寸的图片 2.1 小尺寸图片   小图片 200x150  2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hfutrobot.github.io/img/banner.png">
+<meta property="og:image" content="https://picsum.photos/800/600">
+<meta property="og:image" content="https://picsum.photos/200/150">
+<meta property="og:image" content="https://picsum.photos/600/400">
+<meta property="og:image" content="https://picsum.photos/1200/800">
+<meta property="og:image" content="https://picsum.photos/400/300">
+<meta property="og:image" content="https://picsum.photos/300/200">
+<meta property="og:image" content="https://picsum.photos/600/400">
+<meta property="og:image" content="https://picsum.photos/300/200">
+<meta property="og:image" content="https://picsum.photos/300/200">
+<meta property="og:image" content="https://picsum.photos/300/200">
+<meta property="og:image" content="https://picsum.photos/300/200?random=1">
+<meta property="og:image" content="https://picsum.photos/300/200?random=2">
+<meta property="og:image" content="https://picsum.photos/250/180?random=3">
+<meta property="og:image" content="https://picsum.photos/250/180?random=4">
+<meta property="og:image" content="https://picsum.photos/250/180?random=5">
+<meta property="og:image" content="https://picsum.photos/200/200?random=6">
+<meta property="og:image" content="https://picsum.photos/200/200?random=7">
+<meta property="og:image" content="https://picsum.photos/200/200?random=8">
+<meta property="og:image" content="https://picsum.photos/200/200?random=9">
+<meta property="og:image" content="https://picsum.photos/400/300">
+<meta property="og:image" content="https://picsum.photos/800/600">
+<meta property="og:image" content="https://picsum.photos/600/400?random=10">
+<meta property="og:image" content="https://picsum.photos/600/400?random=11">
+<meta property="og:image" content="https://picsum.photos/600/400?random=12">
+<meta property="og:image" content="https://picsum.photos/400/300?random=13">
+<meta property="og:image" content="https://picsum.photos/400/300?random=14">
+<meta property="og:image" content="https://picsum.photos/400/300?random=15">
+<meta property="og:image" content="https://picsum.photos/500/350?random=16">
+<meta property="og:image" content="https://picsum.photos/500/300?random=17">
+<meta property="og:image" content="https://picsum.photos/300/200?random=18">
+<meta property="og:image" content="https://picsum.photos/300/200?random=19">
+<meta property="og:image" content="https://picsum.photos/300/200?random=20">
+<meta property="og:image" content="https://picsum.photos/250/180?random=21">
+<meta property="og:image" content="https://picsum.photos/250/180?random=22">
+<meta property="og:image" content="https://picsum.photos/250/180?random=23">
+<meta property="og:image" content="https://picsum.photos/200/150?random=24">
+<meta property="og:image" content="https://picsum.photos/400/300?random=25">
+<meta property="og:image" content="https://picsum.photos/800/600?random=26">
+<meta property="og:image" content="https://example.com/nonexistent-image.jpg">
+<meta property="og:image" content="https://picsum.photos/800/450?random=27">
+<meta property="og:image" content="https://picsum.photos/450/800?random=28">
+<meta property="og:image" content="https://picsum.photos/600/600?random=29">
+<meta property="og:image" content="https://picsum.photos/800/600?random=30">
+<meta property="og:image" content="https://picsum.photos/600/450?random=31">
+<meta property="og:image" content="https://picsum.photos/400/300?random=32">
+<meta property="og:image" content="https://picsum.photos/600/400?random=33">
+<meta property="article:published_time" content="2025-11-07T13:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-07T11:31:27.116Z">
+<meta property="article:author" content="Nicotinamide">
+<meta property="article:tag" content="图片">
+<meta property="article:tag" content="测试">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://hfutrobot.github.io/img/banner.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>图片显示测试 - 记事本</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="图片显示测试"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-07 21:00" pubdate>
+          2025年11月7日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          947 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">图片显示测试</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="图片显示测试">图片显示测试</h2>
+<p>本文档用于测试 Hexo Fluid 主题的图片显示功能，包括不同尺寸、格式、对齐方式和说明文字等。</p>
+<h3 id="基本图片显示">1. 基本图片显示</h3>
+<h4 id="本地图片">1.1 本地图片</h4>
+<p>使用本地图片资源：</p>
+<figure>
+<img src="/img/banner.png" srcset="/img/loading.gif" lazyload alt="Banner 图片" />
+<figcaption aria-hidden="true">Banner 图片</figcaption>
+</figure>
+<h4 id="网络图片占位图">1.2 网络图片（占位图）</h4>
+<p>使用占位图片服务测试：</p>
+<figure>
+<img src="https://picsum.photos/800/600" srcset="/img/loading.gif" lazyload alt="占位图片 800x600" />
+<figcaption aria-hidden="true">占位图片 800x600</figcaption>
+</figure>
+<h3 id="不同尺寸的图片">2. 不同尺寸的图片</h3>
+<h4 id="小尺寸图片">2.1 小尺寸图片</h4>
+<figure>
+<img src="https://picsum.photos/200/150" srcset="/img/loading.gif" lazyload alt="小图片 200x150" />
+<figcaption aria-hidden="true">小图片 200x150</figcaption>
+</figure>
+<h4 id="中等尺寸图片">2.2 中等尺寸图片</h4>
+<figure>
+<img src="https://picsum.photos/600/400" srcset="/img/loading.gif" lazyload alt="中等图片 600x400" />
+<figcaption aria-hidden="true">中等图片 600x400</figcaption>
+</figure>
+<h4 id="大尺寸图片">2.3 大尺寸图片</h4>
+<figure>
+<img src="https://picsum.photos/1200/800" srcset="/img/loading.gif" lazyload alt="大图片 1200x800" />
+<figcaption aria-hidden="true">大图片 1200x800</figcaption>
+</figure>
+<h3 id="图片链接">3. 图片链接</h3>
+<h4 id="带链接的图片">3.1 带链接的图片</h4>
+<p>点击图片可以跳转：</p>
+<p><a target="_blank" rel="noopener" href="https://picsum.photos/400/300"><img src="https://picsum.photos/400/300" srcset="/img/loading.gif" lazyload alt="可点击的图片" /></a></p>
+<h4 id="图片链接到外部网站">3.2 图片链接到外部网站</h4>
+<p><a target="_blank" rel="noopener" href="https://github.com"><img src="https://picsum.photos/300/200" srcset="/img/loading.gif" lazyload alt="GitHub Logo" /></a></p>
+<h3 id="图片说明文字caption">4. 图片说明文字（Caption）</h3>
+<p>使用 HTML 的 <code>figure</code> 标签添加说明：</p>
+<figure>
+<img src="https://picsum.photos/600/400" srcset="/img/loading.gif" lazyload alt="示例图片">
+<figcaption>
+这是一张示例图片，带有说明文字
+</figcaption>
+</figure>
+<h3 id="图片对齐">5. 图片对齐</h3>
+<h4 id="左对齐">5.1 左对齐</h4>
+<div data-align="left">
+<p><img src="https://picsum.photos/300/200" srcset="/img/loading.gif" lazyload alt="左对齐图片"></p>
+</div>
+<h4 id="居中">5.2 居中</h4>
+<div data-align="center">
+<p><img src="https://picsum.photos/300/200" srcset="/img/loading.gif" lazyload alt="居中图片"></p>
+</div>
+<h4 id="右对齐">5.3 右对齐</h4>
+<div data-align="right">
+<p><img src="https://picsum.photos/300/200" srcset="/img/loading.gif" lazyload alt="右对齐图片"></p>
+</div>
+<h3 id="多张图片并排显示">6. 多张图片并排显示</h3>
+<h4 id="两张图片">6.1 两张图片</h4>
+<div style="display: flex; gap: 10px; justify-content: center;">
+<p><img src="https://picsum.photos/300/200?random=1" srcset="/img/loading.gif" lazyload alt="图片1" style="flex: 1; max-width: 300px;"> <img src="https://picsum.photos/300/200?random=2" srcset="/img/loading.gif" lazyload alt="图片2" style="flex: 1; max-width: 300px;"></p>
+</div>
+<h4 id="三张图片">6.2 三张图片</h4>
+<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+<p><img src="https://picsum.photos/250/180?random=3" srcset="/img/loading.gif" lazyload alt="图片1" style="flex: 1; min-width: 200px; max-width: 250px;"> <img src="https://picsum.photos/250/180?random=4" srcset="/img/loading.gif" lazyload alt="图片2" style="flex: 1; min-width: 200px; max-width: 250px;"> <img src="https://picsum.photos/250/180?random=5" srcset="/img/loading.gif" lazyload alt="图片3" style="flex: 1; min-width: 200px; max-width: 250px;"></p>
+</div>
+<h3 id="图片网格布局">7. 图片网格布局</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+<p><img src="https://picsum.photos/200/200?random=6" srcset="/img/loading.gif" lazyload alt="网格图片1"> <img src="https://picsum.photos/200/200?random=7" srcset="/img/loading.gif" lazyload alt="网格图片2"> <img src="https://picsum.photos/200/200?random=8" srcset="/img/loading.gif" lazyload alt="网格图片3"> <img src="https://picsum.photos/200/200?random=9" srcset="/img/loading.gif" lazyload alt="网格图片4"></p>
+</div>
+<h3 id="图片与文字混排">8. 图片与文字混排</h3>
+<p>这是一段文字，后面跟着一张图片：</p>
+<figure>
+<img src="https://picsum.photos/400/300" srcset="/img/loading.gif" lazyload alt="混排图片" />
+<figcaption aria-hidden="true">混排图片</figcaption>
+</figure>
+<p>图片后面继续文字内容。这样可以测试图片在文章中的显示效果。</p>
+<h3 id="响应式图片">9. 响应式图片</h3>
+<p>使用 HTML 的 <code>srcset</code> 属性实现响应式图片：</p>
+<p><img src="https://picsum.photos/800/600" srcset="/img/loading.gif" lazyload 
+     srcset="https://picsum.photos/400/300 400w,
+             https://picsum.photos/800/600 800w,
+             https://picsum.photos/1200/900 1200w"
+     sizes="(max-width: 600px) 400px,
+            (max-width: 1200px) 800px,
+            1200px"
+     alt="响应式图片"></p>
+<h3 id="图片懒加载测试">10. 图片懒加载测试</h3>
+<p>使用 <code>loading="lazy"</code> 属性实现懒加载：</p>
+<p><img src="https://picsum.photos/600/400?random=10" srcset="/img/loading.gif" lazyload alt="懒加载图片1" loading="lazy"> <img src="https://picsum.photos/600/400?random=11" srcset="/img/loading.gif" lazyload alt="懒加载图片2" loading="lazy"> <img src="https://picsum.photos/600/400?random=12" srcset="/img/loading.gif" lazyload alt="懒加载图片3" loading="lazy"></p>
+<h3 id="图片样式测试">11. 图片样式测试</h3>
+<h4 id="圆角图片">11.1 圆角图片</h4>
+<p><img src="https://picsum.photos/400/300?random=13" srcset="/img/loading.gif" lazyload alt="圆角图片" style="border-radius: 15px;"></p>
+<h4 id="带边框的图片">11.2 带边框的图片</h4>
+<p><img src="https://picsum.photos/400/300?random=14" srcset="/img/loading.gif" lazyload alt="带边框图片" style="border: 3px solid #333; padding: 5px;"></p>
+<h4 id="带阴影的图片">11.3 带阴影的图片</h4>
+<p><img src="https://picsum.photos/400/300?random=15" srcset="/img/loading.gif" lazyload alt="带阴影图片" style="box-shadow: 0 4px 8px rgba(0,0,0,0.2);"></p>
+<h3 id="图片说明和引用">12. 图片说明和引用</h3>
+<blockquote>
+<p>这是一张重要的图片说明：</p>
+<figure>
+<img src="https://picsum.photos/500/350?random=16" srcset="/img/loading.gif" lazyload alt="重要图片" />
+<figcaption aria-hidden="true">重要图片</figcaption>
+</figure>
+<p>图片展示了某个重要的概念或示例。</p>
+</blockquote>
+<h3 id="图片与代码块组合">13. 图片与代码块组合</h3>
+<p>下面是一个代码示例，配合图片说明：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">process_image</span>(<span class="hljs-params">image_path</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;处理图片的函数&quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 图片处理逻辑</span><br>    <span class="hljs-keyword">return</span> processed_image<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="https://picsum.photos/500/300?random=17" srcset="/img/loading.gif" lazyload alt="代码示例配图" />
+<figcaption aria-hidden="true">代码示例配图</figcaption>
+</figure>
+<h3 id="图片与列表组合">14. 图片与列表组合</h3>
+<h4 id="有序列表中的图片">14.1 有序列表中的图片</h4>
+<ol type="1">
+<li><p>第一步：准备图片资源 <img src="https://picsum.photos/300/200?random=18" srcset="/img/loading.gif" lazyload alt="步骤1" /></p></li>
+<li><p>第二步：处理图片 <img src="https://picsum.photos/300/200?random=19" srcset="/img/loading.gif" lazyload alt="步骤2" /></p></li>
+<li><p>第三步：展示结果 <img src="https://picsum.photos/300/200?random=20" srcset="/img/loading.gif" lazyload alt="步骤3" /></p></li>
+</ol>
+<h4 id="无序列表中的图片">14.2 无序列表中的图片</h4>
+<ul>
+<li>特性一：高质量 <img src="https://picsum.photos/250/180?random=21" srcset="/img/loading.gif" lazyload alt="特性1" /></li>
+<li>特性二：快速加载 <img src="https://picsum.photos/250/180?random=22" srcset="/img/loading.gif" lazyload alt="特性2" /></li>
+<li>特性三：响应式设计 <img src="https://picsum.photos/250/180?random=23" srcset="/img/loading.gif" lazyload alt="特性3" /></li>
+</ul>
+<h3 id="图片与表格组合">15. 图片与表格组合</h3>
+<table>
+<thead>
+<tr>
+<th>图片类型</th>
+<th>尺寸</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小图</td>
+<td>200x150</td>
+<td><img src="https://picsum.photos/200/150?random=24" srcset="/img/loading.gif" lazyload alt="小图" /></td>
+</tr>
+<tr>
+<td>中图</td>
+<td>400x300</td>
+<td><img src="https://picsum.photos/400/300?random=25" srcset="/img/loading.gif" lazyload alt="中图" /></td>
+</tr>
+<tr>
+<td>大图</td>
+<td>800x600</td>
+<td><img src="https://picsum.photos/800/600?random=26" srcset="/img/loading.gif" lazyload alt="大图" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="图片加载失败测试">16. 图片加载失败测试</h3>
+<p>测试图片加载失败时的显示：</p>
+<figure>
+<img src="https://example.com/nonexistent-image.jpg" srcset="/img/loading.gif" lazyload alt="不存在的图片" />
+<figcaption aria-hidden="true">不存在的图片</figcaption>
+</figure>
+<h3 id="长宽比测试">17. 长宽比测试</h3>
+<h4 id="横向图片169">17.1 横向图片（16:9）</h4>
+<figure>
+<img src="https://picsum.photos/800/450?random=27" srcset="/img/loading.gif" lazyload alt="横向图片" />
+<figcaption aria-hidden="true">横向图片</figcaption>
+</figure>
+<h4 id="纵向图片916">17.2 纵向图片（9:16）</h4>
+<figure>
+<img src="https://picsum.photos/450/800?random=28" srcset="/img/loading.gif" lazyload alt="纵向图片" />
+<figcaption aria-hidden="true">纵向图片</figcaption>
+</figure>
+<h4 id="正方形图片11">17.3 正方形图片（1:1）</h4>
+<figure>
+<img src="https://picsum.photos/600/600?random=29" srcset="/img/loading.gif" lazyload alt="正方形图片" />
+<figcaption aria-hidden="true">正方形图片</figcaption>
+</figure>
+<h3 id="图片压缩和优化测试">18. 图片压缩和优化测试</h3>
+<p>测试不同质量的图片：</p>
+<h4 id="高质量图片">18.1 高质量图片</h4>
+<figure>
+<img src="https://picsum.photos/800/600?random=30" srcset="/img/loading.gif" lazyload alt="高质量" />
+<figcaption aria-hidden="true">高质量</figcaption>
+</figure>
+<h4 id="中等质量图片">18.2 中等质量图片</h4>
+<figure>
+<img src="https://picsum.photos/600/450?random=31" srcset="/img/loading.gif" lazyload alt="中等质量" />
+<figcaption aria-hidden="true">中等质量</figcaption>
+</figure>
+<h3 id="图片动画效果css">19. 图片动画效果（CSS）</h3>
+<p>测试图片的 CSS 动画效果：</p>
+<div style="text-align: center;">
+<p><img src="https://picsum.photos/400/300?random=32" srcset="/img/loading.gif" lazyload 
+       alt="动画图片" 
+       style="transition: transform 0.3s ease;"
+       onmouseover="this.style.transform='scale(1.1)'"
+       onmouseout="this.style.transform='scale(1)'"></p>
+</div>
+<p><em>鼠标悬停查看效果</em></p>
+<h3 id="图片说明文字样式">20. 图片说明文字样式</h3>
+<p>测试不同样式的说明文字：</p>
+<figure style="text-align: center;">
+<img src="https://picsum.photos/600/400?random=33" srcset="/img/loading.gif" lazyload alt="带说明的图片">
+<figcaption style="color: #666; font-size: 0.9em; margin-top: 10px;">
+<strong>图 1：</strong>这是一张带有详细说明文字的图片示例
+</figcaption>
+</figure>
+<h2 id="测试说明">测试说明</h2>
+<p>本文档包含了以下图片显示场景的测试：</p>
+<ol type="1">
+<li>✅ 基本图片显示（本地和网络）</li>
+<li>✅ 不同尺寸的图片</li>
+<li>✅ 带链接的图片</li>
+<li>✅ 图片说明文字</li>
+<li>✅ 图片对齐（左、中、右）</li>
+<li>✅ 多张图片并排显示</li>
+<li>✅ 图片网格布局</li>
+<li>✅ 图片与文字混排</li>
+<li>✅ 响应式图片</li>
+<li>✅ 图片懒加载</li>
+<li>✅ 图片样式（圆角、边框、阴影）</li>
+<li>✅ 图片与引用块组合</li>
+<li>✅ 图片与代码块组合</li>
+<li>✅ 图片与列表组合</li>
+<li>✅ 图片与表格组合</li>
+<li>✅ 图片加载失败处理</li>
+<li>✅ 不同长宽比的图片</li>
+<li>✅ 图片压缩和优化</li>
+<li>✅ 图片动画效果</li>
+<li>✅ 图片说明文字样式</li>
+</ol>
+<h2 id="注意事项">注意事项</h2>
+<ul>
+<li>本文档使用了 <code>picsum.photos</code> 作为占位图片服务</li>
+<li>实际使用时，请替换为真实的图片资源</li>
+<li>建议使用本地图片资源以提高加载速度</li>
+<li>大尺寸图片建议进行压缩优化</li>
+<li>考虑使用 CDN 加速图片加载</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B5%8B%E8%AF%95/" class="print-no-link">#测试</a>
+      
+        <a href="/tags/%E5%9B%BE%E7%89%87/" class="print-no-link">#图片</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>图片显示测试</div>
+      <div>https://hfutrobot.github.io/2025/11/07/image-test/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/07/latex-test/" title="LaTeX 数学公式测试">
+                        <span class="hidden-mobile">LaTeX 数学公式测试</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
