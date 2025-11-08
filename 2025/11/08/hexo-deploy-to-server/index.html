@@ -27,7 +27,7 @@
 <meta property="og:description" content="Hexo 博客部署到云服务器完整指南 📖 前言 在使用 Hexo 搭建博客后，除了部署到 GitHub Pages，我们还可以将博客部署到自己的云服务器上，这样可以获得更好的性能和自定义能力。本文将按照配置 SSH 密钥 → 配置部署路径 → 配置 GitHub Actions → 配置 Nginx 的顺序，详细介绍如何通过 GitHub Actions 自动将 Hexo 博客部署到云服务器。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-08T06:00:00.000Z">
-<meta property="article:modified_time" content="2025-11-08T06:26:48.789Z">
+<meta property="article:modified_time" content="2025-11-08T06:52:20.743Z">
 <meta property="article:author" content="Nicotinamide">
 <meta property="article:tag" content="GitHub Actions">
 <meta property="article:tag" content="Hexo">
@@ -37,8 +37,6 @@
 <meta property="article:tag" content="部署">
 <meta name="twitter:card" content="summary_large_image">
   
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
   
   
   <title>Hexo 博客部署到云服务器完整指南 - 记事本</title>
@@ -292,88 +290,51 @@
             
               <div class="markdown-body">
                 
-                <h1 id="hexo-博客部署到云服务器完整指南">Hexo
-博客部署到云服务器完整指南</h1>
+                <h1 id="hexo-博客部署到云服务器完整指南">Hexo 博客部署到云服务器完整指南</h1>
 <h2 id="前言">📖 前言</h2>
-<p>在使用 Hexo 搭建博客后，除了部署到 GitHub
-Pages，我们还可以将博客部署到自己的云服务器上，这样可以获得更好的性能和自定义能力。本文将按照<strong>配置
-SSH 密钥 → 配置部署路径 → 配置 GitHub Actions → 配置 Nginx</strong>
-的顺序，详细介绍如何通过 GitHub Actions 自动将 Hexo
-博客部署到云服务器。</p>
+<p>在使用 Hexo 搭建博客后，除了部署到 GitHub Pages，我们还可以将博客部署到自己的云服务器上，这样可以获得更好的性能和自定义能力。本文将按照<strong>配置 SSH 密钥 → 配置部署路径 → 配置 GitHub Actions → 配置 Nginx</strong> 的顺序，详细介绍如何通过 GitHub Actions 自动将 Hexo 博客部署到云服务器。</p>
 <h2 id="部署方案">🎯 部署方案</h2>
-<p>本文采用以下部署方案： - <strong>本地</strong>：只推送到 GitHub 仓库
-- <strong>GitHub Actions</strong>：自动构建并部署到云服务器 -
-<strong>GitHub Pages</strong>：可选，如果需要也可以同时部署到 GitHub
-Pages - <strong>优势</strong>：无需在本地安装 rsync，Windows
-系统也能轻松使用</p>
+<p>本文采用以下部署方案： - <strong>本地</strong>：只推送到 GitHub 仓库 - <strong>GitHub Actions</strong>：自动构建并部署到云服务器 - <strong>GitHub Pages</strong>：可选，如果需要也可以同时部署到 GitHub Pages - <strong>优势</strong>：无需在本地安装 rsync，Windows 系统也能轻松使用</p>
 <hr />
 <h2 id="第一步配置-ssh-密钥">第一步：配置 SSH 密钥</h2>
-<p>SSH 密钥用于 GitHub Actions
-安全地连接服务器。我们在本地生成密钥对，然后将公钥添加到服务器，私钥添加到
-GitHub Secrets。</p>
-<h3 id="在服务器上创建-www-data-用户">1.1 在服务器上创建 www-data
-用户</h3>
-<p>为了安全起见，我们使用专门的 <code>www-data</code> 用户来部署，而不是
-root 用户。</p>
+<p>SSH 密钥用于 GitHub Actions 安全地连接服务器。我们在本地生成密钥对，然后将公钥添加到服务器，私钥添加到 GitHub Secrets。</p>
+<h3 id="在服务器上创建-www-data-用户">1.1 在服务器上创建 www-data 用户</h3>
+<p>为了安全起见，我们使用专门的 <code>www-data</code> 用户来部署，而不是 root 用户。</p>
 <p><strong>在服务器上执行：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 检查用户是否存在</span><br><span class="hljs-built_in">id</span> www-data<br><br><span class="hljs-comment"># 如果不存在，创建用户（不指定家目录，使用系统默认）</span><br><span class="hljs-built_in">sudo</span> useradd -r -s /bin/bash www-data<br><br><span class="hljs-comment"># 或者如果需要指定家目录</span><br><span class="hljs-built_in">sudo</span> useradd -r -s /bin/bash -d /var/www -m www-data<br></code></pre></td></tr></table></figure>
-<p><strong>参数说明：</strong> - <code>-r</code>: 创建系统用户 -
-<code>-s /bin/bash</code>: 设置登录 shell - <code>-d /var/www</code>:
-设置家目录（可选，www-data 通常使用 /var/www）</p>
+<p><strong>参数说明：</strong> - <code>-r</code>: 创建系统用户 - <code>-s /bin/bash</code>: 设置登录 shell - <code>-d /var/www</code>: 设置家目录（可选，www-data 通常使用 /var/www）</p>
 <h3 id="在本地生成-ssh-密钥对">1.2 在本地生成 SSH 密钥对</h3>
 <p><strong>在本地 Windows 电脑上执行：</strong></p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># 创建 .ssh 目录（如果不存在）</span><br>mkdir <span class="hljs-literal">-p</span> <span class="hljs-variable">$env:USERPROFILE</span>\.ssh<br><br><span class="hljs-comment"># 生成密钥对（专门用于服务器部署）</span><br>ssh<span class="hljs-literal">-keygen</span> <span class="hljs-literal">-t</span> rsa <span class="hljs-literal">-b</span> <span class="hljs-number">4096</span> <span class="hljs-literal">-C</span> <span class="hljs-string">&quot;server-deploy&quot;</span> <span class="hljs-operator">-f</span> <span class="hljs-variable">$env:USERPROFILE</span>\.ssh\id_rsa_server<br><br><span class="hljs-comment"># 提示输入密码时，直接按回车（留空），这样 GitHub Actions 可以自动使用</span><br></code></pre></td></tr></table></figure>
-<p><strong>生成的文件：</strong> -
-<code>C:\Users\你的用户名\.ssh\id_rsa_server</code> -
-私钥（保密，不要分享） -
-<code>C:\Users\你的用户名\.ssh\id_rsa_server.pub</code> -
-公钥（可以添加到服务器）</p>
+<p><strong>生成的文件：</strong> - <code>C:\Users\你的用户名\.ssh\id_rsa_server</code> - 私钥（保密，不要分享） - <code>C:\Users\你的用户名\.ssh\id_rsa_server.pub</code> - 公钥（可以添加到服务器）</p>
 <h3 id="将公钥添加到服务器">1.3 将公钥添加到服务器</h3>
 <p><strong>步骤 1：查看公钥内容</strong></p>
 <p><strong>在本地执行：</strong></p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># 查看公钥内容</span><br><span class="hljs-built_in">Get-Content</span> <span class="hljs-variable">$env:USERPROFILE</span>\.ssh\id_rsa_server.pub<br></code></pre></td></tr></table></figure>
-<p><strong>复制输出的全部内容</strong>（应该是一行，以
-<code>ssh-rsa</code> 开头）</p>
+<p><strong>复制输出的全部内容</strong>（应该是一行，以 <code>ssh-rsa</code> 开头）</p>
 <p><strong>步骤 2：在服务器上添加公钥</strong></p>
 <p><strong>在服务器上执行：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 切换到 www-data 用户</span><br><span class="hljs-built_in">sudo</span> su - www-data<br><br><span class="hljs-comment"># 创建 .ssh 目录</span><br><span class="hljs-built_in">mkdir</span> -p ~/.ssh<br><span class="hljs-built_in">chmod</span> 700 ~/.ssh<br><br><span class="hljs-comment"># 将公钥添加到 authorized_keys（将下面的内容替换为你复制的公钥）</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;你刚才复制的公钥内容&quot;</span> &gt;&gt; ~/.ssh/authorized_keys<br><br><span class="hljs-comment"># 设置 authorized_keys 的权限</span><br><span class="hljs-built_in">chmod</span> 600 ~/.ssh/authorized_keys<br><br><span class="hljs-comment"># 退出 www-data 用户</span><br><span class="hljs-built_in">exit</span><br></code></pre></td></tr></table></figure>
-<p><strong>注意：</strong> 将 <code>"你刚才复制的公钥内容"</code>
-替换为步骤 1 中复制的完整公钥内容。</p>
-<h3 id="将私钥添加到-github-secrets">1.4 将私钥添加到 GitHub
-Secrets</h3>
+<p><strong>注意：</strong> 将 <code>"你刚才复制的公钥内容"</code> 替换为步骤 1 中复制的完整公钥内容。</p>
+<h3 id="将私钥添加到-github-secrets">1.4 将私钥添加到 GitHub Secrets</h3>
 <p><strong>在本地查看私钥内容：</strong></p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># 查看私钥内容</span><br><span class="hljs-built_in">Get-Content</span> <span class="hljs-variable">$env:USERPROFILE</span>\.ssh\id_rsa_server<br></code></pre></td></tr></table></figure>
-<p><strong>复制完整内容</strong>（包括
-<code>-----BEGIN OPENSSH PRIVATE KEY-----</code> 和
-<code>-----END OPENSSH PRIVATE KEY-----</code>）</p>
+<p><strong>复制完整内容</strong>（包括 <code>-----BEGIN OPENSSH PRIVATE KEY-----</code> 和 <code>-----END OPENSSH PRIVATE KEY-----</code>）</p>
 <p><strong>添加到 GitHub Secrets：</strong></p>
 <ol type="1">
-<li>进入 GitHub 仓库 → <strong>Settings</strong> → <strong>Secrets and
-variables</strong> → <strong>Actions</strong></li>
+<li>进入 GitHub 仓库 → <strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong></li>
 <li>点击 <strong>New repository secret</strong></li>
 <li>创建以下 <strong>必需的 Secrets</strong>（部署到服务器）：
 <ul>
-<li><strong>Name:</strong>
-<code>SERVER_HOST</code>，<strong>Value:</strong> 服务器地址（如
-<code>example.com</code> 或 <code>192.168.1.100</code>）</li>
-<li><strong>Name:</strong>
-<code>SERVER_USER</code>，<strong>Value:</strong>
-<code>www-data</code></li>
-<li><strong>Name:</strong>
-<code>SERVER_DEPLOY_PATH</code>，<strong>Value:</strong> 部署路径（如
-<code>/var/www/html</code>）</li>
-<li><strong>Name:</strong>
-<code>SERVER_PORT</code>，<strong>Value:</strong> SSH 端口号（默认
-<code>22</code>，如使用其他端口填写对应数字）</li>
-<li><strong>Name:</strong>
-<code>SERVER_SSH_KEY</code>，<strong>Value:</strong>
-粘贴刚才复制的私钥内容（完整内容，包括 BEGIN 和 END 行）</li>
+<li><strong>Name:</strong> <code>SERVER_HOST</code>，<strong>Value:</strong> 服务器地址（如 <code>example.com</code> 或 <code>192.168.1.100</code>）</li>
+<li><strong>Name:</strong> <code>SERVER_USER</code>，<strong>Value:</strong> <code>www-data</code></li>
+<li><strong>Name:</strong> <code>SERVER_DEPLOY_PATH</code>，<strong>Value:</strong> 部署路径（如 <code>/var/www/html</code>）</li>
+<li><strong>Name:</strong> <code>SERVER_PORT</code>，<strong>Value:</strong> SSH 端口号（默认 <code>22</code>，如使用其他端口填写对应数字）</li>
+<li><strong>Name:</strong> <code>SERVER_SSH_KEY</code>，<strong>Value:</strong> 粘贴刚才复制的私钥内容（完整内容，包括 BEGIN 和 END 行）</li>
 </ul></li>
 <li><strong>可选的 Secret</strong>（如果需要部署到 GitHub Pages）：
 <ul>
-<li><strong>Name:</strong>
-<code>PERSONAL_TOKEN</code>，<strong>Value:</strong> GitHub Personal
-Access Token（用于部署到 GitHub Pages）</li>
+<li><strong>Name:</strong> <code>PERSONAL_TOKEN</code>，<strong>Value:</strong> GitHub Personal Access Token（用于部署到 GitHub Pages）</li>
 </ul></li>
 </ol>
 <hr />
@@ -385,42 +346,25 @@ Access Token（用于部署到 GitHub Pages）</li>
 <hr />
 <h2 id="第三步配置-github-actions">第三步：配置 GitHub Actions</h2>
 <p>配置 GitHub Actions 工作流，实现自动部署。</p>
-<p><strong>重要说明：</strong> -
-如果<strong>只需要部署到服务器</strong>，可以删除或注释掉 GitHub Pages
-部署步骤 - 如果<strong>需要同时部署到 GitHub Pages
-和服务器</strong>，保留所有步骤并配置相应的 Secrets</p>
-<h3 id="创建或更新-github-actions-工作流">3.1 创建或更新 GitHub Actions
-工作流</h3>
-<p>在项目根目录创建 <code>.github/workflows/deploy.yml</code>
-文件（如果不存在）：</p>
-<p><strong>注意：</strong> 如果你的项目使用了
-<code>hexo-renderer-pandoc</code>（可以在 <code>package.json</code>
-中查看），则需要安装 Pandoc。如果使用的是默认的
-<code>hexo-renderer-marked</code>，则可以删除或注释掉 Pandoc
-安装步骤。</p>
+<p><strong>重要说明：</strong> - 如果<strong>只需要部署到服务器</strong>，可以删除或注释掉 GitHub Pages 部署步骤 - 如果<strong>需要同时部署到 GitHub Pages 和服务器</strong>，保留所有步骤并配置相应的 Secrets</p>
+<h3 id="创建或更新-github-actions-工作流">3.1 创建或更新 GitHub Actions 工作流</h3>
+<p>在项目根目录创建 <code>.github/workflows/deploy.yml</code> 文件（如果不存在）：</p>
+<p><strong>注意：</strong> 如果你的项目使用了 <code>hexo-renderer-pandoc</code>（可以在 <code>package.json</code> 中查看），则需要安装 Pandoc。如果使用的是默认的 <code>hexo-renderer-marked</code>，则可以删除或注释掉 Pandoc 安装步骤。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">GitHub</span> <span class="hljs-string">Pages</span> <span class="hljs-string">and</span> <span class="hljs-string">Server</span><br><br><span class="hljs-attr">on:</span><br>  <span class="hljs-attr">push:</span><br>    <span class="hljs-attr">branches:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">main</span><br><br><span class="hljs-attr">jobs:</span><br>  <span class="hljs-attr">deploy:</span><br>    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span><br>    <span class="hljs-attr">steps:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Checkout</span> <span class="hljs-string">repository</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Set</span> <span class="hljs-string">up</span> <span class="hljs-string">Node.js</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span><br>          <span class="hljs-attr">cache:</span> <span class="hljs-string">&#x27;npm&#x27;</span><br><br>      <span class="hljs-comment"># ===== 以下 Pandoc 安装是可选的，只有在使用 hexo-renderer-pandoc 时才需要 =====</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">Pandoc</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">          sudo apt-get update</span><br><span class="hljs-string">          sudo apt-get install -y pandoc</span><br><span class="hljs-string"></span>      <span class="hljs-comment"># ===== Pandoc 安装结束 =====</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">dependencies</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">install</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">site</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">npx</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span><br><br>      <span class="hljs-comment"># ===== 以下 GitHub Pages 部署步骤是可选的，如果不需要部署到 GitHub Pages，可以删除或注释掉 =====</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">GitHub</span> <span class="hljs-string">Pages</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">peaceiris/actions-gh-pages@v3</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">personal_token:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.PERSONAL_TOKEN</span> <span class="hljs-string">&#125;&#125;</span>  <span class="hljs-comment"># 需要配置 PERSONAL_TOKEN secret</span><br>          <span class="hljs-attr">external_repository:</span> <span class="hljs-string">your-username/your-username.github.io</span>  <span class="hljs-comment"># 你的 GitHub Pages 仓库</span><br>          <span class="hljs-attr">publish_branch:</span> <span class="hljs-string">main</span><br>          <span class="hljs-attr">publish_dir:</span> <span class="hljs-string">./public</span><br>          <span class="hljs-attr">user_name:</span> <span class="hljs-string">&#x27;Your Name&#x27;</span><br>          <span class="hljs-attr">user_email:</span> <span class="hljs-string">&#x27;your-email@example.com&#x27;</span><br>      <span class="hljs-comment"># ===== GitHub Pages 部署配置结束 =====</span><br><br>      <span class="hljs-comment"># ===== 以下 rsync 安装是部署到服务器必需的 =====</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">rsync</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">          sudo apt-get update</span><br><span class="hljs-string">          sudo apt-get install -y rsync openssh-client</span><br><span class="hljs-string"></span>      <span class="hljs-comment"># ===== rsync 安装结束 =====</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Custom</span> <span class="hljs-string">Server</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">burnett01/rsync-deployments@7.0.1</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">switches:</span> <span class="hljs-string">-avzr</span> <span class="hljs-string">--delete</span><br>          <span class="hljs-attr">path:</span> <span class="hljs-string">./public/</span><br>          <span class="hljs-attr">remote_path:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_DEPLOY_PATH</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_host:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_HOST</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_user:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_USER</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_key:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_SSH_KEY</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_port:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_PORT</span> <span class="hljs-string">&#125;&#125;</span>  <span class="hljs-comment"># SSH 端口，从 Secrets 中读取</span><br></code></pre></td></tr></table></figure>
-<h3 id="只部署到服务器不部署到-github-pages">3.2
-只部署到服务器（不部署到 GitHub Pages）</h3>
-<p>如果只需要部署到服务器，可以删除 GitHub Pages
-部署步骤，工作流如下：</p>
+<h3 id="只部署到服务器不部署到-github-pages">3.2 只部署到服务器（不部署到 GitHub Pages）</h3>
+<p>如果只需要部署到服务器，可以删除 GitHub Pages 部署步骤，工作流如下：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Server</span><br><br><span class="hljs-attr">on:</span><br>  <span class="hljs-attr">push:</span><br>    <span class="hljs-attr">branches:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">main</span><br><br><span class="hljs-attr">jobs:</span><br>  <span class="hljs-attr">deploy:</span><br>    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span><br>    <span class="hljs-attr">steps:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Checkout</span> <span class="hljs-string">repository</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Set</span> <span class="hljs-string">up</span> <span class="hljs-string">Node.js</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span><br>          <span class="hljs-attr">cache:</span> <span class="hljs-string">&#x27;npm&#x27;</span><br><br>      <span class="hljs-comment"># ===== 以下 Pandoc 安装是可选的，只有在使用 hexo-renderer-pandoc 时才需要 =====</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">Pandoc</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">          sudo apt-get update</span><br><span class="hljs-string">          sudo apt-get install -y pandoc</span><br><span class="hljs-string"></span>      <span class="hljs-comment"># ===== Pandoc 安装结束 =====</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">dependencies</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">install</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">site</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">npx</span> <span class="hljs-string">hexo</span> <span class="hljs-string">generate</span><br><br>      <span class="hljs-comment"># ===== 以下 rsync 安装是部署到服务器必需的 =====</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">rsync</span><br>        <span class="hljs-attr">run:</span> <span class="hljs-string">|</span><br><span class="hljs-string">          sudo apt-get update</span><br><span class="hljs-string">          sudo apt-get install -y rsync openssh-client</span><br><span class="hljs-string"></span>      <span class="hljs-comment"># ===== rsync 安装结束 =====</span><br><br>      <span class="hljs-comment"># 只部署到服务器，不部署到 GitHub Pages</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Custom</span> <span class="hljs-string">Server</span><br>        <span class="hljs-attr">uses:</span> <span class="hljs-string">burnett01/rsync-deployments@7.0.1</span><br>        <span class="hljs-attr">with:</span><br>          <span class="hljs-attr">switches:</span> <span class="hljs-string">-avzr</span> <span class="hljs-string">--delete</span><br>          <span class="hljs-attr">path:</span> <span class="hljs-string">./public/</span><br>          <span class="hljs-attr">remote_path:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_DEPLOY_PATH</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_host:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_HOST</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_user:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_USER</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_key:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_SSH_KEY</span> <span class="hljs-string">&#125;&#125;</span><br>          <span class="hljs-attr">remote_port:</span> <span class="hljs-string">$&#123;&#123;</span> <span class="hljs-string">secrets.SERVER_PORT</span> <span class="hljs-string">&#125;&#125;</span>  <span class="hljs-comment"># SSH 端口，从 Secrets 中读取</span><br></code></pre></td></tr></table></figure>
 <h3 id="配置本地-_config.yml可选">3.3 配置本地 _config.yml（可选）</h3>
-<p><strong>如果你需要本地也能部署到 GitHub Pages，编辑项目根目录的
-<code>_config.yml</code> 文件：</strong></p>
+<p><strong>如果你需要本地也能部署到 GitHub Pages，编辑项目根目录的 <code>_config.yml</code> 文件：</strong></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># Deployment</span><br><span class="hljs-attr">deploy:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>    <span class="hljs-attr">repo:</span> <span class="hljs-string">https://github.com/your-username/your-username.github.io.git</span><br>    <span class="hljs-attr">branch:</span> <span class="hljs-string">main</span><br></code></pre></td></tr></table></figure>
-<p><strong>注意：</strong> -
-这个配置是<strong>可选的</strong>，如果只需要通过 GitHub Actions
-自动部署，可以不配置 - 如果配置了，本地运行 <code>hexo deploy</code>
-会推送到 GitHub 仓库 - 服务器部署由 GitHub Actions
-自动完成，不需要在本地配置</p>
+<p><strong>注意：</strong> - 这个配置是<strong>可选的</strong>，如果只需要通过 GitHub Actions 自动部署，可以不配置 - 如果配置了，本地运行 <code>hexo deploy</code> 会推送到 GitHub 仓库 - 服务器部署由 GitHub Actions 自动完成，不需要在本地配置</p>
 <hr />
 <h2 id="第四步配置-nginx">第四步：配置 Nginx</h2>
 <p>配置 Nginx 让网站可以通过浏览器访问。</p>
 <h3 id="在服务器上安装-nginx">4.1 在服务器上安装 Nginx</h3>
 <p><strong>在服务器上执行：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Ubuntu/Debian</span><br><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install nginx -y<br><br><span class="hljs-comment"># CentOS/RHEL</span><br><span class="hljs-built_in">sudo</span> yum install nginx -y<br><br><span class="hljs-comment"># 启动 Nginx</span><br><span class="hljs-built_in">sudo</span> systemctl start nginx<br><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> nginx<br></code></pre></td></tr></table></figure>
-<h3 id="在服务器上创建-nginx-配置文件">4.2 在服务器上创建 Nginx
-配置文件</h3>
+<h3 id="在服务器上创建-nginx-配置文件">4.2 在服务器上创建 Nginx 配置文件</h3>
 <p><strong>Ubuntu/Debian 系统：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> nano /etc/nginx/sites-available/your-site<br></code></pre></td></tr></table></figure>
 <p><strong>CentOS/RHEL 系统：</strong></p>
@@ -453,52 +397,39 @@ Access Token（用于部署到 GitHub Pages）</li>
 </ul></li>
 </ol>
 <h3 id="查看部署状态">查看部署状态</h3>
-<p>在 GitHub 仓库页面，点击 <strong>Actions</strong>
-标签，可以查看部署进度和日志。</p>
+<p>在 GitHub 仓库页面，点击 <strong>Actions</strong> 标签，可以查看部署进度和日志。</p>
 <hr />
 <h2 id="常见问题">🔧 常见问题</h2>
-<h3 id="问题-1github-actions-部署失败提示-ssh-连接被拒绝">问题 1：GitHub
-Actions 部署失败，提示 SSH 连接被拒绝</h3>
+<h3 id="问题-1github-actions-部署失败提示-ssh-连接被拒绝">问题 1：GitHub Actions 部署失败，提示 SSH 连接被拒绝</h3>
 <p><strong>解决方案：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在服务器上检查用户是否存在</span><br><span class="hljs-built_in">id</span> www-data<br><br><span class="hljs-comment"># 检查家目录权限</span><br><span class="hljs-built_in">ls</span> -la /home/www-data<br><span class="hljs-comment"># 或</span><br><span class="hljs-built_in">ls</span> -la /var/www<br><br><span class="hljs-comment"># 检查 SSH 配置</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">cat</span> /etc/ssh/sshd_config | grep AllowUsers<br></code></pre></td></tr></table></figure>
-<h3 id="问题-2github-actions-部署失败提示权限不足">问题 2：GitHub
-Actions 部署失败，提示权限不足</h3>
+<h3 id="问题-2github-actions-部署失败提示权限不足">问题 2：GitHub Actions 部署失败，提示权限不足</h3>
 <p><strong>解决方案：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在服务器上检查目录所有者</span><br><span class="hljs-built_in">ls</span> -la /var/www/html<br><br><span class="hljs-comment"># 修改所有者</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> -R www-data:www-data /var/www/html<br><br><span class="hljs-comment"># 检查权限</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> 755 /var/www/html<br></code></pre></td></tr></table></figure>
 <h3 id="问题-3nginx-无法访问文件">问题 3：Nginx 无法访问文件</h3>
 <p><strong>解决方案：</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在服务器上检查 Nginx 用户</span><br>ps aux | grep nginx<br><br><span class="hljs-comment"># 确保 Nginx 用户（通常是 www-data）有读取权限</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> -R 755 /var/www/html<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> -R www-data:www-data /var/www/html<br></code></pre></td></tr></table></figure>
-<h3 id="问题-4github-actions-中端口配置错误">问题 4：GitHub Actions
-中端口配置错误</h3>
-<p><strong>检查：</strong> - 确认 <code>switches</code>
-中的端口号与服务器 SSH 端口一致 -
-格式：<code>switches: -avzr --delete -e "ssh -p 端口号"</code></p>
+<h3 id="问题-4github-actions-中端口配置错误">问题 4：GitHub Actions 中端口配置错误</h3>
+<p><strong>检查：</strong> - 确认 <code>switches</code> 中的端口号与服务器 SSH 端口一致 - 格式：<code>switches: -avzr --delete -e "ssh -p 端口号"</code></p>
 <h3 id="问题-5本地-hexo-deploy-失败">问题 5：本地 hexo deploy 失败</h3>
-<p><strong>原因：</strong> 本地只需要推送到
-GitHub，不需要配置服务器部署。</p>
-<p><strong>解决方案：</strong> 确保 <code>_config.yml</code> 中只配置了
-git 部署，不要配置 rsync。</p>
+<p><strong>原因：</strong> 本地只需要推送到 GitHub，不需要配置服务器部署。</p>
+<p><strong>解决方案：</strong> 确保 <code>_config.yml</code> 中只配置了 git 部署，不要配置 rsync。</p>
 <hr />
 <h2 id="总结">📝 总结</h2>
 <p>通过以上四个步骤，我们完成了：</p>
 <ol type="1">
-<li>✅ <strong>配置 SSH 密钥</strong> -
-在本地生成密钥，公钥添加到服务器，私钥添加到 GitHub Secrets</li>
+<li>✅ <strong>配置 SSH 密钥</strong> - 在本地生成密钥，公钥添加到服务器，私钥添加到 GitHub Secrets</li>
 <li>✅ <strong>配置部署路径</strong> - 在服务器上创建目录并设置权限</li>
 <li>✅ <strong>配置 GitHub Actions</strong> - 实现自动构建和部署</li>
 <li>✅ <strong>配置 Nginx</strong> - 让网站可以通过浏览器访问</li>
 </ol>
-<p>现在你的 Hexo 博客可以： - 本地只需 <code>hexo deploy</code> 推送到
-GitHub - GitHub Actions 自动部署到 GitHub Pages 和服务器 - Windows
-系统无需安装 rsync，使用更方便</p>
+<p>现在你的 Hexo 博客可以： - 本地只需 <code>hexo deploy</code> 推送到 GitHub - GitHub Actions 自动部署到 GitHub Pages 和服务器 - Windows 系统无需安装 rsync，使用更方便</p>
 <p>如果遇到问题，欢迎在评论区留言讨论。</p>
 <h2 id="参考资源">🔗 参考资源</h2>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo 官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">GitHub Actions
-文档</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://github.com/burnett01/rsync-deployments">burnett01/rsync-deployments</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">GitHub Actions 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/burnett01/rsync-deployments">burnett01/rsync-deployments</a></li>
 <li><a target="_blank" rel="noopener" href="https://nginx.org/en/docs/">Nginx 官方文档</a></li>
 </ul>
 
@@ -719,32 +650,6 @@ target="_blank" rel="noopener" href="https://github.com/burnett01/rsync-deployme
     </div>
   
   
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="busuanzi_container_site_pv" style="display: none">
-        总访问量 
-        <span id="busuanzi_value_site_pv"></span>
-         次
-      </span>
-    
-    
-      <span id="busuanzi_container_site_uv" style="display: none">
-        总访客数 
-        <span id="busuanzi_value_site_uv"></span>
-         人
-      </span>
-    
-    
-
-  
-
-</div>
-
-  
   
 </div>
 
@@ -889,8 +794,6 @@ target="_blank" rel="noopener" href="https://github.com/burnett01/rsync-deployme
   <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 
