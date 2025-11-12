@@ -22,12 +22,12 @@
     <meta name="description" content="这是一个测试LaTeX数学公式渲染的文章。 行内数学公式 这是一个行内公式：E &#x3D; mc2，展示了爱因斯坦的质能方程。 另一个例子：$\sum_{i&#x3D;1}^{n} x_i &#x3D; x_1 + x_2 + \cdots + x_n$ 块级数学公式 1. 基础公式 $$ \int_{-\infty}^{\infty} e^{-x^2} dx &#x3D; \sqrt{\pi} $$ 2. 矩阵 $$ \begin{">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LaTeX 数学公式测试">
-<meta property="og:url" content="https://www.ohnn.cn/2025/11/07/latex-test/index.html">
+<meta property="og:url" content="https://hfutrobot.github.io/2025/11/07/latex-test/index.html">
 <meta property="og:site_name" content="记事本">
 <meta property="og:description" content="这是一个测试LaTeX数学公式渲染的文章。 行内数学公式 这是一个行内公式：E &#x3D; mc2，展示了爱因斯坦的质能方程。 另一个例子：$\sum_{i&#x3D;1}^{n} x_i &#x3D; x_1 + x_2 + \cdots + x_n$ 块级数学公式 1. 基础公式 $$ \int_{-\infty}^{\infty} e^{-x^2} dx &#x3D; \sqrt{\pi} $$ 2. 矩阵 $$ \begin{">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-07T08:32:21.000Z">
-<meta property="article:modified_time" content="2025-11-12T03:46:41.956Z">
+<meta property="article:modified_time" content="2025-11-12T09:43:45.154Z">
 <meta property="article:author" content="Nicotinamide">
 <meta property="article:tag" content="LaTeX">
 <meta property="article:tag" content="Yike">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -290,8 +290,7 @@
                 
                 <p>这是一个测试LaTeX数学公式渲染的文章。</p>
 <h2 id="行内数学公式">行内数学公式</h2>
-<p>这是一个行内公式：<span
-class="math inline"><em>E</em> = <em>m</em><em>c</em><sup>2</sup></span>，展示了爱因斯坦的质能方程。</p>
+<p>这是一个行内公式：<span class="math inline" data-latex="E = mc^{2}">\[E = mc^{2}\]</span>，展示了爱因斯坦的质能方程。</p>
 <p>另一个例子：<span class="math inline" data-latex="$\sum_{i=1}^{n} x_i = x_1 + x_2
 + \cdots + x_n$">$\sum_{i=1}^{n} x_i = x_1 + x_2
 + \cdots + x_n$</span></p>
@@ -369,11 +368,25 @@ $$</span>
         </button>
       </div></p>
 <h3 id="希腊字母和特殊符号">5. 希腊字母和特殊符号</h3>
-<p><span
-class="math display"><em>α</em> + <em>β</em> = <em>γ</em>,  <em>Δ</em> = <em>b</em><sup>2</sup> − 4<em>a</em><em>c</em>,  ∇ ⋅ <em>F⃗</em> = <em>ρ</em></span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="α + β = γ,  Δ = b^{2} − 4ac,  ∇ ⋅ F⃗ = ρ">\[α + β = γ,  Δ = b^{2} − 4ac,  ∇ ⋅ F⃗ = ρ\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="积分">6. 积分</h3>
-<p><span
-class="math display">∫<sub>0</sub><sup><em>π</em></sup>sin (<em>x</em>)<em>d</em><em>x</em> = 2</span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="∫_{0}^{π}sin (x)dx = 2">\[∫_{0}^{π}sin (x)dx = 2\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="复杂公式">7. 复杂公式</h3>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\frac{\partial}{\partial t} \Psi(\mathbf{r}, t) = \frac{i\hbar}{2m}
@@ -473,8 +486,15 @@ $$</span>
         </button>
       </div></p>
 <h3 id="积分变换">13. 积分变换</h3>
-<p><span
-class="math display">ℱ{<em>f</em>(<em>t</em>)} = ∫<sub>−∞</sub><sup>∞</sup><em>f</em>(<em>t</em>)<em>e</em><sup>−2<em>π</em><em>i</em><em>ξ</em><em>t</em></sup><em>d</em><em>t</em></span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="ℱ{f(t)} = ∫_{−∞}^{∞}f(t)e^{−2πiξt}dt">\[ℱ{f(t)} = ∫_{−∞}^{∞}f(t)e^{−2πiξt}dt\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="向量与矩阵运算">14. 向量与矩阵运算</h3>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\mathbf{A} \mathbf{x} = \mathbf{b}, \quad \|\mathbf{v}\| = \sqrt{v_1^2 +
@@ -490,11 +510,21 @@ $$</span>
         </button>
       </div></p>
 <h3 id="集合与逻辑">15. 集合与逻辑</h3>
-<p><span
-class="math display"><em>A</em> ∪ <em>B</em> = {<em>x</em> ∣ <em>x</em> ∈ <em>A</em>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A ∪ B = {x ∣ x ∈ A
 or
-<em>x</em> ∈ <em>B</em>},  <em>A</em> ∩ <em>B</em> = {<em>x</em> ∣ <em>x</em> ∈ <em>A</em>
-and <em>x</em> ∈ <em>B</em>}</span></p>
+x ∈ B},  A ∩ B = {x ∣ x ∈ A
+and x ∈ B}">\[A ∪ B = {x ∣ x ∈ A
+or
+x ∈ B},  A ∩ B = {x ∣ x ∈ A
+and x ∈ B}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="概率与统计">16. 概率与统计</h3>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad \bar{x} =
@@ -510,8 +540,15 @@ $$</span>
         </button>
       </div></p>
 <h3 id="复数">17. 复数</h3>
-<p><span
-class="math display"><em>e</em><sup><em>i</em><em>π</em></sup> + 1 = 0,  <em>z</em> = <em>a</em> + <em>b</em><em>i</em> = <em>r</em>(cos<em>θ</em>+<em>i</em>sin<em>θ</em>) = <em>r</em><em>e</em><sup><em>i</em><em>θ</em></sup></span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="e^{iπ} + 1 = 0,  z = a + bi = r(cosθ+isinθ) = re^{iθ}">\[e^{iπ} + 1 = 0,  z = a + bi = r(cosθ+isinθ) = re^{iθ}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="级数展开">18. 级数展开</h3>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} +
@@ -573,11 +610,25 @@ $$</span>
         </button>
       </div></p>
 <h3 id="三角函数恒等式">22. 三角函数恒等式</h3>
-<p><span
-class="math display">sin<sup>2</sup>(<em>x</em>) + cos<sup>2</sup>(<em>x</em>) = 1,  sin (2<em>x</em>) = 2sin (<em>x</em>)cos (<em>x</em>)</span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="sin^{2}(x) + cos^{2}(x) = 1,  sin (2x) = 2sin (x)cos (x)">\[sin^{2}(x) + cos^{2}(x) = 1,  sin (2x) = 2sin (x)cos (x)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="对数与指数">23. 对数与指数</h3>
-<p><span
-class="math display">log<sub><em>a</em></sub>(<em>x</em><em>y</em>) = log<sub><em>a</em></sub>(<em>x</em>) + log<sub><em>a</em></sub>(<em>y</em>),  <em>a</em><sup>log<sub><em>a</em></sub>(<em>x</em>)</sup> = <em>x</em></span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="log_{a}(xy) = log_{a}(x) + log_{a}(y),  alog_{a}(x) = x">\[log_{a}(xy) = log_{a}(x) + log_{a}(y),  alog_{a}(x) = x\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="不等式">24. 不等式</h3>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="|x + y| \leq |x| + |y|, \quad \frac{a + b}{2} \geq \sqrt{ab} \quad (a, b
@@ -593,11 +644,9 @@ $$</span>
         </button>
       </div></p>
 <h3 id="行内复杂公式测试">25. 行内复杂公式测试</h3>
-<p>这是一个包含多个符号的行内公式：<span
-class="math inline">∀<em>ε</em> &gt; 0, ∃<em>δ</em> &gt; 0</span> 使得当
-<span class="math inline" data-latex="|&lt;em&gt;x&lt;/em&gt;−&lt;em&gt;a&lt;/em&gt;| &lt; &lt;em&gt;δ&lt;/em&gt;">|<em>x</em>−<em>a</em>| < <em>δ</em></span>
-时，有 <span
-class="math inline">|<em>f</em>(<em>x</em>)−<em>L</em>| &lt; <em>ε</em></span>。</p>
+<p>这是一个包含多个符号的行内公式：<span class="math inline" data-latex="∀ε &gt; 0, ∃δ &gt; 0">\[∀ε > 0, ∃δ > 0\]</span> 使得当
+<span class="math inline" data-latex="|x−a| &lt; δ">\[|x−a| < δ\]</span>
+时，有 <span class="math inline" data-latex="|f(x)−L| &lt; ε">\[|f(x)−L| < ε\]</span>。</p>
 <p>另一个行内公式：<span class="math inline" data-latex="$\int_0^1 x^2 dx =
 \frac{1}{3}$">$\int_0^1 x^2 dx =
 \frac{1}{3}$</span>，以及 <span class="math inline" data-latex="$\lim_{n \to \infty}
@@ -605,11 +654,9 @@ class="math inline">|<em>f</em>(<em>x</em>)−<em>L</em>| &lt; <em>ε</em></
 \left(1 + \frac{1}{n}\right)^n = e$</span>。</p>
 <h2 id="柔索并联机器人公式测试">柔索并联机器人公式测试</h2>
 <h3 id="运动学正解">1. 运动学正解</h3>
-<p>给定柔索长度 <span
-class="math inline"><em>l</em><sub><em>i</em></sub></span> 和固定点位置
-<span
-class="math inline"><strong>A</strong><sub><em>i</em></sub></span>，动平台位置
-<span class="math inline" data-latex="&lt;strong&gt;P&lt;/strong&gt;"><strong>P</strong></span>
+<p>给定柔索长度 <span class="math inline" data-latex="l_{i}">\[l_{i}\]</span> 和固定点位置
+<span class="math inline" data-latex="A_{i}">\[A_{i}\]</span>，动平台位置
+<span class="math inline" data-latex="P">\[P\]</span>
 可通过以下公式计算：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\mathbf{P} = \mathbf{A}_i + l_i \cdot \hat{\mathbf{d}}_i">$$
@@ -625,14 +672,19 @@ $$</span>
 <p>其中，<span class="math inline" data-latex="$\hat{\mathbf{d}}_i$">$\hat{\mathbf{d}}_i$</span>
 为单位方向向量。</p>
 <h3 id="运动学逆解">2. 运动学逆解</h3>
-<p>已知动平台位置 <span
-class="math inline"><strong>P</strong></span>，柔索长度 <span
-class="math inline"><em>l</em><sub><em>i</em></sub></span>
+<p>已知动平台位置 <span class="math inline" data-latex="P">\[P\]</span>，柔索长度 <span class="math inline" data-latex="l_{i}">\[l_{i}\]</span>
 可通过以下公式求解：</p>
-<p><span
-class="math display"><em>l</em><sub><em>i</em></sub> = ∥<strong>P</strong> − <strong>A</strong><sub><em>i</em></sub>∥</span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="l_{i} = ∥P − A_{i}∥">\[l_{i} = ∥P − A_{i}∥\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="雅可比矩阵">3. 雅可比矩阵</h3>
-<p>雅可比矩阵 <span class="math inline" data-latex="&lt;strong&gt;J&lt;/strong&gt;"><strong>J</strong></span>
+<p>雅可比矩阵 <span class="math inline" data-latex="J">\[J\]</span>
 描述了动平台速度与柔索速度之间的关系：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\mathbf{J} = \begin{bmatrix}
@@ -661,7 +713,7 @@ $$</span>
           </svg>
         </button>
       </div></p>
-<p>对于 <span class="math inline" data-latex="&lt;em&gt;n&lt;/em&gt;"><em>n</em></span>
+<p>对于 <span class="math inline" data-latex="n">\[n\]</span>
 根柔索的机器人，雅可比矩阵的转置可以表示为：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\mathbf{J}^T = \begin{bmatrix}
@@ -687,18 +739,22 @@ $$</span>
         </button>
       </div></p>
 <h3 id="静力学平衡方程">4. 静力学平衡方程</h3>
-<p>在静态条件下，动平台所受的外力 <span
-class="math inline"><strong>F</strong><sub>ext</sub></span> 与柔索张力
-<span class="math inline" data-latex="&lt;strong&gt;T&lt;/strong&gt;"><strong>T</strong></span>
+<p>在静态条件下，动平台所受的外力 <span class="math inline" data-latex="F_{ext}">\[F_{ext}\]</span> 与柔索张力
+<span class="math inline" data-latex="T">\[T\]</span>
 之间满足以下关系：</p>
-<p><span
-class="math display"><strong>J</strong><sup><em>T</em></sup><strong>T</strong> = <strong>F</strong><sub>ext</sub></span></p>
-<p>其中，<span
-class="math inline"><strong>T</strong> = [<em>T</em><sub>1</sub>,<em>T</em><sub>2</sub>,…,<em>T</em><sub><em>n</em></sub>]<sup><em>T</em></sup></span>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="J^{T}T = F_{ext}">\[J^{T}T = F_{ext}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中，<span class="math inline" data-latex="T = [T_{1},T_{2},…,T_{n}]^{T}">\[T = [T_{1},T_{2},…,T_{n}]^{T}\]</span>
 为各柔索的张力向量。</p>
 <h3 id="张力分布">5. 张力分布</h3>
-<p>对于 <span class="math inline" data-latex="&lt;em&gt;m&lt;/em&gt;"><em>m</em></span> 个自由度、<span
-class="math inline"><em>n</em></span>
+<p>对于 <span class="math inline" data-latex="m">\[m\]</span> 个自由度、<span class="math inline" data-latex="n">\[n\]</span>
 根柔索的系统，张力分布需要满足：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\begin{cases}
@@ -719,14 +775,21 @@ $$</span>
           </svg>
         </button>
       </div></p>
-<p>其中 <span class="math inline" data-latex="&lt;em&gt;T&lt;/em&gt;&lt;sub&gt;min&lt;/sub&gt;"><em>T</em><sub>min</sub></span> 和
-<span class="math inline" data-latex="&lt;em&gt;T&lt;/em&gt;&lt;sub&gt;max&lt;/sub&gt;"><em>T</em><sub>max</sub></span>
+<p>其中 <span class="math inline" data-latex="T_{min}">\[T_{min}\]</span> 和
+<span class="math inline" data-latex="T_{max}">\[T_{max}\]</span>
 分别为柔索张力的最小值和最大值。</p>
 <h3 id="动力学方程">6. 动力学方程</h3>
-<p>考虑动平台质量 <span class="math inline" data-latex="&lt;em&gt;m&lt;/em&gt;"><em>m</em></span> 和加速度
-<span class="math inline" data-latex="&lt;strong&gt;a&lt;/strong&gt;"><strong>a</strong></span>，动力学方程为：</p>
-<p><span
-class="math display"><strong>J</strong><sup><em>T</em></sup><strong>T</strong> = <em>m</em><strong>a</strong> + <strong>F</strong><sub>ext</sub></span></p>
+<p>考虑动平台质量 <span class="math inline" data-latex="m">\[m\]</span> 和加速度
+<span class="math inline" data-latex="a">\[a\]</span>，动力学方程为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="J^{T}T = ma + F_{ext}">\[J^{T}T = ma + F_{ext}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <p>更完整的动力学方程包括惯性项、科里奥利力和重力：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\mathbf{J}^T \mathbf{T} = \mathbf{M}(\mathbf{q}) \ddot{\mathbf{q}} +
@@ -743,27 +806,41 @@ $$</span>
           </svg>
         </button>
       </div></p>
-<p>其中： - <span
-class="math inline"><strong>M</strong>(<strong>q</strong>)</span>
+<p>其中： - <span class="math inline" data-latex="M(q)">\[M(q)\]</span>
 为质量矩阵 - <span class="math inline" data-latex="$\mathbf{C}(\mathbf{q},
 \dot{\mathbf{q}})$">$\mathbf{C}(\mathbf{q},
-\dot{\mathbf{q}})$</span> 为科里奥利力矩阵 - <span
-class="math inline"><strong>G</strong>(<strong>q</strong>)</span>
-为重力向量 - <span class="math inline" data-latex="&lt;strong&gt;q&lt;/strong&gt;"><strong>q</strong></span>
+\dot{\mathbf{q}})$</span> 为科里奥利力矩阵 - <span class="math inline" data-latex="G(q)">\[G(q)\]</span>
+为重力向量 - <span class="math inline" data-latex="q">\[q\]</span>
 为广义坐标</p>
 <h3 id="工作空间分析">7. 工作空间分析</h3>
 <p>柔索并联机器人的工作空间可通过以下约束条件确定：</p>
-<p><span
-class="math display"><em>l</em><sub>min</sub> ≤ <em>l</em><sub><em>i</em></sub> ≤ <em>l</em><sub>max</sub>,  <em>i</em> = 1, 2, …, <em>n</em></span></p>
-<p>其中，<span class="math inline" data-latex="&lt;em&gt;l&lt;/em&gt;&lt;sub&gt;min&lt;/sub&gt;"><em>l</em><sub>min</sub></span> 和
-<span class="math inline" data-latex="&lt;em&gt;l&lt;/em&gt;&lt;sub&gt;max&lt;/sub&gt;"><em>l</em><sub>max</sub></span>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="l_{min} ≤ l_{i} ≤ l_{max},  i = 1, 2, …, n">\[l_{min} ≤ l_{i} ≤ l_{max},  i = 1, 2, …, n\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中，<span class="math inline" data-latex="l_{min}">\[l_{min}\]</span> 和
+<span class="math inline" data-latex="l_{max}">\[l_{max}\]</span>
 分别为柔索的最小和最大长度。</p>
 <h3 id="力封闭性条件">8. 力封闭性条件</h3>
 <p>系统具有力封闭性的充要条件是雅可比矩阵的转置满足：</p>
-<p><span
-class="math display">rank(<strong>J</strong><sup><em>T</em></sup>) = <em>m</em>,  且存在
-<strong>T</strong> &gt; <strong>0</strong> 使得
-<strong>J</strong><sup><em>T</em></sup><strong>T</strong> = <strong>0</strong></span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="rank(J^{T}) = m,  且存在
+T &gt; 0 使得
+J^{T}T = 0">\[rank(J^{T}) = m,  且存在
+T > 0 使得
+J^{T}T = 0\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 <h3 id="速度关系">9. 速度关系</h3>
 <p>动平台速度 <span class="math inline" data-latex="$\dot{\mathbf{x}}$">$\dot{\mathbf{x}}$</span>
 与柔索速度 <span class="math inline" data-latex="$\dot{\mathbf{l}}$">$\dot{\mathbf{l}}$</span>
@@ -846,14 +923,10 @@ $$</span>
 <h3 id="行内公式示例">13. 行内公式示例</h3>
 <p>柔索长度 <span class="math inline" data-latex="$l_i = \sqrt{(x - A_{ix})^2 + (y -
 A_{iy})^2 + (z - A_{iz})^2}$">$l_i = \sqrt{(x - A_{ix})^2 + (y -
-A_{iy})^2 + (z - A_{iz})^2}$</span>，其中 <span
-class="math inline">(<em>x</em>,<em>y</em>,<em>z</em>)</span>
-为动平台位置，<span
-class="math inline">(<em>A</em><sub><em>i</em><em>x</em></sub>,<em>A</em><sub><em>i</em><em>y</em></sub>,<em>A</em><sub><em>i</em><em>z</em></sub>)</span>
-为第 <span class="math inline" data-latex="&lt;em&gt;i&lt;/em&gt;"><em>i</em></span> 个固定点坐标。</p>
-<p>张力约束：<span
-class="math inline"><em>T</em><sub>min</sub> ≤ <em>T</em><sub><em>i</em></sub> ≤ <em>T</em><sub>max</sub></span>，工作空间约束：<span
-class="math inline"><em>l</em><sub>min</sub> ≤ <em>l</em><sub><em>i</em></sub> ≤ <em>l</em><sub>max</sub></span>。</p>
+A_{iy})^2 + (z - A_{iz})^2}$</span>，其中 <span class="math inline" data-latex="(x,y,z)">\[(x,y,z)\]</span>
+为动平台位置，<span class="math inline" data-latex="(A_{ix},A_{iy},A_{iz})">\[(A_{ix},A_{iy},A_{iz})\]</span>
+为第 <span class="math inline" data-latex="i">\[i\]</span> 个固定点坐标。</p>
+<p>张力约束：<span class="math inline" data-latex="T_{min} ≤ T_{i} ≤ T_{max}">\[T_{min} ≤ T_{i} ≤ T_{max}\]</span>，工作空间约束：<span class="math inline" data-latex="l_{min} ≤ l_{i} ≤ l_{max}">\[l_{min} ≤ l_{i} ≤ l_{max}\]</span>。</p>
 <h2 id="测试说明">测试说明</h2>
 <p>如果上述公式能够正确渲染，说明LaTeX支持已经正常工作。如果显示为原始LaTeX代码，则需要进一步调试配置。</p>
 <h3 id="功能测试清单">功能测试清单</h3>
@@ -919,7 +992,7 @@ class="math inline"><em>l</em><sub>min</sub> ≤ <em>l</em><sub><em>i</em></
   <div class="license-box my-3">
     <div class="license-title">
       <div>LaTeX 数学公式测试</div>
-      <div>https://www.ohnn.cn/2025/11/07/latex-test/</div>
+      <div>https://hfutrobot.github.io/2025/11/07/latex-test/</div>
     </div>
     <div class="license-meta">
       
@@ -1095,6 +1168,23 @@ class="math inline"><em>l</em><sub>min</sub> ≤ <em>l</em><sub><em>i</em></
       皖ICP备2025102965号
     </a>
   </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
   
 </div>
 

@@ -1,0 +1,1428 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="SVD 奇异值分解教程：理论与应用 📖 什么是 SVD 分解？ SVD（Singular Value Decomposition，奇异值分解） 是线性代数中一个非常重要的矩阵分解方法。对于任意一个 m × n 的矩阵 A，SVD 将其分解为三个矩阵的乘积： A &#x3D; UΣVT 其中： - U 是一个 m × m 的正交矩阵（UTU &#x3D; I），其列向量称为左奇异向量 - Σ 是一个 m × n 的对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVD 奇异值分解教程：理论与应用">
+<meta property="og:url" content="https://hfutrobot.github.io/2025/11/12/svd-decomposition-guide/index.html">
+<meta property="og:site_name" content="记事本">
+<meta property="og:description" content="SVD 奇异值分解教程：理论与应用 📖 什么是 SVD 分解？ SVD（Singular Value Decomposition，奇异值分解） 是线性代数中一个非常重要的矩阵分解方法。对于任意一个 m × n 的矩阵 A，SVD 将其分解为三个矩阵的乘积： A &#x3D; UΣVT 其中： - U 是一个 m × m 的正交矩阵（UTU &#x3D; I），其列向量称为左奇异向量 - Σ 是一个 m × n 的对">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-12T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-12T09:43:45.154Z">
+<meta property="article:author" content="Nicotinamide">
+<meta property="article:tag" content="Yike">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="数据科学">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>SVD 奇异值分解教程：理论与应用 - 记事本</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SVD 奇异值分解教程：理论与应用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-12 13:00" pubdate>
+          2025年11月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SVD 奇异值分解教程：理论与应用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="svd-奇异值分解教程理论与应用">SVD
+奇异值分解教程：理论与应用</h1>
+<h2 id="什么是-svd-分解">📖 什么是 SVD 分解？</h2>
+<p><strong>SVD（Singular Value Decomposition，奇异值分解）</strong>
+是线性代数中一个非常重要的矩阵分解方法。对于任意一个 <span class="math inline" data-latex="m × n">\[m × n\]</span> 的矩阵 <span class="math inline" data-latex="A">\[A\]</span>，SVD
+将其分解为三个矩阵的乘积：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中： - <span class="math inline" data-latex="U">\[U\]</span> 是一个 <span class="math inline" data-latex="m × m">\[m × m\]</span> 的正交矩阵（<span class="math inline" data-latex="U^{T}U = I">\[U^{T}U = I\]</span>），其列向量称为<strong>左奇异向量</strong>
+- <span class="math inline" data-latex="Σ">\[Σ\]</span> 是一个 <span class="math inline" data-latex="m × n">\[m × n\]</span>
+的对角矩阵，对角线上的元素称为<strong>奇异值</strong>（Singular
+Values），按降序排列：<span class="math inline" data-latex="σ_{1} ≥ σ_{2} ≥ ⋯ ≥ σ_{r} ≥ 0">\[σ_{1} ≥ σ_{2} ≥ ⋯ ≥ σ_{r} ≥ 0\]</span>
+- <span class="math inline" data-latex="V^{T}">\[V^{T}\]</span> 是
+<span class="math inline" data-latex="V">\[V\]</span> 的转置，<span class="math inline" data-latex="V">\[V\]</span> 是一个 <span class="math inline" data-latex="n × n">\[n × n\]</span> 的正交矩阵（<span class="math inline" data-latex="V^{T}V = I">\[V^{T}V = I\]</span>），其列向量称为<strong>右奇异向量</strong></p>
+<hr />
+<h2 id="如何理解-svd-的意义">🎯 如何理解 SVD 的意义？</h2>
+<h3
+id="核心思想将复杂变换分解为简单操作">核心思想：将复杂变换分解为简单操作</h3>
+<p>SVD
+的核心思想是：<strong>任何矩阵变换都可以分解为三个简单操作的组合</strong>：</p>
+<ol type="1">
+<li><strong>旋转/反射</strong>（<span class="math inline" data-latex="V^{T}">\[V^{T}\]</span>）：在输入空间中旋转</li>
+<li><strong>缩放</strong>（<span class="math inline" data-latex="Σ">\[Σ\]</span>）：沿坐标轴方向缩放</li>
+<li><strong>旋转/反射</strong>（<span class="math inline" data-latex="U">\[U\]</span>）：在输出空间中旋转</li>
+</ol>
+<h3 id="几何直观理解">几何直观理解</h3>
+<p>想象一个矩阵 <span class="math inline" data-latex="A">\[A\]</span>
+表示一个线性变换，它将一个单位圆（或单位球）变换成一个椭圆（或椭球）。</p>
+<p><strong>SVD 告诉我们</strong>： - <span class="math inline" data-latex="V^{T}">\[V^{T}\]</span>
+的作用：找到输入空间中最重要的方向（主轴） - <span class="math inline" data-latex="Σ">\[Σ\]</span>
+的作用：在这些方向上分别缩放多少倍（椭圆的长轴、短轴长度） - <span class="math inline" data-latex="U">\[U\]</span>
+的作用：将缩放后的结果旋转到输出空间的方向</p>
+<h3 id="具体例子22-矩阵的几何意义">具体例子：2×2 矩阵的几何意义</h3>
+<p>考虑矩阵：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A = \begin{bmatrix} 2 &amp; 1 \\ 1 &amp;
+2 \end{bmatrix}">$$A = \begin{bmatrix} 2 & 1 \\ 1 &
+2 \end{bmatrix}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这个矩阵将单位圆变换成一个椭圆。SVD 分解告诉我们：</p>
+<ol type="1">
+<li><strong>输入空间</strong>：单位圆上的点</li>
+<li><strong><span class="math inline" data-latex="V^{T}">\[V^{T}\]</span>
+旋转</strong>：将单位圆旋转，使得椭圆的主轴与坐标轴对齐</li>
+<li><strong><span class="math inline" data-latex="Σ">\[Σ\]</span>
+缩放</strong>：沿坐标轴方向分别缩放 <span class="math inline" data-latex="σ_{1}">\[σ_{1}\]</span> 和 <span class="math inline" data-latex="σ_{2}">\[σ_{2}\]</span> 倍</li>
+<li><strong><span class="math inline" data-latex="U">\[U\]</span>
+旋转</strong>：将缩放后的椭圆旋转到最终位置</li>
+</ol>
+<p><strong>关键洞察</strong>：SVD
+找到了”最佳坐标系”，在这个坐标系下，变换只是简单的缩放操作。</p>
+<hr />
+<h2 id="svd-分解的具体操作步骤">🔧 SVD 分解的具体操作步骤</h2>
+<h3 id="步骤-1计算-at-a-和-aat">步骤 1：计算 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span> 和
+<span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span></h3>
+<p>对于矩阵 <span class="math inline" data-latex="A ∈ ℝ^{m × n}">\[A ∈ ℝ^{m × n}\]</span>：</p>
+<ol type="1">
+<li><strong>计算 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span></strong>（<span class="math inline" data-latex="n × n">\[n × n\]</span> 矩阵）</li>
+<li><strong>计算 <span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span></strong>（<span class="math inline" data-latex="m × m">\[m × m\]</span> 矩阵）</li>
+</ol>
+<h3 id="步骤-2求特征值和特征向量">步骤 2：求特征值和特征向量</h3>
+<ol type="1">
+<li><strong>对 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+求特征值和特征向量</strong>：
+<ul>
+<li>特征值：<span class="math inline" data-latex="λ_{1}, λ_{2}, …, λ_{n}">\[λ_{1}, λ_{2}, …, λ_{n}\]</span>（按降序排列）</li>
+<li>对应的特征向量：<span class="math inline" data-latex="v_{1}, v_{2}, …, v_{n}">\[v_{1}, v_{2}, …, v_{n}\]</span>（单位化后）</li>
+<li>这些特征向量构成 <span class="math inline" data-latex="V">\[V\]</span>
+的列</li>
+</ul></li>
+<li><strong>对 <span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+求特征值和特征向量</strong>：
+<ul>
+<li>特征值：<span class="math inline" data-latex="μ_{1}, μ_{2}, …, μ_{m}">\[μ_{1}, μ_{2}, …, μ_{m}\]</span>（按降序排列）</li>
+<li>对应的特征向量：<span class="math inline" data-latex="u_{1}, u_{2}, …, u_{m}">\[u_{1}, u_{2}, …, u_{m}\]</span>（单位化后）</li>
+<li>这些特征向量构成 <span class="math inline" data-latex="U">\[U\]</span>
+的列</li>
+</ul></li>
+</ol>
+<h3 id="步骤-3计算奇异值">步骤 3：计算奇异值</h3>
+<p>奇异值 <span class="math inline" data-latex="σ_{i}">\[σ_{i}\]</span>
+是特征值的平方根：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\sigma_i = \sqrt{\lambda_i} =
+\sqrt{\mu_i}">$$\sigma_i = \sqrt{\lambda_i} =
+\sqrt{\mu_i}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>注意</strong>：<span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span> 和
+<span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+的非零特征值完全相同（见下面的推导）。</p>
+<h3 id="步骤-4构建矩阵">步骤 4：构建矩阵</h3>
+<ol type="1">
+<li><strong>构建 <span class="math inline" data-latex="V">\[V\]</span></strong>：将 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+的特征向量（单位化后）作为列</li>
+<li><strong>构建 <span class="math inline" data-latex="Σ">\[Σ\]</span></strong>：对角线元素为奇异值，按降序排列</li>
+<li><strong>构建 <span class="math inline" data-latex="U">\[U\]</span></strong>：有两种方法：
+<ul>
+<li>方法 1：使用 <span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+的特征向量</li>
+<li>方法 2：使用公式 <span class="math inline" data-latex="$u_i = \frac{1}{\sigma_i}
+A v_i$">$u_i = \frac{1}{\sigma_i}
+A v_i$</span>（当 <span class="math inline" data-latex="σ_{i} &gt; 0">\[σ_{i} > 0\]</span>
+时）</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="分解后各部分的具体意义">📐 分解后各部分的具体意义</h2>
+<h3 id="从几何变换的角度理解">从几何变换的角度理解</h3>
+<p>想象矩阵 <span class="math inline" data-latex="A">\[A\]</span>
+将一个单位圆（2D）或单位球（3D）变换成一个椭圆或椭球。SVD
+分解告诉我们如何理解这个变换：</p>
+<h4 id="vt-矩阵右奇异向量的意义"><span class="math inline" data-latex="V^{T}">\[V^{T}\]</span>
+矩阵（右奇异向量）的意义</h4>
+<p><strong>作用</strong>：在输入空间中旋转，找到”最佳方向”</p>
+<ul>
+<li><span class="math inline" data-latex="v_{1}">\[v_{1}\]</span>
+是输入空间中<strong>最重要的方向</strong>（椭圆的长轴方向）</li>
+<li><span class="math inline" data-latex="v_{2}">\[v_{2}\]</span>
+是输入空间中<strong>第二重要的方向</strong>（椭圆的短轴方向，与 <span class="math inline" data-latex="v_{1}">\[v_{1}\]</span> 垂直）</li>
+<li>这些方向是<strong>相互正交</strong>的</li>
+</ul>
+<p><strong>直观理解</strong>： - 如果你在输入空间中沿着 <span class="math inline" data-latex="v_{1}">\[v_{1}\]</span>
+方向移动，变换后的影响最大 - 如果你沿着 <span class="math inline" data-latex="v_{2}">\[v_{2}\]</span>
+方向移动，变换后的影响较小 - <span class="math inline" data-latex="V^{T}">\[V^{T}\]</span>
+的作用是将坐标轴旋转到这些”最佳方向”</p>
+<h4 id="sigma-矩阵奇异值的意义"><span class="math inline" data-latex="Σ">\[Σ\]</span> 矩阵（奇异值）的意义</h4>
+<p><strong>作用</strong>：在最佳方向上分别缩放多少倍</p>
+<ul>
+<li><span class="math inline" data-latex="σ_{1}">\[σ_{1}\]</span>
+是<strong>最大的缩放因子</strong>（椭圆的长轴长度）</li>
+<li><span class="math inline" data-latex="σ_{2}">\[σ_{2}\]</span>
+是<strong>第二大的缩放因子</strong>（椭圆的短轴长度）</li>
+<li><span class="math inline" data-latex="σ_{1} ≥ σ_{2} ≥ ⋯ ≥ 0">\[σ_{1} ≥ σ_{2} ≥ ⋯ ≥ 0\]</span></li>
+</ul>
+<p><strong>直观理解</strong>： - <span class="math inline" data-latex="σ_{1}">\[σ_{1}\]</span>
+告诉我们：在最重要的方向 <span class="math inline" data-latex="v_{1}">\[v_{1}\]</span> 上，变换放大了多少倍 -
+<span class="math inline" data-latex="σ_{2}">\[σ_{2}\]</span>
+告诉我们：在第二重要的方向 <span class="math inline" data-latex="v_{2}">\[v_{2}\]</span> 上，变换放大了多少倍 -
+如果 <span class="math inline" data-latex="σ_{i}">\[σ_{i}\]</span>
+很小（接近 0），说明这个方向上的信息不重要，可以忽略</p>
+<p><strong>关键性质</strong>： - 非零奇异值的个数 = 矩阵的秩（有效维度）
+- 奇异值的平方和 = 矩阵的 Frobenius 范数的平方（总能量） - 最大奇异值 =
+矩阵的 2-范数（最大可能的放大倍数）</p>
+<h4 id="u-矩阵左奇异向量的意义"><span class="math inline" data-latex="U">\[U\]</span> 矩阵（左奇异向量）的意义</h4>
+<p><strong>作用</strong>：在输出空间中旋转，确定最终方向</p>
+<ul>
+<li><span class="math inline" data-latex="u_{1}">\[u_{1}\]</span>
+是输出空间中<strong>最重要的方向</strong>（变换后椭圆长轴的方向）</li>
+<li><span class="math inline" data-latex="u_{2}">\[u_{2}\]</span>
+是输出空间中<strong>第二重要的方向</strong>（变换后椭圆短轴的方向，与
+<span class="math inline" data-latex="u_{1}">\[u_{1}\]</span> 垂直）</li>
+<li>这些方向也是<strong>相互正交</strong>的</li>
+</ul>
+<p><strong>直观理解</strong>： - <span class="math inline" data-latex="u_{1}">\[u_{1}\]</span>
+表示：变换后，数据主要沿着这个方向分布 - <span class="math inline" data-latex="u_{2}">\[u_{2}\]</span>
+表示：变换后，数据次要沿着这个方向分布 - <span class="math inline" data-latex="U">\[U\]</span>
+的作用是将缩放后的结果旋转到输出空间的最终方向</p>
+<h3 id="完整的变换过程">完整的变换过程</h3>
+<p>给定一个输入向量 <span class="math inline" data-latex="x">\[x\]</span>，SVD
+告诉我们变换 <span class="math inline" data-latex="Ax">\[Ax\]</span>
+的过程：</p>
+<ol type="1">
+<li><strong>第一步</strong>：<span class="math inline" data-latex="V^{T}x">\[V^{T}x\]</span> -
+将 <span class="math inline" data-latex="x">\[x\]</span> 旋转到”最佳坐标系”</li>
+<li><strong>第二步</strong>：<span class="math inline" data-latex="Σ(V^{T}x)">\[Σ(V^{T}x)\]</span>
+- 在最佳坐标系中分别缩放</li>
+<li><strong>第三步</strong>：<span class="math inline" data-latex="U(ΣV^{T}x)">\[U(ΣV^{T}x)\]</span>
+- 将缩放后的结果旋转到输出方向</li>
+</ol>
+<p><strong>关键洞察</strong>：SVD
+找到了一个特殊的坐标系，在这个坐标系下，复杂的矩阵变换变成了简单的缩放操作。</p>
+<h3 id="数值例子">数值例子</h3>
+<p>考虑矩阵：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A = \begin{bmatrix} 3 &amp; 1 \\ 1 &amp;
+3 \end{bmatrix}">$$A = \begin{bmatrix} 3 & 1 \\ 1 &
+3 \end{bmatrix}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这个矩阵的 SVD 分解（近似值）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A \approx \begin{bmatrix} 0.707 &amp;
+0.707 \\ 0.707 &amp; -0.707 \end{bmatrix} \begin{bmatrix} 4 &amp; 0 \\ 0
+&amp; 2 \end{bmatrix} \begin{bmatrix} 0.707 &amp; 0.707 \\ 0.707 &amp;
+-0.707 \end{bmatrix}^T">$$A \approx \begin{bmatrix} 0.707 &
+0.707 \\ 0.707 & -0.707 \end{bmatrix} \begin{bmatrix} 4 & 0 \\ 0
+& 2 \end{bmatrix} \begin{bmatrix} 0.707 & 0.707 \\ 0.707 &
+-0.707 \end{bmatrix}^T$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>理解</strong>： - <span class="math inline" data-latex="v_{1} = [0.707,0.707]^{T}">\[v_{1} = [0.707,0.707]^{T}\]</span>：输入空间中最重要的方向（45度角）
+- <span class="math inline" data-latex="σ_{1} = 4">\[σ_{1} = 4\]</span>：在这个方向上放大
+4 倍 - <span class="math inline" data-latex="v_{2} = [0.707,−0.707]^{T}">\[v_{2} = [0.707,−0.707]^{T}\]</span>：输入空间中第二重要的方向（-45度角）
+- <span class="math inline" data-latex="σ_{2} = 2">\[σ_{2} = 2\]</span>：在这个方向上放大
+2 倍 - <span class="math inline" data-latex="u_{1}, u_{2}">\[u_{1}, u_{2}\]</span>：输出空间中对应的方向</p>
+<p><strong>实际效果</strong>： - 如果你输入 <span class="math inline" data-latex="x = [1,0]^{T}">\[x = [1,0]^{T}\]</span>（沿着
+x 轴），变换后主要沿着 <span class="math inline" data-latex="u_{1}">\[u_{1}\]</span> 方向，放大倍数约为 4 -
+如果你输入 <span class="math inline" data-latex="x = [0,1]^{T}">\[x = [0,1]^{T}\]</span>（沿着
+y 轴），变换后主要沿着 <span class="math inline" data-latex="u_{2}">\[u_{2}\]</span> 方向，放大倍数约为
+2</p>
+<hr />
+<h2 id="公式推导过程">🔍 公式推导过程</h2>
+<h3 id="推导-1为什么-at-a-和-aat-的特征值相同">推导 1：为什么 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span> 和
+<span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+的特征值相同？</h3>
+<p>设 <span class="math inline" data-latex="λ">\[λ\]</span> 是 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+的特征值，对应的特征向量为 <span class="math inline" data-latex="v">\[v\]</span>，即：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A^{T}Av = λv">\[A^{T}Av = λv\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两边同时左乘 <span class="math inline" data-latex="A">\[A\]</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="AA^{T}(Av) = λ(Av)">\[AA^{T}(Av) = λ(Av)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这说明 <span class="math inline" data-latex="λ">\[λ\]</span> 也是 <span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+的特征值，对应的特征向量为 <span class="math inline" data-latex="Av">\[Av\]</span>（需要归一化）。</p>
+<p><strong>结论</strong>：<span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span> 和
+<span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+的非零特征值完全相同。</p>
+<h3 id="推导-2奇异值与特征值的关系">推导 2：奇异值与特征值的关系</h3>
+<p>从 <span class="math inline" data-latex="A^{T}Av = λv">\[A^{T}Av = λv\]</span>
+和 <span class="math inline" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>，我们有：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A^{T}A = (UΣV^{T})^{T}(UΣV^{T}) = VΣ^{T}U^{T}UΣV^{T} = VΣ^{T}ΣV^{T}">\[A^{T}A = (UΣV^{T})^{T}(UΣV^{T}) = VΣ^{T}U^{T}UΣV^{T} = VΣ^{T}ΣV^{T}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因为 <span class="math inline" data-latex="U">\[U\]</span> 是正交矩阵（<span class="math inline" data-latex="U^{T}U = I">\[U^{T}U = I\]</span>），且
+<span class="math inline" data-latex="Σ^{T}Σ">\[Σ^{T}Σ\]</span>
+是对角矩阵，其对角线元素为 <span class="math inline" data-latex="σ_{i}^{2}">\[σ_{i}^{2}\]</span>。</p>
+<p>因此：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A^{T}Av = VΣ^{T}ΣV^{T}v = λv">\[A^{T}Av = VΣ^{T}ΣV^{T}v = λv\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这说明 <span class="math inline" data-latex="λ_{i} = σ_{i}^{2}">\[λ_{i} = σ_{i}^{2}\]</span>，即：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\sigma_i = \sqrt{\lambda_i}">$$\sigma_i = \sqrt{\lambda_i}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="推导-3如何从-at-a-的特征向量得到-u">推导 3：如何从 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+的特征向量得到 <span class="math inline" data-latex="U">\[U\]</span>？</h3>
+<p>已知 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+的特征向量 <span class="math inline" data-latex="v_{i}">\[v_{i}\]</span>
+和对应的特征值 <span class="math inline" data-latex="λ_{i}">\[λ_{i}\]</span>，我们有：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A^{T}Av_{i} = λ_{i}v_{i}">\[A^{T}Av_{i} = λ_{i}v_{i}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两边同时左乘 <span class="math inline" data-latex="A">\[A\]</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="AA^{T}(Av_{i}) = λ_{i}(Av_{i})">\[AA^{T}(Av_{i}) = λ_{i}(Av_{i})\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这说明 <span class="math inline" data-latex="Av_{i}">\[Av_{i}\]</span> 是
+<span class="math inline" data-latex="AA^{T}">\[AA^{T}\]</span>
+的特征向量，对应的特征值为 <span class="math inline" data-latex="λ_{i}">\[λ_{i}\]</span>。</p>
+<p>为了得到单位化的左奇异向量 <span class="math inline" data-latex="u_{i}">\[u_{i}\]</span>，我们需要：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_i = \frac{A v_i}{\|A
+v_i\|}">$$u_i = \frac{A v_i}{\|A
+v_i\|}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>计算 <span class="math inline" data-latex="∥Av_{i}∥">\[∥Av_{i}∥\]</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="∥Av_{i}∥^{2} = (Av_{i})^{T}(Av_{i}) = v_{i}^{T}A^{T}Av_{i} = v_{i}^{T}λ_{i}v_{i} = λ_{i}∥v_{i}∥^{2} = λ_{i} = σ_{i}^{2}">\[∥Av_{i}∥^{2} = (Av_{i})^{T}(Av_{i}) = v_{i}^{T}A^{T}Av_{i} = v_{i}^{T}λ_{i}v_{i} = λ_{i}∥v_{i}∥^{2} = λ_{i} = σ_{i}^{2}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="∥Av_{i}∥ = σ_{i}">\[∥Av_{i}∥ = σ_{i}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>所以：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_i = \frac{A
+v_i}{\sigma_i}">$$u_i = \frac{A
+v_i}{\sigma_i}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="推导-4svd-分解的唯一性">推导 4：SVD 分解的唯一性</h3>
+<p><strong>定理</strong>：对于矩阵 <span class="math inline" data-latex="A">\[A\]</span>，奇异值是唯一的（在排序后），但
+<span class="math inline" data-latex="U">\[U\]</span> 和 <span class="math inline" data-latex="V">\[V\]</span> 的选择可能不唯一。</p>
+<p><strong>证明</strong>： - 奇异值 <span class="math inline" data-latex="$\sigma_i
+= \sqrt{\lambda_i}$">$\sigma_i
+= \sqrt{\lambda_i}$</span>，其中 <span class="math inline" data-latex="λ_{i}">\[λ_{i}\]</span> 是 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+的特征值，特征值是唯一的 - 如果 <span class="math inline" data-latex="σ_{i}">\[σ_{i}\]</span>
+是单根（没有重复），则对应的 <span class="math inline" data-latex="u_{i}">\[u_{i}\]</span> 和 <span class="math inline" data-latex="v_{i}">\[v_{i}\]</span>
+方向唯一（符号可能不同） - 如果 <span class="math inline" data-latex="σ_{i}">\[σ_{i}\]</span>
+是重根，则对应的 <span class="math inline" data-latex="u_{i}">\[u_{i}\]</span> 和 <span class="math inline" data-latex="v_{i}">\[v_{i}\]</span>
+可以在对应的子空间中任意选择正交基</p>
+<hr />
+<h2 id="奇异值的数学性质">📊 奇异值的数学性质</h2>
+<h3 id="能量解释">能量解释</h3>
+<p>奇异值的平方和等于矩阵的 Frobenius 范数的平方：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\|A\|_F^2 = \sum_{i=1}^r
+\sigma_i^2">$$\|A\|_F^2 = \sum_{i=1}^r
+\sigma_i^2$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>证明</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\|A\|_F^2 =
+\text{tr}(A^T A) = \text{tr}(V \Sigma^T U^T U \Sigma V^T) = \text{tr}(V
+\Sigma^T \Sigma V^T) = \text{tr}(\Sigma^T \Sigma) = \sum_{i=1}^r
+\sigma_i^2">$$\|A\|_F^2 =
+\text{tr}(A^T A) = \text{tr}(V \Sigma^T U^T U \Sigma V^T) = \text{tr}(V
+\Sigma^T \Sigma V^T) = \text{tr}(\Sigma^T \Sigma) = \sum_{i=1}^r
+\sigma_i^2$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>前 <span class="math inline" data-latex="k">\[k\]</span>
+个奇异值占总能量的比例：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\sum_{i=1}^k
+\sigma_i^2}{\sum_{i=1}^r \sigma_i^2}">$$\frac{\sum_{i=1}^k
+\sigma_i^2}{\sum_{i=1}^r \sigma_i^2}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这个比例可以用来评估低秩近似的质量。</p>
+<h3 id="矩阵范数的关系">矩阵范数的关系</h3>
+<p><strong>Frobenius 范数</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\|A\|_F = \sqrt{\sum_{i=1}^r
+\sigma_i^2}">$$\|A\|_F = \sqrt{\sum_{i=1}^r
+\sigma_i^2}$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>2-范数（谱范数）</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="∥A∥_{2} = σ_{1}">\[∥A∥_{2} = σ_{1}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>核范数（Nuclear Norm）</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\|A\|_* = \sum_{i=1}^r \sigma_i">$$\|A\|_* = \sum_{i=1}^r \sigma_i$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="矩阵的秩">矩阵的秩</h3>
+<p>矩阵 <span class="math inline" data-latex="A">\[A\]</span>
+的秩等于非零奇异值的个数：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="rank(A) = #{σ_{i} : σ_{i} &gt; 0}">\[rank(A) = #{σ_{i} : σ_{i} > 0}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>证明</strong>：因为 <span class="math inline" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>，且
+<span class="math inline" data-latex="U">\[U\]</span> 和 <span class="math inline" data-latex="V">\[V\]</span> 都是满秩的，所以 <span class="math inline" data-latex="rank(A) = rank(Σ)">\[rank(A) = rank(Σ)\]</span>，而 <span class="math inline" data-latex="rank(Σ)">\[rank(Σ)\]</span> 等于非零对角元素的个数。</p>
+<hr />
+<h2 id="svd-的存在性证明">🔬 SVD 的存在性证明</h2>
+<h3 id="定理svd-分解的存在性">定理：SVD 分解的存在性</h3>
+<p>对于任意矩阵 <span class="math inline" data-latex="A ∈ ℝ^{m × n}">\[A ∈ ℝ^{m × n}\]</span>，总存在
+SVD 分解 <span class="math inline" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>。</p>
+<h3 id="证明步骤">证明步骤</h3>
+<p><strong>步骤 1</strong>：考虑 <span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>，这是一个
+<span class="math inline" data-latex="n × n">\[n × n\]</span>
+的对称半正定矩阵。</p>
+<p><strong>步骤 2</strong>：根据对称矩阵的性质，<span class="math inline" data-latex="A^{T}A">\[A^{T}A\]</span>
+可以对角化： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="A^{T}A = VΛV^{T}">\[A^{T}A = VΛV^{T}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中： - <span class="math inline" data-latex="Λ">\[Λ\]</span>
+是对角矩阵，对角线元素为特征值 <span class="math inline" data-latex="λ_{1} ≥ λ_{2} ≥ ⋯ ≥ λ_{n} ≥ 0">\[λ_{1} ≥ λ_{2} ≥ ⋯ ≥ λ_{n} ≥ 0\]</span>
+- <span class="math inline" data-latex="V">\[V\]</span>
+是正交矩阵，列向量为对应的特征向量</p>
+<p><strong>步骤 3</strong>：定义奇异值 <span class="math inline" data-latex="$\sigma_i = \sqrt{\lambda_i}$">$\sigma_i = \sqrt{\lambda_i}$</span>，构建 <span class="math inline" data-latex="Σ">\[Σ\]</span> 矩阵。</p>
+<p><strong>步骤 4</strong>：对于 <span class="math inline" data-latex="σ_{i} &gt; 0">\[σ_{i} > 0\]</span>，定义：
+<div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_i = \frac{1}{\sigma_i} A v_i">$$u_i = \frac{1}{\sigma_i} A v_i$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>步骤 5</strong>：验证 <span class="math inline" data-latex="u_{i}">\[u_{i}\]</span>
+是单位向量且相互正交： - <span class="math inline" data-latex="$\|u_i\|^2 =
+\frac{1}{\sigma_i^2} v_i^T A^T A v_i = \frac{1}{\sigma_i^2} \lambda_i =
+1$">$\|u_i\|^2 =
+\frac{1}{\sigma_i^2} v_i^T A^T A v_i = \frac{1}{\sigma_i^2} \lambda_i =
+1$</span> - <span class="math inline" data-latex="$u_i^T u_j = \frac{1}{\sigma_i
+\sigma_j} v_i^T A^T A v_j = \frac{1}{\sigma_i \sigma_j} \lambda_j v_i^T
+v_j = 0$">$u_i^T u_j = \frac{1}{\sigma_i
+\sigma_j} v_i^T A^T A v_j = \frac{1}{\sigma_i \sigma_j} \lambda_j v_i^T
+v_j = 0$</span>（当 <span class="math inline" data-latex="i ≠ j">\[i ≠ j\]</span> 时）</p>
+<p><strong>步骤 6</strong>：对于 <span class="math inline" data-latex="σ_{i} = 0">\[σ_{i} = 0\]</span>
+的情况，<span class="math inline" data-latex="u_{i}">\[u_{i}\]</span>
+可以通过 Gram-Schmidt 正交化过程补充，使得 <span class="math inline" data-latex="U">\[U\]</span> 成为完整的正交矩阵。</p>
+<p><strong>步骤 7</strong>：验证 <span class="math inline" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>：
+<div class="math-formula-wrapper">
+        <span class="math display" data-latex="U \Sigma V^T = \sum_{i=1}^r \sigma_i u_i
+v_i^T = \sum_{i=1}^r A v_i v_i^T = A \sum_{i=1}^r v_i v_i^T = A V V^T =
+A">$$U \Sigma V^T = \sum_{i=1}^r \sigma_i u_i
+v_i^T = \sum_{i=1}^r A v_i v_i^T = A \sum_{i=1}^r v_i v_i^T = A V V^T =
+A$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="r">\[r\]</span>
+是非零奇异值的个数。</p>
+<hr />
+<h2 id="低秩近似的理论保证">📐 低秩近似的理论保证</h2>
+<h3 id="eckart-young-mirsky-定理">Eckart-Young-Mirsky 定理</h3>
+<p><strong>定理</strong>：对于矩阵 <span class="math inline" data-latex="A">\[A\]</span> 的 SVD 分解 <span class="math inline" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>，最佳
+<span class="math inline" data-latex="k">\[k\]</span> 秩近似为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A_k = U_k \Sigma_k V_k^T = \sum_{i=1}^k
+\sigma_i u_i v_i^T">$$A_k = U_k \Sigma_k V_k^T = \sum_{i=1}^k
+\sigma_i u_i v_i^T$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="U_{k}">\[U_{k}\]</span>、<span class="math inline" data-latex="Σ_{k}">\[Σ_{k}\]</span>、<span class="math inline" data-latex="V_{k}">\[V_{k}\]</span> 分别是保留前
+<span class="math inline" data-latex="k">\[k\]</span> 个奇异值对应的部分。</p>
+<p><strong>对于 Frobenius 范数</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\min_{\text{rank}(B) \leq k} \|A - B\|_F^2 = \|A
+- A_k\|_F^2 = \sum_{i=k+1}^r \sigma_i^2">$$\min_{\text{rank}(B) \leq k} \|A - B\|_F^2 = \|A
+- A_k\|_F^2 = \sum_{i=k+1}^r \sigma_i^2$$</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>对于 2-范数（谱范数）</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="min_{rank(B) ≤ k}∥A − B∥_{2} = ∥A − A_{k}∥_{2} = σ_{k + 1}">\[min_{rank(B) ≤ k}∥A − B∥_{2} = ∥A − A_{k}∥_{2} = σ_{k + 1}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="证明思路frobenius-范数">证明思路（Frobenius 范数）</h3>
+<p>设 <span class="math inline" data-latex="B">\[B\]</span> 是任意 <span class="math inline" data-latex="k">\[k\]</span> 秩矩阵，可以写成 <span class="math inline" data-latex="B = XY^{T}">\[B = XY^{T}\]</span>，其中
+<span class="math inline" data-latex="X ∈ ℝ^{m × k}">\[X ∈ ℝ^{m × k}\]</span>，<span class="math inline" data-latex="Y ∈ ℝ^{n × k}">\[Y ∈ ℝ^{n × k}\]</span>。</p>
+<p>最小化 <span class="math inline" data-latex="∥A − XY^{T}∥_{F}^{2}">\[∥A − XY^{T}∥_{F}^{2}\]</span>
+等价于最大化 <span class="math inline" data-latex="tr(A^{T}XY^{T})">\[tr(A^{T}XY^{T})\]</span>。</p>
+<p>通过拉格朗日乘数法和矩阵微积分，可以证明最优解为： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="X = U_{k},  Y = V_{k}Σ_{k}">\[X = U_{k},  Y = V_{k}Σ_{k}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此 <span class="math inline" data-latex="A_{k} = U_{k}Σ_{k}V_{k}^{T}">\[A_{k} = U_{k}Σ_{k}V_{k}^{T}\]</span>
+是最佳 <span class="math inline" data-latex="k">\[k\]</span> 秩近似。</p>
+<h3 id="低秩近似的应用">低秩近似的应用</h3>
+<p>通过保留前 <span class="math inline" data-latex="k">\[k\]</span>
+个最大的奇异值，可以得到矩阵 <span class="math inline" data-latex="A">\[A\]</span>
+的最佳 <span class="math inline" data-latex="k">\[k\]</span> 秩近似：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A_{k} = U_{k}Σ_{k}V_{k}^{T}">\[A_{k} = U_{k}Σ_{k}V_{k}^{T}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="U_{k}">\[U_{k}\]</span>
+是 <span class="math inline" data-latex="U">\[U\]</span> 的前 <span class="math inline" data-latex="k">\[k\]</span> 列，<span class="math inline" data-latex="Σ_{k}">\[Σ_{k}\]</span> 是前 <span class="math inline" data-latex="k">\[k\]</span> 个奇异值组成的对角矩阵，<span class="math inline" data-latex="V_{k}">\[V_{k}\]</span> 是 <span class="math inline" data-latex="V">\[V\]</span> 的前 <span class="math inline" data-latex="k">\[k\]</span> 列。</p>
+<hr />
+<h2 id="svd-分解的应用意义">🎯 SVD 分解的应用意义</h2>
+<h3 id="为什么-svd-如此重要">为什么 SVD 如此重要？</h3>
+<p>SVD 的重要性在于它<strong>揭示了数据的本质结构</strong>：</p>
+<ol type="1">
+<li><strong>找到主要方向</strong>：告诉我们数据在哪些方向上变化最大</li>
+<li><strong>量化重要性</strong>：告诉我们每个方向的重要性（通过奇异值）</li>
+<li><strong>去除冗余</strong>：小的奇异值对应的方向可以忽略，从而实现降维和去噪</li>
+</ol>
+<h3 id="应用场景的直观理解">应用场景的直观理解</h3>
+<h4 id="数据降维">1. 数据降维</h4>
+<p><strong>问题</strong>：数据有 1000 个特征，但可能只有 10
+个是真正重要的。</p>
+<p><strong>SVD 的解决方案</strong>： - 通过 SVD，我们发现前 10 个奇异值
+<span class="math inline" data-latex="σ_{1}, …, σ_{10}">\[σ_{1}, …, σ_{10}\]</span>
+很大 - 后面的奇异值 <span class="math inline" data-latex="σ_{11}, …, σ_{1000}">\[σ_{11}, …, σ_{1000}\]</span>
+很小（接近 0） - <strong>结论</strong>：数据实际上只在这 10
+个方向上变化，其他方向是冗余的 - <strong>操作</strong>：只保留前 10
+个奇异值和对应的 <span class="math inline" data-latex="U">\[U\]</span>、<span class="math inline" data-latex="V">\[V\]</span>，将 1000 维降维到 10 维</p>
+<p><strong>直观理解</strong>：就像一张照片，大部分像素是相似的，只有少数像素是关键的。SVD
+帮我们找到这些关键像素。</p>
+<h4 id="主成分分析pca">2. 主成分分析（PCA）</h4>
+<p><strong>问题</strong>：数据有很多特征，但很多特征是相关的（比如身高和体重）。</p>
+<p><strong>SVD 的解决方案</strong>： - <span class="math inline" data-latex="V">\[V\]</span> 的列向量（<span class="math inline" data-latex="v_{1}, v_{2}, …">\[v_{1}, v_{2}, …\]</span>）是<strong>主成分方向</strong>
+- <span class="math inline" data-latex="σ_{1}^{2}, σ_{2}^{2}, …">\[σ_{1}^{2}, σ_{2}^{2}, …\]</span>
+是每个主成分的<strong>方差</strong>（重要性） - 第一个主成分 <span class="math inline" data-latex="v_{1}">\[v_{1}\]</span> 是数据变化最大的方向 -
+第二个主成分 <span class="math inline" data-latex="v_{2}">\[v_{2}\]</span>
+是数据变化第二大的方向（且与 <span class="math inline" data-latex="v_{1}">\[v_{1}\]</span> 垂直）</p>
+<p><strong>直观理解</strong>：如果数据是二维的（身高、体重），SVD
+会找到一条”最佳直线”，数据沿着这条直线分布最集中。这条直线就是第一主成分。</p>
+<h4 id="图像压缩">3. 图像压缩</h4>
+<p><strong>问题</strong>：一张 1000×1000 的图片需要存储 100
+万个像素值。</p>
+<p><strong>SVD 的解决方案</strong>： - 将图像矩阵 <span class="math inline" data-latex="A">\[A\]</span> 进行 SVD 分解 - 发现前 50
+个奇异值很大，后面的都很小 - <strong>操作</strong>：只保留前 50
+个奇异值和对应的 <span class="math inline" data-latex="U">\[U\]</span>、<span class="math inline" data-latex="V">\[V\]</span> - <strong>结果</strong>：从 100
+万个数字压缩到约 10 万个数字（50 个奇异值 + <span class="math inline" data-latex="U">\[U\]</span> 的 50 列 + <span class="math inline" data-latex="V">\[V\]</span> 的 50 列）</p>
+<p><strong>直观理解</strong>： - <span class="math inline" data-latex="U">\[U\]</span>
+的列：图像的”行模式”（比如水平线条、垂直线条） - <span class="math inline" data-latex="V">\[V\]</span> 的列：图像的”列模式” - <span class="math inline" data-latex="σ_{i}">\[σ_{i}\]</span>：每个模式的重要性
+- 重要的模式（大奇异值）保留，不重要的模式（小奇异值）丢弃</p>
+<h4 id="推荐系统">4. 推荐系统</h4>
+<p><strong>问题</strong>：有 100 万用户和 10
+万部电影，如何预测用户对电影的评分？</p>
+<p><strong>SVD 的解决方案</strong>： - 构建用户-电影评分矩阵 <span class="math inline" data-latex="A">\[A\]</span>（100万行 × 10万列） - 进行 SVD
+分解：<span class="math inline" data-latex="A = UΣV^{T}">\[A = UΣV^{T}\]</span>
+- <strong>理解</strong>： - <span class="math inline" data-latex="U">\[U\]</span>
+的列：用户的”潜在特征”（比如”喜欢动作片”、“喜欢爱情片”） - <span class="math inline" data-latex="V">\[V\]</span>
+的列：电影的”潜在特征”（比如”动作片”、“爱情片”） - <span class="math inline" data-latex="σ_{i}">\[σ_{i}\]</span>：每个特征的重要性
+- <strong>预测</strong>：用户 <span class="math inline" data-latex="i">\[i\]</span> 对电影 <span class="math inline" data-latex="j">\[j\]</span> 的评分 ≈ <span class="math inline" data-latex="U[i,:]ΣV^{T}[:,j]">\[U[i,:]ΣV^{T}[:,j]\]</span></p>
+<p><strong>直观理解</strong>：SVD
+发现了用户和电影的”潜在类型”。比如发现用户可以分为”动作片爱好者”和”爱情片爱好者”，电影也可以分为”动作片”和”爱情片”。通过匹配用户类型和电影类型，可以预测评分。</p>
+<h4 id="噪声去除">5. 噪声去除</h4>
+<p><strong>问题</strong>：数据中有噪声，如何去除？</p>
+<p><strong>SVD 的解决方案</strong>： - 对数据矩阵进行 SVD 分解 - 发现前
+<span class="math inline" data-latex="k">\[k\]</span> 个奇异值很大（对应真实信号）
+- 后面的奇异值很小（对应噪声） - <strong>操作</strong>：只保留前 <span class="math inline" data-latex="k">\[k\]</span> 个奇异值，丢弃后面的 -
+<strong>结果</strong>：重构后的数据去除了噪声</p>
+<p><strong>直观理解</strong>：就像调收音机，信号强的频道（大奇异值）保留，信号弱的频道（小奇异值，可能是噪声）过滤掉。</p>
+<hr />
+<h2 id="总结">📝 总结</h2>
+<p>SVD 奇异值分解是一个强大而通用的工具，在多个领域都有重要应用：</p>
+<ol type="1">
+<li>✅
+<strong>理论基础完善</strong>：存在性、唯一性、最优性都有严格的数学证明</li>
+<li>✅ <strong>计算步骤清晰</strong>：通过特征值分解即可实现</li>
+<li>✅ <strong>各部分意义明确</strong>：<span class="math inline" data-latex="U">\[U\]</span>、<span class="math inline" data-latex="Σ">\[Σ\]</span>、<span class="math inline" data-latex="V">\[V\]</span> 都有清晰的数学和几何解释</li>
+<li>✅
+<strong>应用广泛</strong>：数据降维、图像压缩、推荐系统、噪声去除等</li>
+</ol>
+<p>通过理解 SVD
+的数学原理和公式推导，我们可以更好地应用这一工具处理高维数据和复杂问题。</p>
+<hr />
+<h2 id="相关资源">🔗 相关资源</h2>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html">NumPy
+SVD 文档</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html">scikit-learn
+TruncatedSVD</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.uv.es/~ruizcan/teaching/svd/svd.html">SVD
+可视化工具</a></li>
+</ul>
+<hr />
+<p><em>希望这个教程能帮助你深入理解 SVD 分解的原理和应用！</em></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/%E6%95%99%E7%A8%8B/" class="print-no-link">#教程</a>
+      
+        <a href="/tags/%E6%95%B0%E5%AD%A6/" class="print-no-link">#数学</a>
+      
+        <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" class="print-no-link">#线性代数</a>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" class="print-no-link">#数据科学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SVD 奇异值分解教程：理论与应用</div>
+      <div>https://hfutrobot.github.io/2025/11/12/svd-decomposition-guide/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/08/hexo-beginner-guide/" title="Hexo 博客搭建完整指南：从安装到部署">
+                        <span class="hidden-mobile">Hexo 博客搭建完整指南：从安装到部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

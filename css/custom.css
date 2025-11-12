@@ -598,16 +598,20 @@ a:hover {
 }
 
 /* 块级公式可显示工具提示 */
+/* 已移除 hover 背景色效果，避免布局跳动 */
+/* 如果需要 hover 效果，可以使用以下代码：
 .math.display[data-latex] {
   transition: background-color 0.2s ease;
+  padding: 0.25rem;
+  margin: -0.25rem;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
 }
 
 .math.display[data-latex]:hover {
   background-color: var(--link-hover-bg-color);
-  border-radius: 0.25rem;
-  padding: 0.25rem;
-  margin: -0.25rem;
 }
+*/
 
 /* 复制按钮 */
 .math-copy-btn {
