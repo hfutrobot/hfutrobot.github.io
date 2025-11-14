@@ -1,7 +1,7 @@
 /* Fluid Theme - 卡片式美化定制 + 多作者系统 */
 
-/* 引入字体 - 使用国内镜像CDN，保持原字体效果 */
-@import url('https://fonts.loli.net/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
+/* 引入本地字体 - 无需外部CDN，GitHub Pages友好 */
+@import url('./fonts-local.css');
 
 /* CSS 变量重定义 - 卡片式配色与字体 */
 :root {
