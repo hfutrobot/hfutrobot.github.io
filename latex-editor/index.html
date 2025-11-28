@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Nicotinamide">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="快捷工具     公式模板                                       ×           常用符号                             αβ           希腊字母                             x&#x2F;y           分数微分">
+<meta property="og:type" content="website">
+<meta property="og:title" content="在线 LaTeX 编辑器">
+<meta property="og:url" content="https://hfutrobot.github.io/latex-editor/index.html">
+<meta property="og:site_name" content="记事本">
+<meta property="og:description" content="快捷工具     公式模板                                       ×           常用符号                             αβ           希腊字母                             x&#x2F;y           分数微分">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-28T14:28:08.839Z">
+<meta property="article:modified_time" content="2025-11-28T14:28:08.839Z">
+<meta property="article:author" content="Nicotinamide">
+<meta property="article:tag" content="技术分享,学习笔记,编程,开发">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>在线 LaTeX 编辑器 - 记事本</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-page.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="在线 LaTeX 编辑器"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<article class="page-content">
+  
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/stex/stex.min.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+
+<div class="latex-editor-container">
+  <div class="editor-tabs">
+    <div class="editor-tab active" onclick="switchTab('shortcuts')">快捷工具</div>
+    <div class="editor-tab" onclick="switchTab('templates')">公式模板</div>
+  </div>
+
+  <div class="toolbar-container">
+    <div id="tab-shortcuts" class="tab-content">
+      <div class="category-bar">
+        <div class="category-btn active" onclick="switchCategory('common')" data-cat="common">
+          <span class="category-icon">×</span>
+          <span class="category-name">常用符号</span>
+        </div>
+        <div class="category-btn" onclick="switchCategory('greek')" data-cat="greek">
+          <span class="category-icon">αβ</span>
+          <span class="category-name">希腊字母</span>
+        </div>
+        <div class="category-btn" onclick="switchCategory('fraction')" data-cat="fraction">
+          <span class="category-icon">x/y</span>
+          <span class="category-name">分数微分</span>
+        </div>
+        <div class="category-btn" onclick="switchCategory('root')" data-cat="root">
+          <span class="category-icon">√</span>
+          <span class="category-name">根式角标</span>
+        </div>
+        <div class="category-btn" onclick="switchCategory('function')" data-cat="function">
+          <span class="category-icon">lim</span>
+          <span class="category-name">极限三角</span>
+        </div>
+        <div class="category-btn" onclick="switchCategory('largeop')" data-cat="largeop">
+          <span class="category-icon">∑</span>
+          <span class="category-name">大型算符</span>
+        </div>
+        <div class="category-btn" onclick="switchCategory('brackets')" data-cat="brackets">
+          <span class="category-icon">{}</span>
+          <span class="category-name">括号矩阵</span>
+        </div>
+      </div>
+
+      <div class="symbol-panel-container">
+        <div id="cat-common" class="symbol-group active">
+          
+          <div class="panel-section">
+            <div class="section-title">二元运算符 Binary operations</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="+" data-desc-cn="加号" data-desc-en="plus">+</button>
+              <button class="symbol-btn" data-cmd="-" data-desc-cn="减号" data-desc-en="minus">-</button>
+              <button class="symbol-btn" data-cmd="\times " data-desc-cn="乘" data-desc-en="times">×</button>
+              <button class="symbol-btn" data-cmd="\div " data-desc-cn="除" data-desc-en="divide">÷</button>
+              <button class="symbol-btn" data-cmd="\pm " data-desc-cn="正负" data-desc-en="plus-minus">±</button>
+              <button class="symbol-btn" data-cmd="\mp " data-desc-cn="负正" data-desc-en="minus-plus">∓</button>
+              <button class="symbol-btn" data-cmd="\cdot " data-desc-cn="点乘" data-desc-en="dot">·</button>
+              <button class="symbol-btn" data-cmd="\ast " data-desc-cn="星号" data-desc-en="asterisk">∗</button>
+              <button class="symbol-btn" data-cmd="\star " data-desc-cn="星号" data-desc-en="star">★</button>
+              <button class="symbol-btn" data-cmd="\cup " data-desc-cn="并集" data-desc-en="union">∪</button>
+              <button class="symbol-btn" data-cmd="\cap " data-desc-cn="交集" data-desc-en="intersection">∩</button>
+              <button class="symbol-btn" data-cmd="\setminus " data-desc-cn="差集" data-desc-en="setminus">\</button>
+              <button class="symbol-btn" data-cmd="\oplus " data-desc-cn="直和" data-desc-en="oplus">⊕</button>
+              <button class="symbol-btn" data-cmd="\otimes " data-desc-cn="张量积" data-desc-en="otimes">⊗</button>
+              <button class="symbol-btn" data-cmd="\odot " data-desc-cn="点积" data-desc-en="odot">⊙</button>
+              <button class="symbol-btn" data-cmd="\circ " data-desc-cn="复合" data-desc-en="circ">∘</button>
+              <button class="symbol-btn" data-cmd="\bullet " data-desc-cn="实心圆" data-desc-en="bullet">•</button>
+              <button class="symbol-btn" data-cmd="\diamond " data-desc-cn="菱形" data-desc-en="diamond">◇</button>
+              <button class="symbol-btn" data-cmd="\lhd " data-desc-cn="左三角" data-desc-en="left triangle">◁</button>
+              <button class="symbol-btn" data-cmd="\rhd " data-desc-cn="右三角" data-desc-en="right triangle">▷</button>
+              <button class="symbol-btn" data-cmd="\unlhd " data-desc-cn="左三角等" data-desc-en="left triangle eq">⊴</button>
+              <button class="symbol-btn" data-cmd="\unrhd " data-desc-cn="右三角等" data-desc-en="right triangle eq">⊵</button>
+              <button class="symbol-btn" data-cmd="\vee " data-desc-cn="逻辑或" data-desc-en="vee">∨</button>
+              <button class="symbol-btn" data-cmd="\wedge " data-desc-cn="逻辑与" data-desc-en="wedge">∧</button>
+              <button class="symbol-btn" data-cmd="\dagger " data-desc-cn="匕首" data-desc-en="dagger">†</button>
+              <button class="symbol-btn" data-cmd="\ddagger " data-desc-cn="双匕首" data-desc-en="double dagger">‡</button>
+              <button class="symbol-btn" data-cmd="\wr " data-desc-cn="花环" data-desc-en="wreath">≀</button>
+              <button class="symbol-btn" data-cmd="\amalg " data-desc-cn="混合" data-desc-en="amalgamation">⨿</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <div class="section-title">二元关系符 Binary relations</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="<" data-desc-cn="小于" data-desc-en="less than"><</button>
+              <button class="symbol-btn" data-cmd=">" data-desc-cn="大于" data-desc-en="greater than">></button>
+              <button class="symbol-btn" data-cmd="=" data-desc-cn="等于" data-desc-en="equals">=</button>
+              <button class="symbol-btn" data-cmd="\leq " data-desc-cn="小于等于" data-desc-en="less equal">≤</button>
+              <button class="symbol-btn" data-cmd="\geq " data-desc-cn="大于等于" data-desc-en="greater equal">≥</button>
+              <button class="symbol-btn" data-cmd="\equiv " data-desc-cn="恒等于" data-desc-en="equivalent">≡</button>
+              <button class="symbol-btn" data-cmd="\sim " data-desc-cn="相似" data-desc-en="similar">∼</button>
+              <button class="symbol-btn" data-cmd="\approx " data-desc-cn="约等于" data-desc-en="approx">≈</button>
+              <button class="symbol-btn" data-cmd="\cong " data-desc-cn="全等" data-desc-en="congruent">≅</button>
+              <button class="symbol-btn" data-cmd="\neq " data-desc-cn="不等于" data-desc-en="not equal">≠</button>
+              <button class="symbol-btn" data-cmd="\subset " data-desc-cn="真子集" data-desc-en="subset">⊂</button>
+              <button class="symbol-btn" data-cmd="\supset " data-desc-cn="真超集" data-desc-en="superset">⊃</button>
+              <button class="symbol-btn" data-cmd="\subseteq " data-desc-cn="子集" data-desc-en="subset equal">⊆</button>
+              <button class="symbol-btn" data-cmd="\supseteq " data-desc-cn="超集" data-desc-en="superset equal">⊇</button>
+              <button class="symbol-btn" data-cmd="\in " data-desc-cn="属于" data-desc-en="in">∈</button>
+              <button class="symbol-btn" data-cmd="\ni " data-desc-cn="包含" data-desc-en="owns">∋</button>
+              <button class="symbol-btn" data-cmd="\notin " data-desc-cn="不属于" data-desc-en="not in">∉</button>
+              <button class="symbol-btn" data-cmd="\propto " data-desc-cn="正比于" data-desc-en="proportional">∝</button>
+              <button class="symbol-btn" data-cmd="\mid " data-desc-cn="整除" data-desc-en="mid">|</button>
+              <button class="symbol-btn" data-cmd="\parallel " data-desc-cn="平行" data-desc-en="parallel">∥</button>
+              <button class="symbol-btn" data-cmd="\perp " data-desc-cn="垂直" data-desc-en="perp">⊥</button>
+              <button class="symbol-btn" data-cmd="\vdash " data-desc-cn="推导" data-desc-en="vdash">⊢</button>
+              <button class="symbol-btn" data-cmd="\dashv " data-desc-cn="逆推导" data-desc-en="dashv">⊣</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <div class="section-title">箭头符号 Arrows</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\leftarrow " data-desc-cn="左箭头" data-desc-en="left arrow">←</button>
+              <button class="symbol-btn" data-cmd="\rightarrow " data-desc-cn="右箭头" data-desc-en="right arrow">→</button>
+              <button class="symbol-btn" data-cmd="\leftrightarrow " data-desc-cn="双向箭头" data-desc-en="left right arrow">↔</button>
+              <button class="symbol-btn" data-cmd="\Leftarrow " data-desc-cn="双线左箭头" data-desc-en="Left arrow">⇐</button>
+              <button class="symbol-btn" data-cmd="\Rightarrow " data-desc-cn="双线右箭头" data-desc-en="Right arrow">⇒</button>
+              <button class="symbol-btn" data-cmd="\Leftrightarrow " data-desc-cn="双线双向箭头" data-desc-en="Left Right arrow">⇔</button>
+              <button class="symbol-btn" data-cmd="\uparrow " data-desc-cn="上箭头" data-desc-en="up arrow">↑</button>
+              <button class="symbol-btn" data-cmd="\downarrow " data-desc-cn="下箭头" data-desc-en="down arrow">↓</button>
+              <button class="symbol-btn" data-cmd="\updownarrow " data-desc-cn="上下箭头" data-desc-en="up down arrow">↕</button>
+              <button class="symbol-btn" data-cmd="\mapsto " data-desc-cn="映射" data-desc-en="mapsto">↦</button>
+              <button class="symbol-btn" data-cmd="\longmapsto " data-desc-cn="长映射" data-desc-en="long mapsto">⟼</button>
+              <button class="symbol-btn" data-cmd="\nearrow " data-desc-cn="右上箭头" data-desc-en="ne arrow">↗</button>
+              <button class="symbol-btn" data-cmd="\searrow " data-desc-cn="右下箭头" data-desc-en="se arrow">↘</button>
+              <button class="symbol-btn" data-cmd="\swarrow " data-desc-cn="左下箭头" data-desc-en="sw arrow">↙</button>
+              <button class="symbol-btn" data-cmd="\nwarrow " data-desc-cn="左上箭头" data-desc-en="nw arrow">↖</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <div class="section-title">其他符号 Others</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\infty " data-desc-cn="无穷大" data-desc-en="infinity">∞</button>
+              <button class="symbol-btn" data-cmd="\forall " data-desc-cn="任意" data-desc-en="for all">∀</button>
+              <button class="symbol-btn" data-cmd="\exists " data-desc-cn="存在" data-desc-en="exists">∃</button>
+              <button class="symbol-btn" data-cmd="\nexists " data-desc-cn="不存在" data-desc-en="not exists">∄</button>
+              <button class="symbol-btn" data-cmd="\emptyset " data-desc-cn="空集" data-desc-en="empty set">∅</button>
+              <button class="symbol-btn" data-cmd="\nabla " data-desc-cn="梯度" data-desc-en="nabla">∇</button>
+              <button class="symbol-btn" data-cmd="\partial " data-desc-cn="偏导" data-desc-en="partial">∂</button>
+              <button class="symbol-btn" data-cmd="\angle " data-desc-cn="角" data-desc-en="angle">∠</button>
+              <button class="symbol-btn" data-cmd="\triangle " data-desc-cn="三角形" data-desc-en="triangle">△</button>
+              <button class="symbol-btn" data-cmd="\therefore " data-desc-cn="所以" data-desc-en="therefore">∴</button>
+              <button class="symbol-btn" data-cmd="\because " data-desc-cn="因为" data-desc-en="because">∵</button>
+              <button class="symbol-btn" data-cmd="\cdots " data-desc-cn="横省略号" data-desc-en="cdots">⋯</button>
+              <button class="symbol-btn" data-cmd="\vdots " data-desc-cn="竖省略号" data-desc-en="vdots">⋮</button>
+              <button class="symbol-btn" data-cmd="\ddots " data-desc-cn="斜省略号" data-desc-en="ddots">⋱</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="cat-greek" class="symbol-group">
+          
+          <div class="panel-section">
+            <div class="section-title">小写希腊字母 Lowercase Greek letters</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\alpha " data-desc-cn="阿尔法" data-desc-en="alpha">α</button>
+              <button class="symbol-btn" data-cmd="\beta " data-desc-cn="贝塔" data-desc-en="beta">β</button>
+              <button class="symbol-btn" data-cmd="\gamma " data-desc-cn="伽马" data-desc-en="gamma">γ</button>
+              <button class="symbol-btn" data-cmd="\delta " data-desc-cn="德尔塔" data-desc-en="delta">δ</button>
+              <button class="symbol-btn" data-cmd="\epsilon " data-desc-cn="艾普西龙" data-desc-en="epsilon">ϵ</button>
+              <button class="symbol-btn" data-cmd="\zeta " data-desc-cn="泽塔" data-desc-en="zeta">ζ</button>
+              <button class="symbol-btn" data-cmd="\eta " data-desc-cn="艾塔" data-desc-en="eta">η</button>
+              <button class="symbol-btn" data-cmd="\theta " data-desc-cn="西塔" data-desc-en="theta">θ</button>
+              <button class="symbol-btn" data-cmd="\iota " data-desc-cn="约塔" data-desc-en="iota">ι</button>
+              <button class="symbol-btn" data-cmd="\kappa " data-desc-cn="卡帕" data-desc-en="kappa">κ</button>
+              <button class="symbol-btn" data-cmd="\lambda " data-desc-cn="兰姆达" data-desc-en="lambda">λ</button>
+              <button class="symbol-btn" data-cmd="\mu " data-desc-cn="缪" data-desc-en="mu">μ</button>
+              <button class="symbol-btn" data-cmd="\nu " data-desc-cn="纽" data-desc-en="nu">ν</button>
+              <button class="symbol-btn" data-cmd="\xi " data-desc-cn="克西" data-desc-en="xi">ξ</button>
+              <button class="symbol-btn" data-cmd="o " data-desc-cn="奥密克戎" data-desc-en="omicron">o</button>
+              <button class="symbol-btn" data-cmd="\pi " data-desc-cn="派" data-desc-en="pi">π</button>
+              <button class="symbol-btn" data-cmd="\rho " data-desc-cn="罗" data-desc-en="rho">ρ</button>
+              <button class="symbol-btn" data-cmd="\sigma " data-desc-cn="西格玛" data-desc-en="sigma">σ</button>
+              <button class="symbol-btn" data-cmd="\tau " data-desc-cn="陶" data-desc-en="tau">τ</button>
+              <button class="symbol-btn" data-cmd="\upsilon " data-desc-cn="宇普西龙" data-desc-en="upsilon">υ</button>
+              <button class="symbol-btn" data-cmd="\phi " data-desc-cn="斐" data-desc-en="phi">ϕ</button>
+              <button class="symbol-btn" data-cmd="\chi " data-desc-cn="希" data-desc-en="chi">χ</button>
+              <button class="symbol-btn" data-cmd="\psi " data-desc-cn="普西" data-desc-en="psi">ψ</button>
+              <button class="symbol-btn" data-cmd="\omega " data-desc-cn="欧米伽" data-desc-en="omega">ω</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <div class="section-title">大写希腊字母 Uppercase Greek letters</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\Gamma " data-desc-cn="伽马" data-desc-en="Gamma">Γ</button>
+              <button class="symbol-btn" data-cmd="\Delta " data-desc-cn="德尔塔" data-desc-en="Delta">Δ</button>
+              <button class="symbol-btn" data-cmd="\Theta " data-desc-cn="西塔" data-desc-en="Theta">Θ</button>
+              <button class="symbol-btn" data-cmd="\Lambda " data-desc-cn="兰姆达" data-desc-en="Lambda">Λ</button>
+              <button class="symbol-btn" data-cmd="\Xi " data-desc-cn="克西" data-desc-en="Xi">Ξ</button>
+              <button class="symbol-btn" data-cmd="\Pi " data-desc-cn="派" data-desc-en="Pi">Π</button>
+              <button class="symbol-btn" data-cmd="\Sigma " data-desc-cn="西格玛" data-desc-en="Sigma">Σ</button>
+              <button class="symbol-btn" data-cmd="\Upsilon " data-desc-cn="宇普西龙" data-desc-en="Upsilon">Υ</button>
+              <button class="symbol-btn" data-cmd="\Phi " data-desc-cn="斐" data-desc-en="Phi">Φ</button>
+              <button class="symbol-btn" data-cmd="\Psi " data-desc-cn="普西" data-desc-en="Psi">Ψ</button>
+              <button class="symbol-btn" data-cmd="\Omega " data-desc-cn="欧米伽" data-desc-en="Omega">Ω</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <div class="section-title">变体 Variants</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\varepsilon " data-desc-cn="艾普西龙变体" data-desc-en="varepsilon">ε</button>
+              <button class="symbol-btn" data-cmd="\vartheta " data-desc-cn="西塔变体" data-desc-en="vartheta">ϑ</button>
+              <button class="symbol-btn" data-cmd="\varkappa " data-desc-cn="卡帕变体" data-desc-en="varkappa">ϰ</button>
+              <button class="symbol-btn" data-cmd="\varpi " data-desc-cn="派变体" data-desc-en="varpi">ϖ</button>
+              <button class="symbol-btn" data-cmd="\varrho " data-desc-cn="罗变体" data-desc-en="varrho">ϱ</button>
+              <button class="symbol-btn" data-cmd="\varsigma " data-desc-cn="西格玛变体" data-desc-en="varsigma">ς</button>
+              <button class="symbol-btn" data-cmd="\varphi " data-desc-cn="斐变体" data-desc-en="varphi">φ</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="cat-fraction" class="symbol-group">
+          
+          <div class="panel-section">
+            <div class="section-title">分数 Fractions</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\frac{a}{b} " data-desc-cn="分数" data-desc-en="fraction">\(\frac{a}{b}\)</button>
+              <button class="symbol-btn" data-cmd="x \frac{a}{b} " data-desc-cn="带分数" data-desc-en="mixed fraction">\(x \frac{a}{b}\)</button>
+              <button class="symbol-btn" data-cmd="\mathrm{d}t " data-desc-cn="微分t" data-desc-en="dt">\(\mathrm{d}t\)</button>
+              <button class="symbol-btn" data-cmd="\frac{\mathrm{d}y}{\mathrm{d}x} " data-desc-cn="导数" data-desc-en="derivative">\(\frac{\mathrm{d}y}{\mathrm{d}x}\)</button>
+              <button class="symbol-btn" data-cmd="\partial t " data-desc-cn="偏微分t" data-desc-en="partial t">\(\partial t\)</button>
+              <button class="symbol-btn" data-cmd="\frac{\partial y}{\partial x} " data-desc-cn="偏导数" data-desc-en="partial derivative">\(\frac{\partial y}{\partial x}\)</button>
+              <button class="symbol-btn" data-cmd="\nabla \psi " data-desc-cn="梯度" data-desc-en="gradient">\(\nabla \psi\)</button>
+              <button class="symbol-btn" data-cmd="\frac{\partial^2}{\partial x_1 \partial x_2} y " data-desc-cn="混合偏导" data-desc-en="mixed partial">\(\frac{\partial^2 y}{\partial x_1 \partial x_2}\)</button>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <div class="section-title">导数 Derivative</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\dot{a} " data-desc-cn="一阶点导" data-desc-en="dot">\(\dot{a}\)</button>
+              <button class="symbol-btn" data-cmd="\ddot{a} " data-desc-cn="二阶点导" data-desc-en="ddot">\(\ddot{a}\)</button>
+              <button class="symbol-btn" data-cmd="f' " data-desc-cn="一阶导" data-desc-en="prime">\(f'\)</button>
+              <button class="symbol-btn" data-cmd="f'' " data-desc-cn="二阶导" data-desc-en="double prime">\(f''\)</button>
+              <button class="symbol-btn" data-cmd="f^{(n)} " data-desc-cn="n阶导" data-desc-en="n-th derivative">\(f^{(n)}\)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cat-root" class="symbol-group">
+          <div class="panel-section">
+            <div class="section-title">根式 Roots</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\sqrt{x} " data-desc-cn="平方根" data-desc-en="square root">\(\sqrt{x}\)</button>
+              <button class="symbol-btn" data-cmd="\sqrt[n]{x} " data-desc-cn="n次根" data-desc-en="nth root">\(\sqrt[n]{x}\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">上下标 Subscript & Superscript</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="x^{n} " data-desc-cn="上标" data-desc-en="superscript">\(x^{n}\)</button>
+              <button class="symbol-btn" data-cmd="x_{n} " data-desc-cn="下标" data-desc-en="subscript">\(x_{n}\)</button>
+              <button class="symbol-btn" data-cmd="x^{\Box} " data-desc-cn="空上标" data-desc-en="empty superscript">\(x^{\Box}\)</button>
+              <button class="symbol-btn" data-cmd="x_{\Box} " data-desc-cn="空下标" data-desc-en="empty subscript">\(x_{\Box}\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">上划线 Overlines</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\bar{x} " data-desc-cn="横线" data-desc-en="bar">\(\bar{x}\)</button>
+              <button class="symbol-btn" data-cmd="\hat{x} " data-desc-cn="帽子" data-desc-en="hat">\(\hat{x}\)</button>
+              <button class="symbol-btn" data-cmd="\tilde{x} " data-desc-cn="波浪线" data-desc-en="tilde">\(\tilde{x}\)</button>
+              <button class="symbol-btn" data-cmd="\vec{x} " data-desc-cn="向量" data-desc-en="vector">\(\vec{x}\)</button>
+              <button class="symbol-btn" data-cmd="\overrightarrow{AB} " data-desc-cn="长向量" data-desc-en="long vector">\(\overrightarrow{AB}\)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cat-function" class="symbol-group">
+          <div class="panel-section">
+            <div class="section-title">极限与对数 Limit & Log</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\lim " data-desc-cn="极限" data-desc-en="limit">\(\lim\)</button>
+              <button class="symbol-btn" data-cmd="\lim_{x \to \infty} " data-desc-cn="趋于无穷" data-desc-en="limit to infinity">\(\lim_{x \to \infty}\)</button>
+              <button class="symbol-btn" data-cmd="\log " data-desc-cn="对数" data-desc-en="log">\(\log\)</button>
+              <button class="symbol-btn" data-cmd="\ln " data-desc-cn="自然对数" data-desc-en="ln">\(\ln\)</button>
+              <button class="symbol-btn" data-cmd="\lg " data-desc-cn="常用对数" data-desc-en="lg">\(\lg\)</button>
+              <button class="symbol-btn" data-cmd="\log_{a} b " data-desc-cn="以a为底" data-desc-en="log base a">\(\log_{a} b\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">最值 Min/Max</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\min " data-desc-cn="最小值" data-desc-en="min">\(\min\)</button>
+              <button class="symbol-btn" data-cmd="\max " data-desc-cn="最大值" data-desc-en="max">\(\max\)</button>
+              <button class="symbol-btn" data-cmd="\inf " data-desc-cn="下确界" data-desc-en="infimum">\(\inf\)</button>
+              <button class="symbol-btn" data-cmd="\sup " data-desc-cn="上确界" data-desc-en="supremum">\(\sup\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">三角函数 Trigonometric</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\sin " data-desc-cn="正弦" data-desc-en="sine">\(\sin\)</button>
+              <button class="symbol-btn" data-cmd="\cos " data-desc-cn="余弦" data-desc-en="cosine">\(\cos\)</button>
+              <button class="symbol-btn" data-cmd="\tan " data-desc-cn="正切" data-desc-en="tangent">\(\tan\)</button>
+              <button class="symbol-btn" data-cmd="\cot " data-desc-cn="余切" data-desc-en="cotangent">\(\cot\)</button>
+              <button class="symbol-btn" data-cmd="\sec " data-desc-cn="正割" data-desc-en="secant">\(\sec\)</button>
+              <button class="symbol-btn" data-cmd="\csc " data-desc-cn="余割" data-desc-en="cosecant">\(\csc\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">反三角 Inverse Trig</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\arcsin " data-desc-cn="反正弦" data-desc-en="arcsin">\(\arcsin\)</button>
+              <button class="symbol-btn" data-cmd="\arccos " data-desc-cn="反余弦" data-desc-en="arccos">\(\arccos\)</button>
+              <button class="symbol-btn" data-cmd="\arctan " data-desc-cn="反正切" data-desc-en="arctan">\(\arctan\)</button>
+              <button class="symbol-btn" data-cmd="\text{arc}cot " data-desc-cn="反余切" data-desc-en="arccot">\(\text{arccot}\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">双曲函数 Hyperbolic</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\sinh " data-desc-cn="双曲正弦" data-desc-en="sinh">\(\sinh\)</button>
+              <button class="symbol-btn" data-cmd="\cosh " data-desc-cn="双曲余弦" data-desc-en="cosh">\(\cosh\)</button>
+              <button class="symbol-btn" data-cmd="\tanh " data-desc-cn="双曲正切" data-desc-en="tanh">\(\tanh\)</button>
+              <button class="symbol-btn" data-cmd="\coth " data-desc-cn="双曲余切" data-desc-en="coth">\(\coth\)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cat-largeop" class="symbol-group">
+          <div class="panel-section">
+            <div class="section-title">积分运算 Integral</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\int " data-desc-cn="积分" data-desc-en="integral">\(\int\)</button>
+              <button class="symbol-btn" data-cmd="\int_{a}^{b} " data-desc-cn="定积分" data-desc-en="definite integral">\(\int_{a}^{b}\)</button>
+              <button class="symbol-btn" data-cmd="\iint " data-desc-cn="二重积分" data-desc-en="double integral">\(\iint\)</button>
+              <button class="symbol-btn" data-cmd="\iiint " data-desc-cn="三重积分" data-desc-en="triple integral">\(\iiint\)</button>
+              <button class="symbol-btn" data-cmd="\oint " data-desc-cn="环路积分" data-desc-en="contour integral">\(\oint\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">大型运算符 Large Operator</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\sum " data-desc-cn="求和" data-desc-en="sum">\(\sum\)</button>
+              <button class="symbol-btn" data-cmd="\sum_{i=0}^{n} " data-desc-cn="带上下限求和" data-desc-en="sum with limits">\(\sum_{i=0}^{n}\)</button>
+              <button class="symbol-btn" data-cmd="\prod " data-desc-cn="连乘" data-desc-en="product">\(\prod\)</button>
+              <button class="symbol-btn" data-cmd="\prod_{i=0}^{n} " data-desc-cn="带上下限连乘" data-desc-en="product with limits">\(\prod_{i=0}^{n}\)</button>
+              <button class="symbol-btn" data-cmd="\bigcup " data-desc-cn="并集" data-desc-en="union">\(\bigcup\)</button>
+              <button class="symbol-btn" data-cmd="\bigcap " data-desc-cn="交集" data-desc-en="intersection">\(\bigcap\)</button>
+              <button class="symbol-btn" data-cmd="\bigvee " data-desc-cn="逻辑或" data-desc-en="big vee">\(\bigvee\)</button>
+              <button class="symbol-btn" data-cmd="\bigwedge " data-desc-cn="逻辑与" data-desc-en="big wedge">\(\bigwedge\)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cat-brackets" class="symbol-group">
+          <div class="panel-section">
+            <div class="section-title">括号 Brackets</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="() " data-desc-cn="圆括号" data-desc-en="parentheses">\((\ )\)</button>
+              <button class="symbol-btn" data-cmd="[] " data-desc-cn="方括号" data-desc-en="square brackets">\([\ ]\)</button>
+              <button class="symbol-btn" data-cmd="\{\} " data-desc-cn="花括号" data-desc-en="curly braces">\(\{\ \}\)</button>
+              <button class="symbol-btn" data-cmd="\langle \rangle " data-desc-cn="尖括号" data-desc-en="angle brackets">\(\langle\ \rangle\)</button>
+              <button class="symbol-btn" data-cmd="| | " data-desc-cn="竖线" data-desc-en="vertical bars">\(|\ |\)</button>
+              <button class="symbol-btn" data-cmd="\| \| " data-desc-cn="双竖线" data-desc-en="double bars">\(\|\ \|\)</button>
+              <button class="symbol-btn" data-cmd="\lfloor \rfloor " data-desc-cn="向下取整" data-desc-en="floor">\(\lfloor\ \rfloor\)</button>
+              <button class="symbol-btn" data-cmd="\lceil \rceil " data-desc-cn="向上取整" data-desc-en="ceiling">\(\lceil\ \rceil\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">大括号 Large Brackets</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\left( \right) " data-desc-cn="自适应圆括号" data-desc-en="auto parentheses">\(\left(\ \right)\)</button>
+              <button class="symbol-btn" data-cmd="\left[ \right] " data-desc-cn="自适应方括号" data-desc-en="auto square">\(\left[\ \right]\)</button>
+              <button class="symbol-btn" data-cmd="\left\{ \right\} " data-desc-cn="自适应花括号" data-desc-en="auto curly">\(\left\{\ \right\}\)</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="section-title">矩阵 Matrix</div>
+            <div class="symbol-grid">
+              <button class="symbol-btn" data-cmd="\begin{matrix}&#10;  a & b \\&#10;  c & d&#10;\end{matrix}" data-desc-cn="无括号矩阵" data-desc-en="matrix" style="width:auto; padding:0 5px;">matrix</button>
+              <button class="symbol-btn" data-cmd="\begin{pmatrix}&#10;  a & b \\&#10;  c & d&#10;\end{pmatrix}" data-desc-cn="圆括号矩阵" data-desc-en="pmatrix" style="width:auto; padding:0 5px;">pmatrix</button>
+              <button class="symbol-btn" data-cmd="\begin{bmatrix}&#10;  a & b \\&#10;  c & d&#10;\end{bmatrix}" data-desc-cn="方括号矩阵" data-desc-en="bmatrix" style="width:auto; padding:0 5px;">bmatrix</button>
+              <button class="symbol-btn" data-cmd="\begin{vmatrix}&#10;  a & b \\&#10;  c & d&#10;\end{vmatrix}" data-desc-cn="行列式" data-desc-en="determinant" style="width:auto; padding:0 5px;">vmatrix</button>
+              <button class="symbol-btn" data-cmd="\begin{cases}&#10;  x & x>0 \\&#10;  -x & x<0&#10;\end{cases}" data-desc-cn="分段函数" data-desc-en="cases" style="width:auto; padding:0 5px;">cases</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="tab-templates" class="tab-content" style="display:none; padding: 20px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <button class="btn" onclick="insertCmd('\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}')">二次方程根</button>
+        <button class="btn" onclick="insertCmd('\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}')">高斯积分</button>
+        <button class="btn" onclick="insertCmd('e^{i\\pi} + 1 = 0')">欧拉公式</button>
+        <button class="btn" onclick="insertCmd('E = mc^2')">质能方程</button>
+        <button class="btn" onclick="insertCmd('a^2 + b^2 = c^2')">勾股定理</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="editor-main">
+    <div class="input-area">
+      <div class="area-header">
+        <span>输入区域 Input</span>
+        <div class="action-bar">
+          <button class="btn" onclick="clearEditor()">清空</button>
+          <button class="btn" onclick="copyCode()">复制源码</button>
+        </div>
+      </div>
+      <textarea id="latex-input"></textarea>
+    </div>
+
+    <div class="preview-area">
+      <div class="area-header">
+        <span>实时预览 Preview</span>
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="exportSVG()">导出 SVG</button>
+          <button class="btn btn-primary" onclick="exportPNG()">导出 PNG</button>
+        </div>
+      </div>
+      <div class="preview-content">
+        <div id="latex-preview"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="export-canvas" style="display:none;"></canvas>
+<div id="toast"></div>
+
+<script src="script.js"></script>
+
+
+
+  
+
+</article>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1224 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="柔索并联机器人（Cable-Driven Parallel Robot, CDPR）是一种利用柔性索牵引末端执行器实现运动的并联机构。本文将详细推导其运动学和静力学的基本公式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="柔索并联机器人基本公式推导">
+<meta property="og:url" content="https://hfutrobot.github.io/2025/11/28/cdpr-formulas/index.html">
+<meta property="og:site_name" content="记事本">
+<meta property="og:description" content="柔索并联机器人（Cable-Driven Parallel Robot, CDPR）是一种利用柔性索牵引末端执行器实现运动的并联机构。本文将详细推导其运动学和静力学的基本公式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-28T11:55:00.000Z">
+<meta property="article:modified_time" content="2025-11-28T14:28:08.828Z">
+<meta property="article:author" content="Nicotinamide">
+<meta property="article:tag" content="CDPR">
+<meta property="article:tag" content="Dynamics">
+<meta property="article:tag" content="Kinematics">
+<meta property="article:tag" content="Math">
+<meta property="article:tag" content="Yike">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>柔索并联机器人基本公式推导 - 记事本</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="柔索并联机器人基本公式推导"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-28 19:55" pubdate>
+          2025年11月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">柔索并联机器人基本公式推导</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>柔索并联机器人（Cable-Driven Parallel Robot, CDPR）是一种利用柔性索牵引末端执行器实现运动的并联机构。本文将详细推导其运动学和静力学的基本公式。</p>
+<span id="more"></span>
+<h2 id="几何建模-geometric-modeling">1. 几何建模 (Geometric Modeling)</h2>
+<p>首先建立两个坐标系：</p>
+<ul>
+<li><strong>基坐标系 (Base Frame)</strong> <span class="math inline" data-latex="\{B\}">\(\{B\}\)</span>: 固定在静止基座上，原点为 <span class="math inline" data-latex="O">\(O\)</span>。</li>
+<li><strong>末端坐标系 (End-effector Frame)</strong> <span class="math inline" data-latex="\{P\}">\(\{P\}\)</span>: 固定在运动平台上，原点为 <span class="math inline" data-latex="P">\(P\)</span>。</li>
+</ul>
+<p>定义关键几何参数：</p>
+<ul>
+<li><strong>出索点 (Cable Exit Points)</strong>: 第 <span class="math inline" data-latex="i">\(i\)</span> 根索在基座上的出索点为 <span class="math inline" data-latex="A_i">\(A_i\)</span>。在 <span class="math inline" data-latex="\{B\}">\(\{B\}\)</span> 中的坐标向量记为 <span class="math inline" data-latex="\boldsymbol{a}_i">\(\boldsymbol{a}_i\)</span>。</li>
+<li><strong>连接点 (Anchor Points)</strong>: 第 <span class="math inline" data-latex="i">\(i\)</span> 根索在末端平台上的连接点为 <span class="math inline" data-latex="B_i">\(B_i\)</span>。在 <span class="math inline" data-latex="\{P\}">\(\{P\}\)</span> 中的坐标向量记为 <span class="math inline" data-latex="\boldsymbol{b}_i">\(\boldsymbol{b}_i\)</span>。</li>
+<li><strong>末端位姿 (End-effector Pose)</strong>:
+<ul>
+<li>位置：末端原点 <span class="math inline" data-latex="P">\(P\)</span> 在 <span class="math inline" data-latex="\{B\}">\(\{B\}\)</span> 中的位置向量为 <span class="math inline" data-latex="\boldsymbol{p} = [x, y, z]^T">\(\boldsymbol{p} = [x, y, z]^T\)</span>。</li>
+<li>姿态：<span class="math inline" data-latex="\{P\}">\(\{P\}\)</span> 相对于 <span class="math inline" data-latex="\{B\}">\(\{B\}\)</span> 的旋转矩阵为 <span class="math inline" data-latex="\boldsymbol{R}">\(\boldsymbol{R}\)</span>。</li>
+</ul></li>
+</ul>
+<h2 id="逆运动学-inverse-kinematics">2. 逆运动学 (Inverse Kinematics)</h2>
+<p>逆运动学的目标是已知末端位姿 <span class="math inline" data-latex="(\boldsymbol{p}, \boldsymbol{R})">\((\boldsymbol{p}, \boldsymbol{R})\)</span>，求解各根索的长度 <span class="math inline" data-latex="l_i">\(l_i\)</span>。</p>
+<p>根据向量闭环原理，对于第 <span class="math inline" data-latex="i">\(i\)</span> 根索，我们有： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\vec{OA_i} = \vec{OP} + \vec{PB_i} + \vec{B_iA_i}">\[
+\vec{OA_i} = \vec{OP} + \vec{PB_i} + \vec{B_iA_i}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 其中：</p>
+<ul>
+<li><span class="math inline" data-latex="\vec{OA_i} = \boldsymbol{a}_i">\(\vec{OA_i} = \boldsymbol{a}_i\)</span></li>
+<li><span class="math inline" data-latex="\vec{OP} = \boldsymbol{p}">\(\vec{OP} = \boldsymbol{p}\)</span></li>
+<li><span class="math inline" data-latex="\vec{PB_i} = \boldsymbol{R}\boldsymbol{b}_i">\(\vec{PB_i} = \boldsymbol{R}\boldsymbol{b}_i\)</span> （将局部坐标 <span class="math inline" data-latex="\boldsymbol{b}_i">\(\boldsymbol{b}_i\)</span> 变换到基坐标系）</li>
+<li><span class="math inline" data-latex="\vec{B_iA_i}">\(\vec{B_iA_i}\)</span> 是从平台连接点指向基座出索点的向量，其长度即为索长 <span class="math inline" data-latex="l_i">\(l_i\)</span>，方向单位向量记为 <span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span>。即 <span class="math inline" data-latex="\vec{B_iA_i} = l_i \boldsymbol{u}_i">\(\vec{B_iA_i} = l_i \boldsymbol{u}_i\)</span>（注意：<strong>本文定义 <span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span> 为从平台指向锚点</strong>，与拉力方向一致）。</li>
+</ul>
+<p>让我们重新整理一下向量关系，定义索向量 <span class="math inline" data-latex="\boldsymbol{l}_i">\(\boldsymbol{l}_i\)</span> 为从连接点 <span class="math inline" data-latex="B_i">\(B_i\)</span> 指向出索点 <span class="math inline" data-latex="A_i">\(A_i\)</span> 的向量（<strong>与拉力方向一致</strong>）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{l}_i = \vec{B_i A_i} = \vec{OA_i} - \vec{OB_i}">\[
+\boldsymbol{l}_i = \vec{B_i A_i} = \vec{OA_i} - \vec{OB_i}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\vec{OB_i} = \vec{OP} + \vec{PB_i} = \boldsymbol{p} + \boldsymbol{R}\boldsymbol{b}_i">\[
+\vec{OB_i} = \vec{OP} + \vec{PB_i} = \boldsymbol{p} + \boldsymbol{R}\boldsymbol{b}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 所以： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{l}_i = \boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i">\[
+\boldsymbol{l}_i = \boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>索长 <span class="math inline" data-latex="l_i">\(l_i\)</span> 为该向量的模： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="l_i = \|\boldsymbol{l}_i\| = \|\boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i\|">\[
+l_i = \|\boldsymbol{l}_i\| = \|\boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i\|
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这就是 CDPR 的<strong>逆运动学位置方程</strong>。</p>
+<h2 id="速度运动学与雅可比矩阵-velocity-kinematics-jacobian">3. 速度运动学与雅可比矩阵 (Velocity Kinematics &amp; Jacobian)</h2>
+<p>对索长公式两边关于时间 <span class="math inline" data-latex="t">\(t\)</span> 求导，可以得到索长变化率（索速）<span class="math inline" data-latex="\dot{l}_i">\(\dot{l}_i\)</span> 与末端运动速度（线速度 <span class="math inline" data-latex="\boldsymbol{v}">\(\boldsymbol{v}\)</span> 和角速度 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span>）之间的关系。</p>
+<p>已知 <span class="math inline" data-latex="l_i^2 = \boldsymbol{l}_i^T \boldsymbol{l}_i">\(l_i^2 = \boldsymbol{l}_i^T \boldsymbol{l}_i\)</span>，两边求导： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="2 l_i \dot{l}_i = 2 \boldsymbol{l}_i^T \dot{\boldsymbol{l}}_i">\[
+2 l_i \dot{l}_i = 2 \boldsymbol{l}_i^T \dot{\boldsymbol{l}}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 即： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{l}_i = \frac{\boldsymbol{l}_i^T}{l_i} \dot{\boldsymbol{l}}_i = \boldsymbol{u}_i^T \dot{\boldsymbol{l}}_i">\[
+\dot{l}_i = \frac{\boldsymbol{l}_i^T}{l_i} \dot{\boldsymbol{l}}_i = \boldsymbol{u}_i^T \dot{\boldsymbol{l}}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 其中 <span class="math inline" data-latex="\boldsymbol{u}_i = \frac{\boldsymbol{l}_i}{l_i}">\(\boldsymbol{u}_i = \frac{\boldsymbol{l}_i}{l_i}\)</span> 是沿索方向（从 <span class="math inline" data-latex="B_i">\(B_i\)</span> 指向 <span class="math inline" data-latex="A_i">\(A_i\)</span>，即从平台指向锚点）的单位向量。</p>
+<p>对 <span class="math inline" data-latex="\boldsymbol{l}_i = \boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i">\(\boldsymbol{l}_i = \boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i\)</span> 求导： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{\boldsymbol{l}}_i = \dot{\boldsymbol{a}}_i - \dot{\boldsymbol{p}} - \dot{\boldsymbol{R}}\boldsymbol{b}_i">\[
+\dot{\boldsymbol{l}}_i = \dot{\boldsymbol{a}}_i - \dot{\boldsymbol{p}} - \dot{\boldsymbol{R}}\boldsymbol{b}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 其中：</p>
+<ol type="1">
+<li><span class="math inline" data-latex="\dot{\boldsymbol{p}} = \boldsymbol{v}">\(\dot{\boldsymbol{p}} = \boldsymbol{v}\)</span> 是末端线速度。</li>
+<li><span class="math inline" data-latex="\dot{\boldsymbol{a}}_i">\(\dot{\boldsymbol{a}}_i\)</span> 是出索点的速度（对于固定基座 CDPR，<span class="math inline" data-latex="\dot{\boldsymbol{a}}_i = \boldsymbol{0}">\(\dot{\boldsymbol{a}}_i = \boldsymbol{0}\)</span>；但对于<strong>可重构 CDPR</strong>，出索点可能移动，此时 <span class="math inline" data-latex="\dot{\boldsymbol{a}}_i \neq \boldsymbol{0}">\(\dot{\boldsymbol{a}}_i \neq \boldsymbol{0}\)</span>）。</li>
+<li><span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{b}_i">\(\dot{\boldsymbol{R}}\boldsymbol{b}_i\)</span> 项的推导如下：
+<ul>
+<li>旋转矩阵的导数满足 <span class="math inline" data-latex="\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}">\(\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}\)</span>，其中 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega})">\(\boldsymbol{S}(\boldsymbol{\omega})\)</span> 是角速度向量 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 对应的反对称矩阵（Skew-symmetric matrix），即 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{x} = \boldsymbol{\omega} \times \boldsymbol{x}">\(\boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{x} = \boldsymbol{\omega} \times \boldsymbol{x}\)</span>。</li>
+<li>因此：<span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{b}_i = (\boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}) \boldsymbol{b}_i = \boldsymbol{S}(\boldsymbol{\omega}) (\boldsymbol{R} \boldsymbol{b}_i) = \boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i)">\(\dot{\boldsymbol{R}}\boldsymbol{b}_i = (\boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}) \boldsymbol{b}_i = \boldsymbol{S}(\boldsymbol{\omega}) (\boldsymbol{R} \boldsymbol{b}_i) = \boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i)\)</span>。</li>
+</ul></li>
+</ol>
+<blockquote>
+<p><strong>补充：<span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega})">\(\boldsymbol{S}(\boldsymbol{\omega})\)</span> 到底是什么？（详细推导）</strong></p>
+<p><strong>核心问题</strong>：我们已经知道刚体运动学中的经典公式 <span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span>，现在需要证明： - 旋转矩阵的导数 <span class="math inline" data-latex="\dot{\boldsymbol{R}}">\(\dot{\boldsymbol{R}}\)</span> 中出现的 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega})">\(\boldsymbol{S}(\boldsymbol{\omega})\)</span> 就是由角速度向量 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 构成的叉乘算子矩阵 - 即证明：<span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span> 对任意 <span class="math inline" data-latex="\boldsymbol{r}">\(\boldsymbol{r}\)</span> 成立</p>
+<p><strong>推导思路</strong>： 1. 从旋转矩阵的正交性推出 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T\)</span> 是反对称矩阵（纯数学） 2. 证明任何反对称矩阵都可以表示为某个向量的叉乘算子（线性代数定理） 3. 验证这个向量就是物理上的角速度 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span></p>
+<hr />
+<h2 id="第一步数学推导-dotboldsymbolrboldsymbolrt-的性质">第一步：数学推导 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T\)</span> 的性质</h2>
+<p><strong>步骤1：利用正交性求导</strong></p>
+<p>旋转矩阵 <span class="math inline" data-latex="\boldsymbol{R}(t)">\(\boldsymbol{R}(t)\)</span> 是正交矩阵，满足恒等式： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}(t) \boldsymbol{R}(t)^T = \boldsymbol{I}">\[
+\boldsymbol{R}(t) \boldsymbol{R}(t)^T = \boldsymbol{I}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 对等式两边关于时间 <span class="math inline" data-latex="t">\(t\)</span> 求导（应用乘积法则）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{\boldsymbol{R}}(t) \boldsymbol{R}(t)^T + \boldsymbol{R}(t) \dot{\boldsymbol{R}}(t)^T = \boldsymbol{0}">\[
+\dot{\boldsymbol{R}}(t) \boldsymbol{R}(t)^T + \boldsymbol{R}(t) \dot{\boldsymbol{R}}(t)^T = \boldsymbol{0}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>步骤2：证明 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T\)</span> 是反对称矩阵</strong></p>
+<p>令 <span class="math inline" data-latex="\boldsymbol{A}(t) = \dot{\boldsymbol{R}}(t) \boldsymbol{R}(t)^T">\(\boldsymbol{A}(t) = \dot{\boldsymbol{R}}(t) \boldsymbol{R}(t)^T\)</span>。 注意到 <span class="math inline" data-latex="\boldsymbol{A}^T = (\dot{\boldsymbol{R}} \boldsymbol{R}^T)^T = (\boldsymbol{R}^T)^T \dot{\boldsymbol{R}}^T = \boldsymbol{R} \dot{\boldsymbol{R}}^T">\(\boldsymbol{A}^T = (\dot{\boldsymbol{R}} \boldsymbol{R}^T)^T = (\boldsymbol{R}^T)^T \dot{\boldsymbol{R}}^T = \boldsymbol{R} \dot{\boldsymbol{R}}^T\)</span>。 将其代入步骤1的方程，得到： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{A} + \boldsymbol{A}^T = \boldsymbol{0} \implies \boldsymbol{A}^T = -\boldsymbol{A}">\[
+\boldsymbol{A} + \boldsymbol{A}^T = \boldsymbol{0} \implies \boldsymbol{A}^T = -\boldsymbol{A}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 这说明 <span class="math inline" data-latex="\boldsymbol{A}">\(\boldsymbol{A}\)</span> 是一个<strong>反对称矩阵 (Skew-symmetric matrix)</strong>。</p>
+<p><strong>步骤3：反对称矩阵的一般形式</strong></p>
+<p>在三维空间中，任意 <span class="math inline" data-latex="3 \times 3">\(3 \times 3\)</span> 反对称矩阵只有 3 个独立元素，可以写成： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{A} = \begin{bmatrix}
+0 &amp; -a_3 &amp; a_2 \\
+a_3 &amp; 0 &amp; -a_1 \\
+-a_2 &amp; a_1 &amp; 0
+\end{bmatrix}">\[
+\boldsymbol{A} = \begin{bmatrix}
+0 & -a_3 & a_2 \\
+a_3 & 0 & -a_1 \\
+-a_2 & a_1 & 0
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<hr />
+<h2 id="第二步证明反对称矩阵">第二步：证明反对称矩阵</h2>
+<p><strong>这是整个推导的核心</strong>：任何反对称矩阵都可以表示为某个向量的叉乘算子。</p>
+<p><strong>核心定理</strong>：向量叉乘 <span class="math inline" data-latex="\boldsymbol{a} \times \boldsymbol{b}">\(\boldsymbol{a} \times \boldsymbol{b}\)</span> <strong>本质上就可用矩阵乘法表示</strong>！</p>
+<p>对于任意向量 <span class="math inline" data-latex="\boldsymbol{a} = [a_1, a_2, a_3]^T">\(\boldsymbol{a} = [a_1, a_2, a_3]^T\)</span>，定义其<strong>叉乘算子矩阵</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="[\boldsymbol{a}]_\times = \begin{bmatrix}
+0 &amp; -a_3 &amp; a_2 \\
+a_3 &amp; 0 &amp; -a_1 \\
+-a_2 &amp; a_1 &amp; 0
+\end{bmatrix}">\[
+[\boldsymbol{a}]_\times = \begin{bmatrix}
+0 & -a_3 & a_2 \\
+a_3 & 0 & -a_1 \\
+-a_2 & a_1 & 0
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 则对于任意向量 <span class="math inline" data-latex="\boldsymbol{b}">\(\boldsymbol{b}\)</span>，<strong>永远</strong>有： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{a} \times \boldsymbol{b} = [\boldsymbol{a}]_\times \boldsymbol{b}">\[
+\boldsymbol{a} \times \boldsymbol{b} = [\boldsymbol{a}]_\times \boldsymbol{b}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 这是线性代数的基本定理！</p>
+<p><strong>逐项验证</strong>（以证明这不是”拼凑”）：</p>
+<p>叉乘定义： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{a} \times \boldsymbol{b} = \begin{bmatrix} a_2 b_3 - a_3 b_2 \\ a_3 b_1 - a_1 b_3 \\ a_1 b_2 - a_2 b_1 \end{bmatrix}">\[
+\boldsymbol{a} \times \boldsymbol{b} = \begin{bmatrix} a_2 b_3 - a_3 b_2 \\ a_3 b_1 - a_1 b_3 \\ a_1 b_2 - a_2 b_1 \end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 矩阵乘法： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="[\boldsymbol{a}]_\times \boldsymbol{b} = \begin{bmatrix}
+0 &amp; -a_3 &amp; a_2 \\
+a_3 &amp; 0 &amp; -a_1 \\
+-a_2 &amp; a_1 &amp; 0
+\end{bmatrix} \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix} = \begin{bmatrix} -a_3 b_2 + a_2 b_3 \\ a_3 b_1 - a_1 b_3 \\ -a_2 b_1 + a_1 b_2 \end{bmatrix}">\[
+[\boldsymbol{a}]_\times \boldsymbol{b} = \begin{bmatrix}
+0 & -a_3 & a_2 \\
+a_3 & 0 & -a_1 \\
+-a_2 & a_1 & 0
+\end{bmatrix} \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix} = \begin{bmatrix} -a_3 b_2 + a_2 b_3 \\ a_3 b_1 - a_1 b_3 \\ -a_2 b_1 + a_1 b_2 \end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 完全相同！<span class="math inline" data-latex="[\boldsymbol{a}]_\times">\([\boldsymbol{a}]_\times\)</span> 的定义源于叉乘的<strong>数学本质</strong>。</p>
+<p><strong>结论</strong>：步骤3的反对称矩阵 <span class="math inline" data-latex="\boldsymbol{A}">\(\boldsymbol{A}\)</span> 对应唯一向量 <span class="math inline" data-latex="\boldsymbol{\omega} = [a_1, a_2, a_3]^T">\(\boldsymbol{\omega} = [a_1, a_2, a_3]^T\)</span>，使得： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{A} = [\boldsymbol{\omega}]_\times = \boldsymbol{S}(\boldsymbol{\omega})">\[
+\boldsymbol{A} = [\boldsymbol{\omega}]_\times = \boldsymbol{S}(\boldsymbol{\omega})
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 因此 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{\omega})">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{\omega})\)</span>，即 <span class="math inline" data-latex="\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{R}">\(\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{R}\)</span></p>
+<hr />
+<h2 id="第三步验证-boldsymbolomega-就是角速度">第三步：验证 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 就是角速度</h2>
+<p>考虑刚体上固定的点（体坐标 <span class="math inline" data-latex="\boldsymbol{b}">\(\boldsymbol{b}\)</span>），其世界坐标为 <span class="math inline" data-latex="\boldsymbol{r}(t) = \boldsymbol{R}(t)\boldsymbol{b}">\(\boldsymbol{r}(t) = \boldsymbol{R}(t)\boldsymbol{b}\)</span>。 该点的速度为： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{v} = \dot{\boldsymbol{r}} = \dot{\boldsymbol{R}}\boldsymbol{b} = \dot{\boldsymbol{R}}(\boldsymbol{R}^T\boldsymbol{r}) = (\dot{\boldsymbol{R}}\boldsymbol{R}^T)\boldsymbol{r} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}">\[
+\boldsymbol{v} = \dot{\boldsymbol{r}} = \dot{\boldsymbol{R}}\boldsymbol{b} = \dot{\boldsymbol{R}}(\boldsymbol{R}^T\boldsymbol{r}) = (\dot{\boldsymbol{R}}\boldsymbol{R}^T)\boldsymbol{r} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 这正是刚体旋转的经典速度公式 <span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span>（理论力学基础知识，见下文附注）！</p>
+<p>因此，数学推导中的向量 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 确实就是刚体的<strong>角速度向量</strong>。</p>
+<hr />
+<p><strong>附注：公式 <span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span> 的物理来源</strong></p>
+<p>这是<strong>刚体运动学</strong>（理论力学）中的基础知识： - 刚体绕某点（或某轴）以角速度 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 旋转 - 刚体上某固定点距旋转中心的位置矢量为 <span class="math inline" data-latex="\boldsymbol{r}">\(\boldsymbol{r}\)</span> - 该点的线速度 <span class="math inline" data-latex="\boldsymbol{v}">\(\boldsymbol{v}\)</span> 由上式给出</p>
+<p><strong>直观理解</strong>：旋转圆盘边缘上某点，距中心距离 <span class="math inline" data-latex="r">\(r\)</span>，角速度 <span class="math inline" data-latex="\omega">\(\omega\)</span>，则线速度 <span class="math inline" data-latex="v = \omega r">\(v = \omega r\)</span>，方向垂直于 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 和 <span class="math inline" data-latex="\boldsymbol{r}">\(\boldsymbol{r}\)</span>，正是 <span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span>。</p>
+<p><strong>几何推导</strong>：刚体旋转时，某点在微小时间 <span class="math inline" data-latex="dt">\(dt\)</span> 内转过微小角度 <span class="math inline" data-latex="d\theta = \omega dt">\(d\theta = \omega dt\)</span>： - 角位移矢量 <span class="math inline" data-latex="d\boldsymbol{\theta}">\(d\boldsymbol{\theta}\)</span> 方向沿旋转轴，大小为 <span class="math inline" data-latex="d\theta">\(d\theta\)</span> - 位移 <span class="math inline" data-latex="d\boldsymbol{r} = d\boldsymbol{\theta} \times \boldsymbol{r}">\(d\boldsymbol{r} = d\boldsymbol{\theta} \times \boldsymbol{r}\)</span> - 速度 <span class="math inline" data-latex="\boldsymbol{v} = \frac{d\boldsymbol{r}}{dt} = \frac{d\boldsymbol{\theta}}{dt} \times \boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \frac{d\boldsymbol{r}}{dt} = \frac{d\boldsymbol{\theta}}{dt} \times \boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span></p>
+<hr />
+<p><strong>总结：完整的推导链</strong></p>
+<p>（1）正交性 <span class="math inline" data-latex="\Rightarrow">\(\Rightarrow\)</span> <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T\)</span> 是反对称矩阵（<strong>数学</strong>）<br />
+（2）反对称矩阵 <span class="math inline" data-latex="\Leftrightarrow">\(\Leftrightarrow\)</span> 叉乘算子（<strong>线性代数定理</strong>）<br />
+（3）速度公式匹配 <span class="math inline" data-latex="\Rightarrow">\(\Rightarrow\)</span> <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 是角速度（<strong>物理验证</strong>）</p>
+<hr />
+<h2 id="总结三步完整证明">总结：三步完整证明</h2>
+<p><strong>我们证明了什么</strong>：<span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega})">\(\boldsymbol{S}(\boldsymbol{\omega})\)</span> 就是由角速度向量 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 构成的叉乘算子矩阵</p>
+<p><strong>完整证明链</strong>：</p>
+<p>（1）<strong>第一步（数学）</strong>：正交性 <span class="math inline" data-latex="\Rightarrow">\(\Rightarrow\)</span> <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T\)</span> 是反对称矩阵</p>
+<p>（2）<strong>第二步（关键）</strong>：反对称矩阵 <span class="math inline" data-latex="\Leftrightarrow">\(\Leftrightarrow\)</span> 叉乘算子，证明了 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{\omega})">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{\omega})\)</span></p>
+<p>（3）<strong>第三步（验证）</strong>：速度公式 <span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span> 确认 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 是角速度</p>
+<hr />
+<p><strong>思路链路解析</strong></p>
+<p>整个推导的<strong>核心逻辑</strong>：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs abnf">【已知物理事实】v <span class="hljs-operator">=</span> ω × r（刚体运动学）<br>       ↓<br>【数学推导】从旋转矩阵正交性出发<br>       ↓<br>RRᵀ <span class="hljs-operator">=</span> I → 求导 → ṘRᵀ 是反对称矩阵<br>       ↓<br>【关键步骤】反对称矩阵 ⟷ 叉乘算子（线性代数定理）<br>       ↓<br>存在唯一向量 ω 使得 ṘRᵀ <span class="hljs-operator">=</span> [ω]× <span class="hljs-operator">=</span> S(ω)<br>       ↓<br>【验证匹配】计算刚体上点的速度<br>       ↓<br><span class="hljs-attribute">v</span> <span class="hljs-operator">=</span> Ṙb <span class="hljs-operator">=</span> (ṘRᵀ)r <span class="hljs-operator">=</span> S(ω)r <span class="hljs-operator">=</span> ω × r ✓<br>       ↓<br>与已知物理公式一致！确认 S(ω) 就是由 ω 构成的叉乘算子<br></code></pre></td></tr></table></figure>
+<p><strong>关键洞察</strong>：</p>
+<p>（1）<strong>我们已经知道</strong> <span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span>（这是刚体运动学的基本事实）</p>
+<p>（2）<strong>数学推导证明</strong>：从旋转矩阵的正交性必然导出一个反对称矩阵 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T\)</span></p>
+<p>（3）<strong>线性代数桥梁</strong>：任何反对称矩阵都唯一对应一个向量的叉乘算子，即存在唯一的 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 使得 <span class="math inline" data-latex="\dot{\boldsymbol{R}}\boldsymbol{R}^T = [\boldsymbol{\omega}]_\times = \boldsymbol{S}(\boldsymbol{\omega})">\(\dot{\boldsymbol{R}}\boldsymbol{R}^T = [\boldsymbol{\omega}]_\times = \boldsymbol{S}(\boldsymbol{\omega})\)</span></p>
+<p>（4）<strong>验证一致性</strong>：通过计算 <span class="math inline" data-latex="\boldsymbol{v} = (\dot{\boldsymbol{R}}\boldsymbol{R}^T)\boldsymbol{r} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}">\(\boldsymbol{v} = (\dot{\boldsymbol{R}}\boldsymbol{R}^T)\boldsymbol{r} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{r} = \boldsymbol{\omega} \times \boldsymbol{r}\)</span>，证明了： - 数学推导出的 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega})">\(\boldsymbol{S}(\boldsymbol{\omega})\)</span> 确实就是由向量 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 构成的叉乘算子 - 这个 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 就是物理上的角速度向量</p>
+<p>所以： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{\boldsymbol{l}}_i = \dot{\boldsymbol{a}}_i - \boldsymbol{v} - \boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i)">\[
+\dot{\boldsymbol{l}}_i = \dot{\boldsymbol{a}}_i - \boldsymbol{v} - \boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+</blockquote>
+<p>代入 <span class="math inline" data-latex="\dot{l}_i = \boldsymbol{u}_i^T \dot{\boldsymbol{l}}_i">\(\dot{l}_i = \boldsymbol{u}_i^T \dot{\boldsymbol{l}}_i\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{l}_i = \boldsymbol{u}_i^T (\dot{\boldsymbol{a}}_i - \boldsymbol{v} - \boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i))">\[
+\dot{l}_i = \boldsymbol{u}_i^T (\dot{\boldsymbol{a}}_i - \boldsymbol{v} - \boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i))
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 利用向量混合积性质 <span class="math inline" data-latex="\boldsymbol{u}_i^T (\boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i)) = (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \boldsymbol{\omega}">\(\boldsymbol{u}_i^T (\boldsymbol{\omega} \times (\boldsymbol{R}\boldsymbol{b}_i)) = (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \boldsymbol{\omega}\)</span>，整理得： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{l}_i = \boldsymbol{u}_i^T \dot{\boldsymbol{a}}_i - \boldsymbol{u}_i^T \boldsymbol{v} - (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \boldsymbol{\omega}">\[
+\dot{l}_i = \boldsymbol{u}_i^T \dot{\boldsymbol{a}}_i - \boldsymbol{u}_i^T \boldsymbol{v} - (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \boldsymbol{\omega}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 或写成： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{l}_i = -\boldsymbol{u}_i^T \boldsymbol{v} - (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \boldsymbol{\omega} + \boldsymbol{u}_i^T \dot{\boldsymbol{a}}_i">\[
+\dot{l}_i = -\boldsymbol{u}_i^T \boldsymbol{v} - (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \boldsymbol{\omega} + \boldsymbol{u}_i^T \dot{\boldsymbol{a}}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>写成矩阵形式： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{l}_i = -\begin{bmatrix} \boldsymbol{u}_i^T &amp; (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \end{bmatrix} \begin{bmatrix} \boldsymbol{v} \\ \boldsymbol{\omega} \end{bmatrix} + \boldsymbol{u}_i^T \dot{\boldsymbol{a}}_i">\[
+\dot{l}_i = -\begin{bmatrix} \boldsymbol{u}_i^T & (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)^T \end{bmatrix} \begin{bmatrix} \boldsymbol{v} \\ \boldsymbol{\omega} \end{bmatrix} + \boldsymbol{u}_i^T \dot{\boldsymbol{a}}_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>对于 <span class="math inline" data-latex="m">\(m\)</span> 根索，完整的速度映射关系为： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{\boldsymbol{l}} = -\boldsymbol{J}^T \boldsymbol{\nu} + \boldsymbol{u}_{proj}^T \dot{\boldsymbol{a}}">\[
+\dot{\boldsymbol{l}} = -\boldsymbol{J}^T \boldsymbol{\nu} + \boldsymbol{u}_{proj}^T \dot{\boldsymbol{a}}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>其中各项定义为：</strong></p>
+<p>（1）<strong>索速向量</strong>：<span class="math inline" data-latex="\dot{\boldsymbol{l}} = [\dot{l}_1, \dots, \dot{l}_m]^T">\(\dot{\boldsymbol{l}} = [\dot{l}_1, \dots, \dot{l}_m]^T\)</span><br />
+（2）<strong>末端旋量</strong>：<span class="math inline" data-latex="\boldsymbol{\nu} = [\boldsymbol{v}^T, \boldsymbol{\omega}^T]^T">\(\boldsymbol{\nu} = [\boldsymbol{v}^T, \boldsymbol{\omega}^T]^T\)</span> （Twist）<br />
+（3）<strong>锚点速度</strong>：<span class="math inline" data-latex="\dot{\boldsymbol{a}} = [\dot{\boldsymbol{a}}_1^T, \dots, \dot{\boldsymbol{a}}_m^T]^T">\(\dot{\boldsymbol{a}} = [\dot{\boldsymbol{a}}_1^T, \dots, \dot{\boldsymbol{a}}_m^T]^T\)</span> （对于可重构CDPR）<br />
+（4）<strong>投影矩阵</strong>：<span class="math inline" data-latex="\boldsymbol{u}_{proj}^T = \text{diag}(\boldsymbol{u}_1^T, \dots, \boldsymbol{u}_m^T)">\(\boldsymbol{u}_{proj}^T = \text{diag}(\boldsymbol{u}_1^T, \dots, \boldsymbol{u}_m^T)\)</span></p>
+<p><strong>重要说明：</strong></p>
+<p>（1）<strong>固定基座CDPR</strong>：<span class="math inline" data-latex="\dot{\boldsymbol{a}}_i = \boldsymbol{0}">\(\dot{\boldsymbol{a}}_i = \boldsymbol{0}\)</span>，公式简化为 <span class="math inline" data-latex="\dot{\boldsymbol{l}} = -\boldsymbol{J}^T \boldsymbol{\nu}">\(\dot{\boldsymbol{l}} = -\boldsymbol{J}^T \boldsymbol{\nu}\)</span><br />
+（2）<strong>可重构CDPR</strong>（出索点可移动）：必须包含 <span class="math inline" data-latex="+\boldsymbol{u}_{proj}^T \dot{\boldsymbol{a}}">\(+\boldsymbol{u}_{proj}^T \dot{\boldsymbol{a}}\)</span> 项</p>
+<p><span class="math inline" data-latex="\boldsymbol{J}^T">\(\boldsymbol{J}^T\)</span> 是<strong>结构矩阵 (Structure Matrix)</strong>，通常也被称为逆雅可比矩阵（Inverse Jacobian）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{J}^T = \begin{bmatrix}
+\boldsymbol{u}_1^T &amp; (\boldsymbol{R}\boldsymbol{b}_1 \times \boldsymbol{u}_1)^T \\
+\vdots &amp; \vdots \\
+\boldsymbol{u}_m^T &amp; (\boldsymbol{R}\boldsymbol{b}_m \times \boldsymbol{u}_m)^T
+\end{bmatrix}">\[
+\boldsymbol{J}^T = \begin{bmatrix}
+\boldsymbol{u}_1^T & (\boldsymbol{R}\boldsymbol{b}_1 \times \boldsymbol{u}_1)^T \\
+\vdots & \vdots \\
+\boldsymbol{u}_m^T & (\boldsymbol{R}\boldsymbol{b}_m \times \boldsymbol{u}_m)^T
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h2 id="静力学-statics">4. 静力学 (Statics)</h2>
+<p>假设机器人处于静止平衡状态，忽略索的质量和弹性。末端平台受到外部广义力（Wrench）<span class="math inline" data-latex="\boldsymbol{w}_{ext}">\(\boldsymbol{w}_{ext}\)</span> 的作用，包括重力、外力等。索对平台施加的拉力为 <span class="math inline" data-latex="\tau_i">\(\tau_i\)</span>（<span class="math inline" data-latex="\tau_i &gt; 0">\(\tau_i > 0\)</span> 表示张紧）。</p>
+<p>第 <span class="math inline" data-latex="i">\(i\)</span> 根索对平台的拉力方向沿着索的方向，即 <span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span>（注意 <span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span> 定义为从平台 <span class="math inline" data-latex="B_i">\(B_i\)</span> 指向锚点 <span class="math inline" data-latex="A_i">\(A_i\)</span>，与拉力方向一致）。 力向量：<span class="math inline" data-latex="\boldsymbol{f}_i = \tau_i \boldsymbol{u}_i">\(\boldsymbol{f}_i = \tau_i \boldsymbol{u}_i\)</span> 力矩向量（相对于 <span class="math inline" data-latex="P">\(P\)</span> 点）：<span class="math inline" data-latex="\boldsymbol{m}_i = (\boldsymbol{R}\boldsymbol{b}_i) \times \boldsymbol{f}_i = (\boldsymbol{R}\boldsymbol{b}_i) \times (\tau_i \boldsymbol{u}_i) = \tau_i (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)">\(\boldsymbol{m}_i = (\boldsymbol{R}\boldsymbol{b}_i) \times \boldsymbol{f}_i = (\boldsymbol{R}\boldsymbol{b}_i) \times (\tau_i \boldsymbol{u}_i) = \tau_i (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i)\)</span></p>
+<p>根据平衡方程 <span class="math inline" data-latex="\sum \boldsymbol{F} = \boldsymbol{0}">\(\sum \boldsymbol{F} = \boldsymbol{0}\)</span> 和 <span class="math inline" data-latex="\sum \boldsymbol{M} = \boldsymbol{0}">\(\sum \boldsymbol{M} = \boldsymbol{0}\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\sum_{i=1}^m \boldsymbol{f}_i + \boldsymbol{f}_{ext} = \boldsymbol{0} \implies \sum_{i=1}^m \tau_i \boldsymbol{u}_i + \boldsymbol{f}_{ext} = \boldsymbol{0}">\[
+\sum_{i=1}^m \boldsymbol{f}_i + \boldsymbol{f}_{ext} = \boldsymbol{0} \implies \sum_{i=1}^m \tau_i \boldsymbol{u}_i + \boldsymbol{f}_{ext} = \boldsymbol{0}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\sum_{i=1}^m \boldsymbol{m}_i + \boldsymbol{m}_{ext} = \boldsymbol{0} \implies \sum_{i=1}^m \tau_i (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i) + \boldsymbol{m}_{ext} = \boldsymbol{0}">\[
+\sum_{i=1}^m \boldsymbol{m}_i + \boldsymbol{m}_{ext} = \boldsymbol{0} \implies \sum_{i=1}^m \tau_i (\boldsymbol{R}\boldsymbol{b}_i \times \boldsymbol{u}_i) + \boldsymbol{m}_{ext} = \boldsymbol{0}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>写成矩阵形式： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+\boldsymbol{u}_1 &amp; \dots &amp; \boldsymbol{u}_m \\
+\boldsymbol{R}\boldsymbol{b}_1 \times \boldsymbol{u}_1 &amp; \dots &amp; \boldsymbol{R}\boldsymbol{b}_m \times \boldsymbol{u}_m
+\end{bmatrix} \begin{bmatrix} \tau_1 \\ \vdots \\ \tau_m \end{bmatrix} + \begin{bmatrix} \boldsymbol{f}_{ext} \\ \boldsymbol{m}_{ext} \end{bmatrix} = \boldsymbol{0}">\[
+\begin{bmatrix}
+\boldsymbol{u}_1 & \dots & \boldsymbol{u}_m \\
+\boldsymbol{R}\boldsymbol{b}_1 \times \boldsymbol{u}_1 & \dots & \boldsymbol{R}\boldsymbol{b}_m \times \boldsymbol{u}_m
+\end{bmatrix} \begin{bmatrix} \tau_1 \\ \vdots \\ \tau_m \end{bmatrix} + \begin{bmatrix} \boldsymbol{f}_{ext} \\ \boldsymbol{m}_{ext} \end{bmatrix} = \boldsymbol{0}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>注意到左边的矩阵正是前面推导的结构矩阵 <span class="math inline" data-latex="\boldsymbol{J}^T">\(\boldsymbol{J}^T\)</span> 的转置，即 <span class="math inline" data-latex="\boldsymbol{J}">\(\boldsymbol{J}\)</span>。 <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}">\[
+\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 或者写成更常见的形式： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{J} \boldsymbol{\tau} = \boldsymbol{w}_{ext}">\[
+\boldsymbol{J} \boldsymbol{\tau} = \boldsymbol{w}_{ext}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <strong>注意</strong>：这里的符号定义非常关键。</p>
+<p>（1）<strong>本文定义</strong> <span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span> 为从平台指向基座（拉力方向），则拉力 <span class="math inline" data-latex="\boldsymbol{f}_i = \tau_i \boldsymbol{u}_i">\(\boldsymbol{f}_i = \tau_i \boldsymbol{u}_i\)</span>，方程为 <span class="math inline" data-latex="\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}">\(\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}\)</span>。</p>
+<p>（2）若定义 <span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span> 为从基座指向平台（索长增加方向），则拉力为 <span class="math inline" data-latex="-\tau_i \boldsymbol{u}_i">\(-\tau_i \boldsymbol{u}_i\)</span>，导致方程为 <span class="math inline" data-latex="-\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}">\(-\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}\)</span>。</p>
+<p>通常在 CDPR 文献中，结构矩阵 <span class="math inline" data-latex="\boldsymbol{A}^T">\(\boldsymbol{A}^T\)</span> (或 <span class="math inline" data-latex="\boldsymbol{J}^T">\(\boldsymbol{J}^T\)</span>) 定义为 <span class="math inline" data-latex="\dot{\boldsymbol{l}} = \boldsymbol{A}^T \boldsymbol{\nu}">\(\dot{\boldsymbol{l}} = \boldsymbol{A}^T \boldsymbol{\nu}\)</span>。 而静力学方程写为 <span class="math inline" data-latex="\boldsymbol{A} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}">\(\boldsymbol{A} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}\)</span>。 此时 <span class="math inline" data-latex="\boldsymbol{A}">\(\boldsymbol{A}\)</span> 的列向量就是各根索对末端产生的单位旋量（Unit Wrench）。</p>
+<h2 id="总结-summary">5. 总结 (Summary)</h2>
+<p>（1）<strong>逆运动学</strong>: <span class="math inline" data-latex="l_i = \|\boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i\|">\(l_i = \|\boldsymbol{a}_i - \boldsymbol{p} - \boldsymbol{R}\boldsymbol{b}_i\|\)</span></p>
+<p>（2）<strong>微分运动学</strong>（固定基座）: <span class="math inline" data-latex="\dot{\boldsymbol{l}} = -\boldsymbol{J}^T \boldsymbol{\nu}">\(\dot{\boldsymbol{l}} = -\boldsymbol{J}^T \boldsymbol{\nu}\)</span></p>
+<p>（3）<strong>静力学</strong>: <span class="math inline" data-latex="\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}">\(\boldsymbol{J} \boldsymbol{\tau} + \boldsymbol{w}_{ext} = \boldsymbol{0}\)</span></p>
+<p><strong>符号约定</strong>（本文）： （1）<span class="math inline" data-latex="\boldsymbol{u}_i">\(\boldsymbol{u}_i\)</span>：从<strong>平台指向锚点</strong>（与拉力方向一致） （2）<span class="math inline" data-latex="\tau_i &gt; 0">\(\tau_i > 0\)</span>：拉力大小</p>
+<p>这些公式构成了 CDPR 运动控制、张力分配和工作空间分析的基础。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="category-chain-item">机器人</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/%E5%B9%B6%E8%81%94%E6%9C%BA%E6%9E%84/" class="category-chain-item">并联机构</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/CDPR/" class="print-no-link">#CDPR</a>
+      
+        <a href="/tags/Kinematics/" class="print-no-link">#Kinematics</a>
+      
+        <a href="/tags/Dynamics/" class="print-no-link">#Dynamics</a>
+      
+        <a href="/tags/Math/" class="print-no-link">#Math</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>柔索并联机器人基本公式推导</div>
+      <div>https://hfutrobot.github.io/2025/11/28/cdpr-formulas/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/12/tension-distribution-gao-2022/" title="读论文｜Tension distribution algorithm based on graphics with high computational efficiency and robust optimization for two-redundant cable-driven parallel robots">
+                        <span class="hidden-mobile">读论文｜Tension distribution algorithm based on graphics with high computational efficiency and robust optimization for two-redundant cable-driven parallel robots</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
