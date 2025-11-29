@@ -27,7 +27,7 @@
 <meta property="og:description" content="这是一个测试LaTeX数学公式渲染的文章。 行内数学公式 这是一个行内公式：\(E &#x3D; mc^2\)，展示了爱因斯坦的质能方程。 另一个例子：\(\sum_{i&#x3D;1}^{n} x_i &#x3D; x_1 + x_2 + \cdots + x_n\) 块级数学公式 1. 基础公式 \[ \int_{-\infty}^{\infty} e^{-x^2} dx &#x3D; \sqrt{\pi} \] 2. 矩阵 \[">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-07T08:32:21.000Z">
-<meta property="article:modified_time" content="2025-11-28T14:28:08.828Z">
+<meta property="article:modified_time" content="2025-11-29T02:13:50.394Z">
 <meta property="article:author" content="Nicotinamide">
 <meta property="article:tag" content="LaTeX">
 <meta property="article:tag" content="Yike">
@@ -39,15 +39,15 @@
   
   <title>LaTeX 数学公式测试 - 记事本</title>
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
 
 
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
 
 
 
@@ -1150,8 +1150,8 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -1162,13 +1162,13 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
   </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
 
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
@@ -1195,7 +1195,7 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
     var toc = jQuery('#toc');
     if (toc.length === 0 || !window.tocbot) { return; }
     var boardCtn = jQuery('#board-ctn');
@@ -1233,14 +1233,14 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
 </script>
 
 
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
     window.anchors.options = {
       placement: CONFIG.anchorjs.placement,
       visible  : CONFIG.anchorjs.visible
@@ -1278,7 +1278,7 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
     Fluid.plugins.fancyBox();
   });
 </script>
@@ -1294,7 +1294,7 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
               inlineMath: { '[+]': [['$', '$']] }
             },
             loader : {
-              load: ['ui/lazy']
+              
             },
             options: {
               renderActions: {
@@ -1327,7 +1327,7 @@ T_i \geq T_{\min} \quad (i = 1, 2, \ldots, n)
       </script>
     
 
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

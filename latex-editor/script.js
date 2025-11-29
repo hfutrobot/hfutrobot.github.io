@@ -15,6 +15,13 @@ var isRendering = false;
 var pendingText = null;
 
 function renderLatex() {
+    // Check if MathJax is loaded
+    if (typeof MathJax === 'undefined' || !MathJax.typesetPromise) {
+        console.warn('MathJax not ready yet, retrying...');
+        setTimeout(renderLatex, 100);
+        return;
+    }
+
     if (isRendering) {
         pendingText = editor.getValue();
         return;
@@ -41,7 +48,15 @@ editor.on("change", function () {
     renderLatex();
 });
 
-setTimeout(renderLatex, 500);
+// Wait for MathJax to load before initial render
+function waitForMathJax() {
+    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+        renderLatex();
+    } else {
+        setTimeout(waitForMathJax, 100);
+    }
+}
+waitForMathJax();
 
 // Tab Switching
 function switchTab(tabName) {
@@ -228,11 +243,19 @@ if (symbolPanelContainer) {
 // Call this after DOM load
 attachButtonListeners();
 
-// Render LaTeX in symbol buttons
+// Render LaTeX in symbol buttons - wait for MathJax
+function renderSymbolButtons() {
+    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+        MathJax.typesetPromise(document.querySelectorAll('.symbol-btn')).catch(function (err) {
+            console.error('MathJax button rendering error:', err);
+        });
+    } else {
+        setTimeout(renderSymbolButtons, 100);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-    MathJax.typesetPromise(document.querySelectorAll('.symbol-btn')).catch(function (err) {
-        console.error('MathJax button rendering error:', err);
-    });
+    renderSymbolButtons();
 });
 
 // Make functions globally accessible for onclick handlers

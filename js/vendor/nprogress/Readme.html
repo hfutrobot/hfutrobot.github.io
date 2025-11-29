@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Nicotinamide">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="NProgress Slim progress bars for Ajax’y applications. Inspired by Google, YouTube, and Medium. Installation Add nprogress.js and nprogress.css to your project. 12&lt;script src&#x3D;&#x27;nprogress.js&amp;#x27">
+<meta property="og:type" content="website">
+<meta property="og:title" content="page.title">
+<meta property="og:url" content="https://hfutrobot.github.io/js/vendor/nprogress/Readme.html">
+<meta property="og:site_name" content="记事本">
+<meta property="og:description" content="NProgress Slim progress bars for Ajax’y applications. Inspired by Google, YouTube, and Medium. Installation Add nprogress.js and nprogress.css to your project. 12&lt;script src&#x3D;&#x27;nprogress.js&amp;#x27">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://img.shields.io/github/issues/rstacruz/nprogress.svg">
+<meta property="og:image" content="http://img.shields.io/badge/stackoverflow-nprogress-brightgreen.svg">
+<meta property="og:image" content="http://img.shields.io/badge/gitter-rstacruz%20/%20nprogress-brightgreen.svg">
+<meta property="og:image" content="https://api.travis-ci.org/rstacruz/nprogress.svg?branch=master">
+<meta property="og:image" content="https://img.shields.io/npm/v/nprogress.png">
+<meta property="og:image" content="http://spmjs.io/badge/nprogress">
+<meta property="article:published_time" content="2025-11-29T02:13:50.534Z">
+<meta property="article:modified_time" content="2025-11-29T02:13:50.534Z">
+<meta property="article:author" content="Nicotinamide">
+<meta property="article:tag" content="技术分享,学习笔记,编程,开发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://img.shields.io/github/issues/rstacruz/nprogress.svg">
+  
+  
+  
+  <title>page.title - 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-page.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="page.title"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<article class="page-content">
+  <h1 id="nprogress">NProgress</h1>
+<p>Slim progress bars for Ajax’y applications. Inspired by Google, YouTube, and Medium.</p>
+<h2 id="installation">Installation</h2>
+<p>Add <a target="_blank" rel="noopener" href="http://ricostacruz.com/nprogress/nprogress.js">nprogress.js</a> and <a target="_blank" rel="noopener" href="http://ricostacruz.com/nprogress/nprogress.css">nprogress.css</a> to your project.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;nprogress.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&#x27;stylesheet&#x27;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&#x27;nprogress.css&#x27;</span>/&gt;</span><br></code></pre></td></tr></table></figure>
+<p>NProgress is available via <a target="_blank" rel="noopener" href="http://bower.io/search/?q=nprogress">bower</a> and <a target="_blank" rel="noopener" href="https://www.npmjs.org/package/nprogress">npm</a> and <a target="_blank" rel="noopener" href="http://spmjs.io/package/nprogress">spm</a>.</p>
+<pre><code class="hljs">$ bower install --save nprogress
+$ npm install --save nprogress</code></pre>
+<h2 id="basic-usage">Basic usage</h2>
+<p>Simply call <code>start()</code> and <code>done()</code> to control the progress bar.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">start</span>();<br><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">done</span>();<br></code></pre></td></tr></table></figure>
+<p>Using <a target="_blank" rel="noopener" href="https://github.com/rails/turbolinks">Turbolinks</a> or similar? Ensure you’re using Turbolinks 1.3.0+, and use this: (explained <a target="_blank" rel="noopener" href="https://github.com/rstacruz/nprogress/issues/8#issuecomment-23010560">here</a>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">$(<span class="hljs-variable language_">document</span>).<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;page:fetch&#x27;</span>,   <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123; <span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">start</span>(); &#125;);<br>$(<span class="hljs-variable language_">document</span>).<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;page:change&#x27;</span>,  <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123; <span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">done</span>(); &#125;);<br>$(<span class="hljs-variable language_">document</span>).<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;page:restore&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123; <span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">remove</span>(); &#125;);<br></code></pre></td></tr></table></figure>
+<h2 id="ideas">Ideas</h2>
+<ul>
+<li><p>Add progress to your Ajax calls! Bind it to the jQuery <code>ajaxStart</code> and <code>ajaxStop</code> events.</p></li>
+<li><p>Make a fancy loading bar even without Turbolinks/Pjax! Bind it to <code>$(document).ready</code> and <code>$(window).load</code>.</p></li>
+</ul>
+<h2 id="advanced-usage">Advanced usage</h2>
+<p><strong>Percentages:</strong> To set a progress percentage, call <code>.set(n)</code>, where <em>n</em> is a number between <code>0..1</code>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.0</span>);     <span class="hljs-comment">// Sorta same as .start()</span><br><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0.4</span>);<br><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">1.0</span>);     <span class="hljs-comment">// Sorta same as .done()</span><br></code></pre></td></tr></table></figure>
+<p><strong>Incrementing:</strong> To increment the progress bar, just use <code>.inc()</code>. This increments it with a random amount. This will never get to 100%: use it for every image load (or similar).</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">inc</span>();<br></code></pre></td></tr></table></figure>
+<p>If you want to increment by a specific value, you can pass that as a parameter:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">inc</span>(<span class="hljs-number">0.2</span>);    <span class="hljs-comment">// This will get the current status value and adds 0.2 until status is 0.994</span><br></code></pre></td></tr></table></figure>
+<p><strong>Force-done:</strong> By passing <code>true</code> to <code>done()</code>, it will show the progress bar even if it’s not being shown. (The default behavior is that <em>.done()</em> will not do anything if <em>.start()</em> isn’t called)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">done</span>(<span class="hljs-literal">true</span>);<br></code></pre></td></tr></table></figure>
+<p><strong>Get the status value:</strong> To get the status value, use <code>.status</code></p>
+<h2 id="configuration">Configuration</h2>
+<h4 id="minimum"><code>minimum</code></h4>
+<p>Changes the minimum percentage used upon starting. (default: <code>0.08</code>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123; <span class="hljs-attr">minimum</span>: <span class="hljs-number">0.1</span> &#125;);<br></code></pre></td></tr></table></figure>
+<h4 id="template"><code>template</code></h4>
+<p>You can change the markup using <code>template</code>. To keep the progress bar working, keep an element with <code>role='bar'</code> in there. See the <a target="_blank" rel="noopener" href="https://github.com/rstacruz/nprogress/blob/master/nprogress.js#L31">default template</a> for reference.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123;<br>  <span class="hljs-attr">template</span>: <span class="hljs-string">&quot;&lt;div class=&#x27;....&#x27;&gt;...&lt;/div&gt;&quot;</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+<h4 id="easing-and-speed"><code>easing</code> and <code>speed</code></h4>
+<p>Adjust animation settings using <em>easing</em> (a CSS easing string) and <em>speed</em> (in ms). (default: <code>ease</code> and <code>200</code>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123; <span class="hljs-attr">easing</span>: <span class="hljs-string">&#x27;ease&#x27;</span>, <span class="hljs-attr">speed</span>: <span class="hljs-number">500</span> &#125;);<br></code></pre></td></tr></table></figure>
+<h4 id="trickle"><code>trickle</code></h4>
+<p>Turn off the automatic incrementing behavior by setting this to <code>false</code>. (default: <code>true</code>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123; <span class="hljs-attr">trickle</span>: <span class="hljs-literal">false</span> &#125;);<br></code></pre></td></tr></table></figure>
+<h4 id="tricklerate-and-tricklespeed"><code>trickleRate</code> and <code>trickleSpeed</code></h4>
+<p>You can adjust the <em>trickleRate</em> (how much to increase per trickle) and <em>trickleSpeed</em> (how often to trickle, in ms).</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123; <span class="hljs-attr">trickleRate</span>: <span class="hljs-number">0.02</span>, <span class="hljs-attr">trickleSpeed</span>: <span class="hljs-number">800</span> &#125;);<br></code></pre></td></tr></table></figure>
+<h4 id="showspinner"><code>showSpinner</code></h4>
+<p>Turn off loading spinner by setting it to false. (default: <code>true</code>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123; <span class="hljs-attr">showSpinner</span>: <span class="hljs-literal">false</span> &#125;);<br></code></pre></td></tr></table></figure>
+<h4 id="parent"><code>parent</code></h4>
+<p>specify this to change the parent container. (default: <code>body</code>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-title class_">NProgress</span>.<span class="hljs-title function_">configure</span>(&#123; <span class="hljs-attr">parent</span>: <span class="hljs-string">&#x27;#container&#x27;</span> &#125;);<br></code></pre></td></tr></table></figure>
+<h2 id="customization">Customization</h2>
+<p>Just edit <code>nprogress.css</code> to your liking. Tip: you probably only want to find and replace occurrences of <code>#29d</code>.</p>
+<p>The included CSS file is pretty minimal… in fact, feel free to scrap it and make your own!</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.usabilitypost.com/2013/08/19/new-ui-pattern-website-loading-bars/">New UI Pattern: Website Loading Bars</a> (usabilitypost.com)</li>
+</ul>
+<h2 id="support">Support</h2>
+<p><strong>Bugs and requests</strong>: submit them through the project’s issues tracker.<br> <a target="_blank" rel="noopener" href="https://github.com/rstacruz/nprogress/issues"><img src="http://img.shields.io/github/issues/rstacruz/nprogress.svg" srcset="/img/loading.gif" lazyload alt="Issues" /></a></p>
+<p><strong>Questions</strong>: ask them at StackOverflow with the tag <em>nprogress</em>.<br> <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/tagged/nprogress"><img src="http://img.shields.io/badge/stackoverflow-nprogress-brightgreen.svg" srcset="/img/loading.gif" lazyload alt="StackOverflow" /></a></p>
+<p><strong>Chat</strong>: join us at gitter.im.<br> <a target="_blank" rel="noopener" href="https://gitter.im/rstacruz/nprogress"><img src="http://img.shields.io/badge/gitter-rstacruz%20/%20nprogress-brightgreen.svg" srcset="/img/loading.gif" lazyload alt="Chat" /></a></p>
+<h2 id="thanks">Thanks</h2>
+<p><strong>NProgress</strong> © 2013-2014, Rico Sta. Cruz. Released under the <a target="_blank" rel="noopener" href="http://mit-license.org/">MIT License</a>.<br> Authored and maintained by Rico Sta. Cruz with help from <a target="_blank" rel="noopener" href="http://github.com/rstacruz/nprogress/contributors">contributors</a>.</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://ricostacruz.com">ricostacruz.com</a>  ·  GitHub <a target="_blank" rel="noopener" href="https://github.com/rstacruz"><span class="citation" data-cites="rstacruz">@rstacruz</span></a>  ·  Twitter <a target="_blank" rel="noopener" href="https://twitter.com/rstacruz"><span class="citation" data-cites="rstacruz">@rstacruz</span></a></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://travis-ci.org/rstacruz/nprogress"><img src="https://api.travis-ci.org/rstacruz/nprogress.svg?branch=master" srcset="/img/loading.gif" lazyload alt="Status" /></a> <a target="_blank" rel="noopener" href="https://npmjs.org/package/nprogress" title="View this project on npm"><img src="https://img.shields.io/npm/v/nprogress.png" srcset="/img/loading.gif" lazyload alt="npm version" /></a> <a target="_blank" rel="noopener" href="http://spmjs.io/package/nprogress"><img src="http://spmjs.io/badge/nprogress" srcset="/img/loading.gif" lazyload alt="spm package" /></a></p>
+
+
+  
+
+</article>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

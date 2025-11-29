@@ -27,7 +27,7 @@
 <meta property="og:description" content="柔索并联机器人（Cable-Driven Parallel Robot, CDPR）是一种利用柔性索牵引末端执行器实现运动的并联机构。本文将详细推导其运动学和静力学的基本公式。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-28T11:55:00.000Z">
-<meta property="article:modified_time" content="2025-11-28T14:28:08.828Z">
+<meta property="article:modified_time" content="2025-11-29T02:13:50.393Z">
 <meta property="article:author" content="Nicotinamide">
 <meta property="article:tag" content="CDPR">
 <meta property="article:tag" content="Dynamics">
@@ -40,15 +40,15 @@
   
   <title>柔索并联机器人基本公式推导 - 记事本</title>
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
 
 
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
 
 
 
@@ -1021,8 +1021,8 @@ a_3 & 0 & -a_1 \\
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -1033,13 +1033,13 @@ a_3 & 0 & -a_1 \\
   </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
 
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
@@ -1066,7 +1066,7 @@ a_3 & 0 & -a_1 \\
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
     var toc = jQuery('#toc');
     if (toc.length === 0 || !window.tocbot) { return; }
     var boardCtn = jQuery('#board-ctn');
@@ -1104,14 +1104,14 @@ a_3 & 0 & -a_1 \\
 </script>
 
 
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
     window.anchors.options = {
       placement: CONFIG.anchorjs.placement,
       visible  : CONFIG.anchorjs.visible
@@ -1149,7 +1149,7 @@ a_3 & 0 & -a_1 \\
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
     Fluid.plugins.fancyBox();
   });
 </script>
@@ -1165,7 +1165,7 @@ a_3 & 0 & -a_1 \\
               inlineMath: { '[+]': [['$', '$']] }
             },
             loader : {
-              load: ['ui/lazy']
+              
             },
             options: {
               renderActions: {
@@ -1198,7 +1198,7 @@ a_3 & 0 & -a_1 \\
       </script>
     
 
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

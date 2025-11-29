@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Nicotinamide">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="How to contribute  Getting help Submitting bug reports Contributing code  Getting help Community discussion, questions, and informal bug reporting is done on the discuss.CodeMirror forum. Submitting b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="page.title">
+<meta property="og:url" content="https://hfutrobot.github.io/js/vendor/codemirror/CONTRIBUTING.html">
+<meta property="og:site_name" content="记事本">
+<meta property="og:description" content="How to contribute  Getting help Submitting bug reports Contributing code  Getting help Community discussion, questions, and informal bug reporting is done on the discuss.CodeMirror forum. Submitting b">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-29T02:13:50.419Z">
+<meta property="article:modified_time" content="2025-11-29T02:13:50.419Z">
+<meta property="article:author" content="Nicotinamide">
+<meta property="article:tag" content="技术分享,学习笔记,编程,开发">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>page.title - 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-page.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="page.title"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<article class="page-content">
+  <h1 id="how-to-contribute">How to contribute</h1>
+<ul>
+<li><a href="#getting-help">Getting help</a></li>
+<li><a href="#submitting-bug-reports">Submitting bug reports</a></li>
+<li><a href="#contributing-code">Contributing code</a></li>
+</ul>
+<h2 id="getting-help">Getting help</h2>
+<p>Community discussion, questions, and informal bug reporting is done on the <a target="_blank" rel="noopener" href="http://discuss.codemirror.net">discuss.CodeMirror forum</a>.</p>
+<h2 id="submitting-bug-reports">Submitting bug reports</h2>
+<p>The preferred way to report bugs is to use the <a target="_blank" rel="noopener" href="http://github.com/codemirror/CodeMirror/issues">GitHub issue tracker</a>. Before reporting a bug, read these pointers.</p>
+<p><strong>Note:</strong> The issue tracker is for <em>bugs</em>, not requests for help. Questions should be asked on the <a target="_blank" rel="noopener" href="http://discuss.codemirror.net">discuss.CodeMirror forum</a> instead.</p>
+<h3 id="reporting-bugs-effectively">Reporting bugs effectively</h3>
+<ul>
+<li><p>CodeMirror is maintained by volunteers. They don’t owe you anything, so be polite. Reports with an indignant or belligerent tone tend to be moved to the bottom of the pile.</p></li>
+<li><p>Include information about <strong>the browser in which the problem occurred</strong>. Even if you tested several browsers, and the problem occurred in all of them, mention this fact in the bug report. Also include browser version numbers and the operating system that you’re on.</p></li>
+<li><p>Mention which release of CodeMirror you’re using. Preferably, try also with the current development snapshot, to ensure the problem has not already been fixed.</p></li>
+<li><p>Mention very precisely what went wrong. “X is broken” is not a good bug report. What did you expect to happen? What happened instead? Describe the exact steps a maintainer has to take to make the problem occur. We can not fix something that we can not observe.</p></li>
+<li><p>If the problem can not be reproduced in any of the demos included in the CodeMirror distribution, please provide an HTML document that demonstrates the problem. The best way to do this is to go to <a target="_blank" rel="noopener" href="http://jsbin.com/ihunin/edit">jsbin.com</a>, enter it there, press save, and include the resulting link in your bug report.</p></li>
+</ul>
+<h2 id="contributing-code">Contributing code</h2>
+<p>Note that we are not accepting any new addons or modes into the main distribution. If you’ve written such a module, please distribute it as a separate NPM package.</p>
+<ul>
+<li>Make sure you have a <a target="_blank" rel="noopener" href="https://github.com/signup/free">GitHub Account</a></li>
+<li>Fork <a target="_blank" rel="noopener" href="https://github.com/codemirror/CodeMirror/">CodeMirror</a> (<a target="_blank" rel="noopener" href="https://help.github.com/articles/fork-a-repo">how to fork a repo</a>)</li>
+<li>Make your changes</li>
+<li>If your changes are easy to test or likely to regress, add tests. Tests for the core go into <code>test/test.js</code>, some modes have their own test suite under <code>mode/XXX/test.js</code>. Feel free to add new test suites to modes that don’t have one yet (be sure to link the new tests into <code>test/index.html</code>).</li>
+<li>Follow the general code style of the rest of the project (see below). Run <code>bin/lint</code> to verify that the linter is happy.</li>
+<li>Make sure all tests pass. Visit <code>test/index.html</code> in your browser to run them.</li>
+<li>Submit a pull request (<a target="_blank" rel="noopener" href="https://help.github.com/articles/fork-a-repo">how to create a pull request</a>). Don’t put more than one feature/fix in a single pull request.</li>
+</ul>
+<p>By contributing code to CodeMirror you</p>
+<ul>
+<li><p>agree to license the contributed code under CodeMirror’s <a target="_blank" rel="noopener" href="https://codemirror.net/LICENSE">MIT license</a>.</p></li>
+<li><p>confirm that you have the right to contribute and license the code in question. (Either you hold all rights on the code, or the rights holder has explicitly granted the right to use it like this, through a compatible open source license or through a direct agreement with you.)</p></li>
+</ul>
+<h3 id="coding-standards">Coding standards</h3>
+<ul>
+<li><p>2 spaces per indentation level, no tabs.</p></li>
+<li><p>Note that the linter (<code>bin/lint</code>) which is run after each commit complains about unused variables and functions. Prefix their names with an underscore to muffle it.</p></li>
+<li><p>CodeMirror does <em>not</em> follow JSHint or JSLint prescribed style. Patches that try to ‘fix’ code to pass one of these linters will be unceremoniously discarded.</p></li>
+</ul>
+
+
+  
+
+</article>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

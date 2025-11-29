@@ -27,7 +27,7 @@
 <meta property="og:description" content="Hexo 博客搭建完整指南：从安装到部署 📖 前言 Hexo 是一个快速、简洁且高效的博客框架，使用 Markdown 解析文章，可以在几秒内生成静态网页。本文将带你从零开始，完成 Hexo 博客的安装、主题配置，并通过 GitHub Actions 自动部署到 GitHub Pages。 🎯 本教程内容  环境准备（Node.js、Git） Hexo 安装与初始化 主题安装与配置（以 Flu">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-08T06:00:00.000Z">
-<meta property="article:modified_time" content="2025-11-28T14:28:08.828Z">
+<meta property="article:modified_time" content="2025-11-29T02:13:50.394Z">
 <meta property="article:author" content="Nicotinamide">
 <meta property="article:tag" content="GitHub Actions">
 <meta property="article:tag" content="GitHub Pages">
@@ -42,15 +42,15 @@
   
   <title>Hexo 博客搭建完整指南：从安装到部署 - 记事本</title>
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
 
 
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
 
 
 
@@ -867,8 +867,8 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -879,13 +879,13 @@
   </script>
 
 
-<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
 
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
@@ -912,7 +912,7 @@
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
     var toc = jQuery('#toc');
     if (toc.length === 0 || !window.tocbot) { return; }
     var boardCtn = jQuery('#board-ctn');
@@ -950,14 +950,14 @@
 </script>
 
 
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
     window.anchors.options = {
       placement: CONFIG.anchorjs.placement,
       visible  : CONFIG.anchorjs.visible
@@ -995,7 +995,7 @@
 
   
 <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
     Fluid.plugins.fancyBox();
   });
 </script>
