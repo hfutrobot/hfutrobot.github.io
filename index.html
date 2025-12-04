@@ -16,23 +16,23 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Nicotinamide">
+  <meta name="author" content="Yike">
   <meta name="keywords" content="技术分享,学习笔记,编程,开发">
   
     <meta name="description" content="个人技术文档与知识分享平台">
 <meta property="og:type" content="website">
-<meta property="og:title" content="记事本">
-<meta property="og:url" content="https://hfutrobot.github.io/index.html">
-<meta property="og:site_name" content="记事本">
+<meta property="og:title" content="Oh 记事本">
+<meta property="og:url" content="https://www.ohnn.cn/index.html">
+<meta property="og:site_name" content="Oh 记事本">
 <meta property="og:description" content="个人技术文档与知识分享平台">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="Nicotinamide">
+<meta property="article:author" content="Yike">
 <meta property="article:tag" content="技术分享,学习笔记,编程,开发">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>记事本</title>
+  <title>Oh 记事本</title>
 
   <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
 
@@ -62,13 +62,14 @@
 
   
 <link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"hfutrobot.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -246,6 +247,557 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2025/12/04/elliptic-pde-five-point-scheme/" target="_self">
+          二维椭圆型方程的五点差分格式
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/12/04/elliptic-pde-five-point-scheme/" target="_self">
+        <div>
+          本文系统介绍二维椭圆型偏微分方程的五点差分格式，从一般形式出发推导差分格式，再特化为常系数等步长情况。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-12-04 16:50" pubdate>
+              2025-12-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" class="category-chain-item">偏微分方程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/">#数值计算</a>
+            
+              <a href="/tags/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">#偏微分方程</a>
+            
+              <a href="/tags/%E6%9C%89%E9%99%90%E5%B7%AE%E5%88%86/">#有限差分</a>
+            
+              <a href="/tags/%E6%A4%AD%E5%9C%86%E5%9E%8B%E6%96%B9%E7%A8%8B/">#椭圆型方程</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/12/03/elliptic-bvp/" target="_self">
+          两点边值问题的数值解法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/12/03/elliptic-bvp/" target="_self">
+        <div>
+          本文系统介绍两点边值问题的一般形式及其数值求解方法，重点讨论有限差分法和积分插值法的理论基础、离散格式推导和误差分析。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-12-03 19:54" pubdate>
+              2025-12-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/">#数值计算</a>
+            
+              <a href="/tags/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">#偏微分方程</a>
+            
+              <a href="/tags/%E8%BE%B9%E5%80%BC%E9%97%AE%E9%A2%98/">#边值问题</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/12/03/parabolic_pde_schemes/" target="_self">
+          抛物型偏微分方程的数值解法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/12/03/parabolic_pde_schemes/" target="_self">
+        <div>
+          本文系统介绍求解抛物型偏微分方程（如热传导方程）的5种经典差分格式，包括显式格式、隐式格式、Crank-Nicolson格式、Richardson格式和双层加权格式，并详细分析它们的稳定性和精度。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-12-03 10:41" pubdate>
+              2025-12-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/">#数值计算</a>
+            
+              <a href="/tags/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">#偏微分方程</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/12/02/predictor_corrector_rk/" target="_self">
+          常微分方程求解之预估校正与Runge-Kutta方法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/12/02/predictor_corrector_rk/" target="_self">
+        <div>
+          预估校正方法通过结合显式和隐式方法的优点，为求解常微分方程提供了高效且精确的途径。本文将详细推导预估校正方法的基本思想，并自然过渡到经典的Runge-Kutta方法体系。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-12-02 21:50" pubdate>
+              2025-12-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/">#数值计算</a>
+            
+              <a href="/tags/%E5%B8%B8%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">#常微分方程</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/12/02/trapezoidal_method/" target="_self">
+          常微分方程求解之梯形法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/12/02/trapezoidal_method/" target="_self">
+        <div>
+          梯形法是求解常微分方程初值问题的重要隐式数值方法。本文将详细推导其基本公式，并严格证明截断误差、收敛性和稳定性，特别是其优越的A-稳定性质。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-12-02 16:23" pubdate>
+              2025-12-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/">#数值计算</a>
+            
+              <a href="/tags/%E5%B8%B8%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">#常微分方程</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/12/02/euler_method/" target="_self">
+          常微分方程求解之欧拉法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/12/02/euler_method/" target="_self">
+        <div>
+          Euler法是求解常微分方程初值问题最基本的数值方法。本文将详细推导其基本公式,并严格证明截断误差、收敛性和稳定性。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-12-02 13:40" pubdate>
+              2025-12-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/">#数值计算</a>
+            
+              <a href="/tags/%E5%B8%B8%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/">#常微分方程</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/11/29/angular-velocity-transformation/" target="_self">
+          角速度与欧拉角导数：一架飞机的故事
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/29/angular-velocity-transformation/" target="_self">
+        <div>
+          为什么角速度 \(\boldsymbol{\omega}\) 不等于欧拉角导数 \(\dot{\boldsymbol{\theta}}\)？让我用一架飞机的例子，从头到尾给你讲清楚。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-11-29 16:00" pubdate>
+              2025-11-29
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="category-chain-item">机器人</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/%E8%BF%90%E5%8A%A8%E5%AD%A6/" class="category-chain-item">运动学</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/Kinematics/">#Kinematics</a>
+            
+              <a href="/tags/Angular-Velocity/">#Angular Velocity</a>
+            
+              <a href="/tags/Euler-Angles/">#Euler Angles</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/11/29/rotation-matrix-guide/" target="_self">
+          旋转矩阵：从零开始的直观操作指南
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/29/rotation-matrix-guide/" target="_self">
+        <div>
+          不要被”矩阵”这个词吓倒。旋转矩阵其实非常简单，它就是把三个箭头（坐标轴）打包在一起而已。本文将抛弃复杂的数学定义，用最直观的方式告诉你：旋转矩阵是什么，怎么构建它，以及怎么用它来控制机器人。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-11-29 13:00" pubdate>
+              2025-11-29
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="category-chain-item">机器人</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" class="category-chain-item">基础教程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Yike/">#Yike</a>
+            
+              <a href="/tags/Rotation-Matrix/">#Rotation Matrix</a>
+            
+              <a href="/tags/Tutorial/">#Tutorial</a>
+            
+              <a href="/tags/Beginner/">#Beginner</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2025/11/28/cdpr-formulas/" target="_self">
           柔索并联机器人基本公式推导
         </a>
@@ -302,9 +854,9 @@
             
               <a href="/tags/Yike/">#Yike</a>
             
-              <a href="/tags/CDPR/">#CDPR</a>
-            
               <a href="/tags/Kinematics/">#Kinematics</a>
+            
+              <a href="/tags/CDPR/">#CDPR</a>
             
               <a href="/tags/Dynamics/">#Dynamics</a>
             
@@ -403,425 +955,13 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/12/svd-decomposition-guide/" target="_self">
-          SVD 奇异值分解教程：理论与应用
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/12/svd-decomposition-guide/" target="_self">
-        <div>
-          SVD 奇异值分解教程：理论与应用 📖 什么是 SVD 分解？ SVD（Singular Value Decomposition，奇异值分解） 是线性代数中一个非常重要的矩阵分解方法。对于任意一个 \(m \times n\) 的矩阵 \(A\)，SVD 将其分解为三个矩阵的乘积： \[A = U \Sigma V^T\] 其中： - \(U\) 是一个 \(m \times m\) 的正交矩阵
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-12 13:00" pubdate>
-              2025-11-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Yike/">#Yike</a>
-            
-              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/">#线性代数</a>
-            
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a>
-            
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/">#数据科学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/08/hexo-beginner-guide/" target="_self">
-          Hexo 博客搭建完整指南：从安装到部署
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/08/hexo-beginner-guide/" target="_self">
-        <div>
-          Hexo 博客搭建完整指南：从安装到部署 📖 前言 Hexo 是一个快速、简洁且高效的博客框架，使用 Markdown 解析文章，可以在几秒内生成静态网页。本文将带你从零开始，完成 Hexo 博客的安装、主题配置，并通过 GitHub Actions 自动部署到 GitHub Pages。 🎯 本教程内容  环境准备（Node.js、Git） Hexo 安装与初始化 主题安装与配置（以 Flu
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-08 14:00" pubdate>
-              2025-11-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Yike/">#Yike</a>
-            
-              <a href="/tags/Hexo/">#Hexo</a>
-            
-              <a href="/tags/%E5%8D%9A%E5%AE%A2/">#博客</a>
-            
-              <a href="/tags/GitHub-Pages/">#GitHub Pages</a>
-            
-              <a href="/tags/GitHub-Actions/">#GitHub Actions</a>
-            
-              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
-            
-              <a href="/tags/%E5%85%A5%E9%97%A8/">#入门</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/08/hexo-deploy-to-server/" target="_self">
-          Hexo 博客部署到云服务器完整指南
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/08/hexo-deploy-to-server/" target="_self">
-        <div>
-          Hexo 博客部署到云服务器完整指南 📖 前言 在使用 Hexo 搭建博客后，除了部署到 GitHub Pages，我们还可以将博客部署到自己的云服务器上，这样可以获得更好的性能和自定义能力。本文将按照配置 SSH 密钥 → 配置部署路径 → 配置 GitHub Actions → 配置 Nginx 的顺序，详细介绍如何通过 GitHub Actions 自动将 Hexo 博客部署到云服务器。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-08 14:00" pubdate>
-              2025-11-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Yike/">#Yike</a>
-            
-              <a href="/tags/Hexo/">#Hexo</a>
-            
-              <a href="/tags/GitHub-Actions/">#GitHub Actions</a>
-            
-              <a href="/tags/%E9%83%A8%E7%BD%B2/">#部署</a>
-            
-              <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">#服务器</a>
-            
-              <a href="/tags/Nginx/">#Nginx</a>
-            
-              <a href="/tags/SSH/">#SSH</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/07/image-test/" target="_self">
-          图片显示测试
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/07/image-test/" target="_self">
-        <div>
-          图片显示测试 本文档用于测试 Hexo Fluid 主题的图片显示功能，包括不同尺寸、格式、对齐方式和说明文字等。 1. 基本图片显示 1.1 本地图片 使用本地图片资源：   Banner 图片  1.2 网络图片（占位图） 使用占位图片服务测试：   占位图片 800x600  2. 不同尺寸的图片 2.1 小尺寸图片   小图片 200x150  2.2 中等尺寸图片   中等图片 600x
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-07 21:00" pubdate>
-              2025-11-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Yike/">#Yike</a>
-            
-              <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
-            
-              <a href="/tags/%E5%9B%BE%E7%89%87/">#图片</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/07/latex-test/" target="_self">
-          LaTeX 数学公式测试
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/07/latex-test/" target="_self">
-        <div>
-          这是一个测试LaTeX数学公式渲染的文章。 行内数学公式 这是一个行内公式：\(E = mc^2\)，展示了爱因斯坦的质能方程。 另一个例子：\(\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\) 块级数学公式 1. 基础公式 \[ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} \] 2. 矩阵 \[
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-07 16:32" pubdate>
-              2025-11-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Yike/">#Yike</a>
-            
-              <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
-            
-              <a href="/tags/LaTeX/">#LaTeX</a>
-            
-              <a href="/tags/%E6%95%B0%E5%AD%A6/">#数学</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/11/07/linux-commands-guide/" target="_self">
-          Linux 快捷命令
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/11/07/linux-commands-guide/" target="_self">
-        <div>
-          Linux 快捷命令 🚀 前言 作为Linux用户，掌握快捷命令是提升工作效率的关键。本文整理了最实用的Linux快捷命令和技巧，帮助你在终端中更加得心应手。 📂 文件与目录操作 基础导航命令 12345678910111213# 显示当前目录pwd# 列出文件和目录ls -la          # 详细列表，包含隐藏文件ls -lh          # 人性化显示文件大小ls -lt
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-11-07 16:00" pubdate>
-              2025-11-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/" class="category-chain-item">技术教程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Yike/">#Yike</a>
-            
-              <a href="/tags/Linux/">#Linux</a>
-            
-              <a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/">#命令行</a>
-            
-              <a href="/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/">#系统管理</a>
-            
-              <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/">#快捷键</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
 
 
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
 
 
 
@@ -959,6 +1099,7 @@
 
   
 <script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
 
 
 

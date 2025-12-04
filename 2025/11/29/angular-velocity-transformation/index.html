@@ -1,0 +1,1350 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="为什么角速度 \(\boldsymbol{\omega}\) 不等于欧拉角导数 \(\dot{\boldsymbol{\theta}}\)？让我用一架飞机的例子，从头到尾给你讲清楚。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="角速度与欧拉角导数：一架飞机的故事">
+<meta property="og:url" content="https://www.ohnn.cn/2025/11/29/angular-velocity-transformation/index.html">
+<meta property="og:site_name" content="Oh 记事本">
+<meta property="og:description" content="为什么角速度 \(\boldsymbol{\omega}\) 不等于欧拉角导数 \(\dot{\boldsymbol{\theta}}\)？让我用一架飞机的例子，从头到尾给你讲清楚。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-29T08:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T13:44:48.967Z">
+<meta property="article:author" content="Yike">
+<meta property="article:tag" content="Angular Velocity">
+<meta property="article:tag" content="Euler Angles">
+<meta property="article:tag" content="Kinematics">
+<meta property="article:tag" content="Yike">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>角速度与欧拉角导数：一架飞机的故事 - Oh 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="角速度与欧拉角导数：一架飞机的故事"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-29 16:00" pubdate>
+          2025年11月29日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">角速度与欧拉角导数：一架飞机的故事</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>为什么角速度 <span class="math inline" data-latex="\boldsymbol{\omega}">\(\boldsymbol{\omega}\)</span> 不等于欧拉角导数 <span class="math inline" data-latex="\dot{\boldsymbol{\theta}}">\(\dot{\boldsymbol{\theta}}\)</span>？让我用一架飞机的例子，从头到尾给你讲清楚。</p>
+<span id="more"></span>
+<h2 id="故事开始一架飞机的三次转弯">1. 故事开始：一架飞机的三次转弯</h2>
+<p>想象你是一个飞行员。你的飞机有三个操纵杆： - <strong>方向舵</strong>：控制 Yaw（偏航），左转右转 - <strong>升降舵</strong>：控制 Pitch（俯仰），机头抬起或低头 - <strong>副翼</strong>：控制 Roll（滚转），左右倾斜</p>
+<h3 id="问题来了">1.1 问题来了</h3>
+<p>地面塔台问你：“你现在的角速度是多少？”</p>
+<p>你看了看仪表盘： - 方向舵转动速度：<span class="math inline" data-latex="\dot{\psi} = 10°/\text{秒}">\(\dot{\psi} = 10°/\text{秒}\)</span> - 升降舵转动速度：<span class="math inline" data-latex="\dot{\theta} = 5°/\text{秒}">\(\dot{\theta} = 5°/\text{秒}\)</span> - 副翼转动速度：<span class="math inline" data-latex="\dot{\phi} = 3°/\text{秒}">\(\dot{\phi} = 3°/\text{秒}\)</span></p>
+<p><strong>你能不能直接回答：角速度是 <span class="math inline" data-latex="[3, 5, 10]">\([3, 5, 10]\)</span> ？</strong></p>
+<p><strong>答案是不能！</strong></p>
+<hr />
+<h2 id="为什么不能直接相加">2. 为什么不能直接相加？</h2>
+<h3 id="实验三次转弯">2.1 实验：三次转弯</h3>
+<p>让我们做一个实验。假设飞机从<strong>停机坪起飞</strong>（初始姿态和地面一致）。</p>
+<h4 id="第1步yaw偏航">第1步：Yaw（偏航）</h4>
+<p>你踩下方向舵，飞机<strong>原地转了30°</strong>（绕垂直轴）。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs">俯视图（从上往下看）：<br><br>起飞前：          转弯后：<br>↑                  ↗<br>机头               机头<br>朝北               朝东北<br></code></pre></td></tr></table></figure>
+<p>现在，飞机的<strong>机头</strong>、<strong>机翼</strong>方向都变了，但<strong>上下方向</strong>还是和地面一致。</p>
+<h4 id="第2步pitch俯仰">第2步：Pitch（俯仰）</h4>
+<p>你拉升降舵，飞机<strong>抬头20°</strong>（机头向上）。</p>
+<p><strong>关键问题来了！</strong></p>
+<p>你现在是绕着<strong>哪根轴</strong>抬头的？</p>
+<ul>
+<li><strong>不是地面的”东西轴”！</strong></li>
+<li>而是<strong>经过第1步旋转后的”机翼轴”</strong>！</li>
+</ul>
+<p>因为第1步你已经转了30°，你的机翼已经不是正东西方向了，它已经偏了30°！</p>
+<h4 id="第3步roll滚转">第3步：Roll（滚转）</h4>
+<p>你推副翼，飞机<strong>侧翻15°</strong>。</p>
+<p>你是绕着<strong>哪根轴</strong>翻滚的？</p>
+<ul>
+<li><strong>不是地面的”南北轴”！</strong></li>
+<li>而是<strong>经过前两步后的”机头轴”</strong>！</li>
+</ul>
+<p>你的机头已经： 1. 转了30°（Yaw） 2. 又抬了20°（Pitch）</p>
+<p>所以机头轴早就不是原来的方向了！</p>
+<h3 id="核心发现">2.2 核心发现</h3>
+<p><strong>三个操纵杆（Yaw、Pitch、Roll）绕的是三根”不同方向”的轴！</strong></p>
+<ul>
+<li><span class="math inline" data-latex="\dot{\psi}">\(\dot{\psi}\)</span>：绕<strong>地面的垂直轴</strong>（固定不动）</li>
+<li><span class="math inline" data-latex="\dot{\theta}">\(\dot{\theta}\)</span>：绕<strong>经过Yaw后的机翼轴</strong>（已经转了！）</li>
+<li><span class="math inline" data-latex="\dot{\phi}">\(\dot{\phi}\)</span>：绕<strong>经过Yaw+Pitch后的机头轴</strong>（转了两次！）</li>
+</ul>
+<p>就像你不能把”向东1米”+“向你前方1米”直接相加一样，<strong>这三个转速也不能直接加起来</strong>。</p>
+<hr />
+<h2 id="解决方案统一到地面坐标系">3. 解决方案：统一到地面坐标系</h2>
+<p>要算出真实的角速度（相对于地面），我们得把三个”不同方向的转速”都换算成”相对于地面的转速”。</p>
+<h3 id="第1个转速yaw">3.1 第1个转速：Yaw</h3>
+<p><span class="math inline" data-latex="\dot{\psi} = 10°/\text{秒}">\(\dot{\psi} = 10°/\text{秒}\)</span>，绕<strong>地面垂直轴</strong>。</p>
+<p><strong>方向</strong>：地面的Z轴，就是 <span class="math inline" data-latex="[0, 0, 1]">\([0, 0, 1]\)</span>（向上）。</p>
+<p><strong>对角速度的贡献</strong>（已经是地面坐标系）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega}_\psi = 10 \times \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 10 \end{bmatrix}">\[\boldsymbol{\omega}_\psi = 10 \times \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 10 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="第2个转速pitch">3.2 第2个转速：Pitch</h3>
+<p><span class="math inline" data-latex="\dot{\theta} = 5°/\text{秒}">\(\dot{\theta} = 5°/\text{秒}\)</span>，绕<strong>转过30°后的机翼轴</strong>。</p>
+<p><strong>问题</strong>：这根轴在地面看来是什么方向？</p>
+<p><strong>答案</strong>：原来的机翼轴是地面的Y轴 <span class="math inline" data-latex="[0, 1, 0]">\([0, 1, 0]\)</span>（向东）。转了30°后，方向变了！</p>
+<p>怎么算新方向？用旋转矩阵： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\text{新机翼轴} = \boldsymbol{R}_z(30°) \times \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}">\[\text{新机翼轴} = \boldsymbol{R}_z(30°) \times \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>计算结果（你不需要手算，记住规律就行）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\text{新机翼轴} = \begin{bmatrix} -\sin 30° \\ \cos 30° \\ 0 \end{bmatrix} = \begin{bmatrix} -0.5 \\ 0.866 \\ 0 \end{bmatrix}">\[\text{新机翼轴} = \begin{bmatrix} -\sin 30° \\ \cos 30° \\ 0 \end{bmatrix} = \begin{bmatrix} -0.5 \\ 0.866 \\ 0 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>对角速度的贡献</strong>（换算到地面坐标系）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega}_\theta = 5 \times \begin{bmatrix} -0.5 \\ 0.866 \\ 0 \end{bmatrix} = \begin{bmatrix} -2.5 \\ 4.33 \\ 0 \end{bmatrix}">\[\boldsymbol{\omega}_\theta = 5 \times \begin{bmatrix} -0.5 \\ 0.866 \\ 0 \end{bmatrix} = \begin{bmatrix} -2.5 \\ 4.33 \\ 0 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="第3个转速roll">3.3 第3个转速：Roll</h3>
+<p><span class="math inline" data-latex="\dot{\phi} = 3°/\text{秒}">\(\dot{\phi} = 3°/\text{秒}\)</span>，绕<strong>转过30°又抬过20°后的机头轴</strong>。</p>
+<p><strong>问题</strong>：这根轴在地面看来又是什么方向？</p>
+<p><strong>答案</strong>：原来的机头轴是地面的X轴 <span class="math inline" data-latex="[1, 0, 0]">\([1, 0, 0]\)</span>（向北）。先转30°，再抬20°，方向又变了！</p>
+<p>怎么算？先用 <span class="math inline" data-latex="\boldsymbol{R}_y(20°)">\(\boldsymbol{R}_y(20°)\)</span> 再用 <span class="math inline" data-latex="\boldsymbol{R}_z(30°)">\(\boldsymbol{R}_z(30°)\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\text{新机头轴} = \boldsymbol{R}_z(30°) \boldsymbol{R}_y(20°) \times \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}">\[\text{新机头轴} = \boldsymbol{R}_z(30°) \boldsymbol{R}_y(20°) \times \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>计算结果： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\text{新机头轴} \approx \begin{bmatrix} 0.813 \\ 0.469 \\ -0.342 \end{bmatrix}">\[\text{新机头轴} \approx \begin{bmatrix} 0.813 \\ 0.469 \\ -0.342 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>对角速度的贡献</strong>（换算到地面坐标系）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega}_\phi = 3 \times \begin{bmatrix} 0.813 \\ 0.469 \\ -0.342 \end{bmatrix} = \begin{bmatrix} 2.44 \\ 1.41 \\ -1.03 \end{bmatrix}">\[\boldsymbol{\omega}_\phi = 3 \times \begin{bmatrix} 0.813 \\ 0.469 \\ -0.342 \end{bmatrix} = \begin{bmatrix} 2.44 \\ 1.41 \\ -1.03 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="合成总角速度">3.4 合成总角速度</h3>
+<p>现在三个分量都是”地面坐标系”下的了，可以直接相加了：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega} = \boldsymbol{\omega}_\psi + \boldsymbol{\omega}_\theta + \boldsymbol{\omega}_\phi">\[\boldsymbol{\omega} = \boldsymbol{\omega}_\psi + \boldsymbol{\omega}_\theta + \boldsymbol{\omega}_\phi\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= \begin{bmatrix} 0 \\ 0 \\ 10 \end{bmatrix} + \begin{bmatrix} -2.5 \\ 4.33 \\ 0 \end{bmatrix} + \begin{bmatrix} 2.44 \\ 1.41 \\ -1.03 \end{bmatrix}">\[= \begin{bmatrix} 0 \\ 0 \\ 10 \end{bmatrix} + \begin{bmatrix} -2.5 \\ 4.33 \\ 0 \end{bmatrix} + \begin{bmatrix} 2.44 \\ 1.41 \\ -1.03 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= \begin{bmatrix} -0.06 \\ 5.74 \\ 8.97 \end{bmatrix} \, °/\text{秒}">\[= \begin{bmatrix} -0.06 \\ 5.74 \\ 8.97 \end{bmatrix} \, °/\text{秒}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>这才是真实的角速度！</strong></p>
+<hr />
+<h2 id="一般公式e矩阵是什么">4. 一般公式：E矩阵是什么？</h2>
+<h3 id="规律提取">4.1 规律提取</h3>
+<p>从上面的例子你发现了吗？</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega} = (\text{第1个轴在地面的方向}) \times \dot{\psi} + (\text{第2个轴在地面的方向}) \times \dot{\theta} + (\text{第3个轴在地面的方向}) \times \dot{\phi}">\[\boldsymbol{\omega} = (\text{第1个轴在地面的方向}) \times \dot{\psi} + (\text{第2个轴在地面的方向}) \times \dot{\theta} + (\text{第3个轴在地面的方向}) \times \dot{\phi}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>写成矩阵：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega} = \begin{bmatrix} 
+\text{Roll轴方向} &amp; \text{Pitch轴方向} &amp; \text{Yaw轴方向}
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}">\[\boldsymbol{\omega} = \begin{bmatrix} 
+\text{Roll轴方向} & \text{Pitch轴方向} & \text{Yaw轴方向}
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="具体到zyx欧拉角">4.2 具体到ZYX欧拉角</h3>
+<p>对于航空常用的ZYX顺序（Yaw→Pitch→Roll）：</p>
+<ul>
+<li><strong>Yaw轴</strong>：地面Z轴，方向是 <span class="math inline" data-latex="\boldsymbol{e}_z = [0,0,1]">\(\boldsymbol{e}_z = [0,0,1]\)</span></li>
+<li><strong>Pitch轴</strong>：转过Yaw后的Y轴，方向是 <span class="math inline" data-latex="\boldsymbol{R}_z(\psi) \boldsymbol{e}_y">\(\boldsymbol{R}_z(\psi) \boldsymbol{e}_y\)</span></li>
+<li><strong>Roll轴</strong>：转过Yaw和Pitch后的X轴，方向是 <span class="math inline" data-latex="\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta) \boldsymbol{e}_x">\(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta) \boldsymbol{e}_x\)</span></li>
+</ul>
+<p>所以：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega} = \begin{bmatrix} 
+\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta) \boldsymbol{e}_x &amp; 
+\boldsymbol{R}_z(\psi) \boldsymbol{e}_y &amp; 
+\boldsymbol{e}_z
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}">\[\boldsymbol{\omega} = \begin{bmatrix} 
+\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta) \boldsymbol{e}_x & 
+\boldsymbol{R}_z(\psi) \boldsymbol{e}_y & 
+\boldsymbol{e}_z
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>这个矩阵就是 <span class="math inline" data-latex="E">\(E\)</span> 矩阵！</strong></p>
+<h3 id="计算出来的最终公式">4.3 计算出来的最终公式</h3>
+<p>把旋转矩阵乘开后（这是数学计算，你不需要手推）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\boldsymbol{\omega} = \begin{bmatrix}
+\cos\psi\cos\theta &amp; -\sin\psi &amp; 0 \\
+\sin\psi\cos\theta &amp; \cos\psi &amp; 0 \\
+-\sin\theta &amp; 0 &amp; 1
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}}">\[\boxed{\boldsymbol{\omega} = \begin{bmatrix}
+\cos\psi\cos\theta & -\sin\psi & 0 \\
+\sin\psi\cos\theta & \cos\psi & 0 \\
+-\sin\theta & 0 & 1
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<hr />
+<h2 id="总结记住这个故事">5. 总结：记住这个故事</h2>
+<ol type="1">
+<li><strong>欧拉角像三次转弯</strong>：每次转弯的”轴”方向都在变。</li>
+<li><strong>不能直接加</strong>：就像”向东1米”+“向前1米”不能直接加。</li>
+<li><strong>E矩阵的作用</strong>：把三个”不同方向的转速”都换算成”地面方向的转速”。</li>
+<li><strong>E矩阵的每一列</strong>：对应一个转动轴在地面坐标系下的方向向量。</li>
+</ol>
+<p>希望这次你能理解了！</p>
+<hr />
+<h2 id="数学严格证明进阶">6. 数学严格证明（进阶）</h2>
+<p>如果你已经理解了上面的直觉，现在让我们用严格的数学语言来证明 <span class="math inline" data-latex="E">\(E\)</span> 矩阵的来源。</p>
+<h3 id="出发点旋转矩阵的导数">6.1 出发点：旋转矩阵的导数</h3>
+<p><strong>已知事实</strong>（详细证明见 <a href="/2025/11/28/cdpr-formulas/" title="柔索并联机器人基本公式推导">《柔索并联机器人基本公式推导》</a> 中的”补充证明”折叠部分）：</p>
+<p>对于任意旋转矩阵 <span class="math inline" data-latex="\boldsymbol{R}(t)">\(\boldsymbol{R}(t)\)</span>，其时间导数与角速度的关系为： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}">\[\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{\omega})">\(\boldsymbol{S}(\boldsymbol{\omega})\)</span> 是角速度 <span class="math inline" data-latex="\boldsymbol{\omega} = [\omega_x, \omega_y, \omega_z]^T">\(\boldsymbol{\omega} = [\omega_x, \omega_y, \omega_z]^T\)</span> 的<strong>反对称矩阵</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{S}(\boldsymbol{\omega}) = \begin{bmatrix}
+0 &amp; -\omega_z &amp; \omega_y \\
+\omega_z &amp; 0 &amp; -\omega_x \\
+-\omega_y &amp; \omega_x &amp; 0
+\end{bmatrix}">\[\boldsymbol{S}(\boldsymbol{\omega}) = \begin{bmatrix}
+0 & -\omega_z & \omega_y \\
+\omega_z & 0 & -\omega_x \\
+-\omega_y & \omega_x & 0
+\end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>物理意义</strong>：这个公式将”旋转矩阵的变化率”与”角速度”直接联系起来。</p>
+<h3 id="欧拉角参数化">6.2 欧拉角参数化</h3>
+<p>对于ZYX欧拉角 <span class="math inline" data-latex="\boldsymbol{\theta} = [\phi, \theta, \psi]^T">\(\boldsymbol{\theta} = [\phi, \theta, \psi]^T\)</span>，旋转矩阵是关于这些角度的函数： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}(\boldsymbol{\theta}(t)) = \boldsymbol{R}_z(\psi(t)) \boldsymbol{R}_y(\theta(t)) \boldsymbol{R}_x(\phi(t))">\[\boldsymbol{R}(\boldsymbol{\theta}(t)) = \boldsymbol{R}_z(\psi(t)) \boldsymbol{R}_y(\theta(t)) \boldsymbol{R}_x(\phi(t))\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="应用链式法则">6.3 应用链式法则</h3>
+<p>由于 <span class="math inline" data-latex="\boldsymbol{R}">\(\boldsymbol{R}\)</span> 依赖于三个随时间变化的参数 <span class="math inline" data-latex="\phi(t), \theta(t), \psi(t)">\(\phi(t), \theta(t), \psi(t)\)</span>，根据<strong>多元函数的链式法则</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\dot{\boldsymbol{R}} = \frac{\partial \boldsymbol{R}}{\partial \phi}\dot{\phi} + \frac{\partial \boldsymbol{R}}{\partial \theta}\dot{\theta} + \frac{\partial \boldsymbol{R}}{\partial \psi}\dot{\psi}">\[\dot{\boldsymbol{R}} = \frac{\partial \boldsymbol{R}}{\partial \phi}\dot{\phi} + \frac{\partial \boldsymbol{R}}{\partial \theta}\dot{\theta} + \frac{\partial \boldsymbol{R}}{\partial \psi}\dot{\psi}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="联立两个表达式">6.4 联立两个表达式</h3>
+<p>现在我们有两个关于 <span class="math inline" data-latex="\dot{\boldsymbol{R}}">\(\dot{\boldsymbol{R}}\)</span> 的表达式： 1. <strong>角速度形式</strong>：<span class="math inline" data-latex="\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}">\(\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega}) \boldsymbol{R}\)</span> 2. <strong>链式法则形式</strong>：<span class="math inline" data-latex="\dot{\boldsymbol{R}} = \sum_i \frac{\partial \boldsymbol{R}}{\partial \theta_i}\dot{\theta}_i">\(\dot{\boldsymbol{R}} = \sum_i \frac{\partial \boldsymbol{R}}{\partial \theta_i}\dot{\theta}_i\)</span></p>
+<p>将它们等同并右乘 <span class="math inline" data-latex="\boldsymbol{R}^T">\(\boldsymbol{R}^T\)</span>（利用 <span class="math inline" data-latex="\boldsymbol{R}\boldsymbol{R}^T = \boldsymbol{I}">\(\boldsymbol{R}\boldsymbol{R}^T = \boldsymbol{I}\)</span>）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{S}(\boldsymbol{\omega}) = \frac{\partial \boldsymbol{R}}{\partial \phi}\dot{\phi}\boldsymbol{R}^T + \frac{\partial \boldsymbol{R}}{\partial \theta}\dot{\theta}\boldsymbol{R}^T + \frac{\partial \boldsymbol{R}}{\partial \psi}\dot{\psi}\boldsymbol{R}^T">\[\boldsymbol{S}(\boldsymbol{\omega}) = \frac{\partial \boldsymbol{R}}{\partial \phi}\dot{\phi}\boldsymbol{R}^T + \frac{\partial \boldsymbol{R}}{\partial \theta}\dot{\theta}\boldsymbol{R}^T + \frac{\partial \boldsymbol{R}}{\partial \psi}\dot{\psi}\boldsymbol{R}^T\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="计算各偏导数项">6.5 计算各偏导数项</h3>
+<h4 id="a-第一项fracpartial-boldsymbolrpartial-phi">(a) 第一项：<span class="math inline" data-latex="\frac{\partial \boldsymbol{R}}{\partial \phi}">\(\frac{\partial \boldsymbol{R}}{\partial \phi}\)</span></h4>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial \boldsymbol{R}}{\partial \phi} = \frac{\partial}{\partial \phi}[\boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \boldsymbol{R}_x(\phi)] = \boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \frac{d\boldsymbol{R}_x(\phi)}{d\phi}">\[\frac{\partial \boldsymbol{R}}{\partial \phi} = \frac{\partial}{\partial \phi}[\boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \boldsymbol{R}_x(\phi)] = \boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \frac{d\boldsymbol{R}_x(\phi)}{d\phi}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>引理</strong>：对于基本旋转矩阵，有 <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_x(\phi)">\[\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_x(\phi)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="\boldsymbol{e}_x = [1,0,0]^T">\(\boldsymbol{e}_x = [1,0,0]^T\)</span>，<span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{e}_x)">\(\boldsymbol{S}(\boldsymbol{e}_x)\)</span> 是其反对称矩阵。</p>
+<details>
+<summary>
+📋 引理的证明（点击展开，从任意角速度出发）
+</summary>
+<p>当物体绕X轴旋转时，角速度为 <span class="math inline" data-latex="\boldsymbol{\omega} = \dot{\phi}\boldsymbol{e}_x">\(\boldsymbol{\omega} = \dot{\phi}\boldsymbol{e}_x\)</span>（<span class="math inline" data-latex="\dot{\phi}">\(\dot{\phi}\)</span> 可以是任意值）。</p>
+<p>根据基本公式 <span class="math inline" data-latex="\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{R}">\(\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{R}\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{dt} = \boldsymbol{S}(\dot{\phi}\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)">\[\frac{d\boldsymbol{R}_x(\phi)}{dt} = \boldsymbol{S}(\dot{\phi}\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用反对称矩阵的线性性质 <span class="math inline" data-latex="\boldsymbol{S}(k\boldsymbol{v}) = k\boldsymbol{S}(\boldsymbol{v})">\(\boldsymbol{S}(k\boldsymbol{v}) = k\boldsymbol{S}(\boldsymbol{v})\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{dt} = \dot{\phi} \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)">\[\frac{d\boldsymbol{R}_x(\phi)}{dt} = \dot{\phi} \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>另一方面，根据链式法则： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{dt} = \frac{d\boldsymbol{R}_x(\phi)}{d\phi} \cdot \frac{d\phi}{dt} = \frac{d\boldsymbol{R}_x(\phi)}{d\phi} \cdot \dot{\phi}">\[\frac{d\boldsymbol{R}_x(\phi)}{dt} = \frac{d\boldsymbol{R}_x(\phi)}{d\phi} \cdot \frac{d\phi}{dt} = \frac{d\boldsymbol{R}_x(\phi)}{d\phi} \cdot \dot{\phi}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>对比这两个表达式： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{d\phi} \cdot \dot{\phi} = \dot{\phi} \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)">\[\frac{d\boldsymbol{R}_x(\phi)}{d\phi} \cdot \dot{\phi} = \dot{\phi} \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>由于这对<strong>任意</strong> <span class="math inline" data-latex="\dot{\phi}">\(\dot{\phi}\)</span> 都成立，两边同时约去 <span class="math inline" data-latex="\dot{\phi}">\(\dot{\phi}\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi) \quad \square">\[\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi) \quad \square\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>验证</strong>（直接计算）：</p>
+<p>已知 <span class="math inline" data-latex="\boldsymbol{R}_x(\phi) = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; \cos\phi &amp; -\sin\phi \\ 0 &amp; \sin\phi &amp; \cos\phi \end{bmatrix}">\(\boldsymbol{R}_x(\phi) = \begin{bmatrix} 1 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi \\ 0 & \sin\phi & \cos\phi \end{bmatrix}\)</span></p>
+<p>对 <span class="math inline" data-latex="\phi">\(\phi\)</span> 求导：<span class="math inline" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \begin{bmatrix} 0 &amp; 0 &amp; 0 \\ 0 &amp; -\sin\phi &amp; -\cos\phi \\ 0 &amp; \cos\phi &amp; -\sin\phi \end{bmatrix}">\(\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \begin{bmatrix} 0 & 0 & 0 \\ 0 & -\sin\phi & -\cos\phi \\ 0 & \cos\phi & -\sin\phi \end{bmatrix}\)</span></p>
+<p>而 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{e}_x) = \begin{bmatrix} 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; -1 \\ 0 &amp; 1 &amp; 0 \end{bmatrix}">\(\boldsymbol{S}(\boldsymbol{e}_x) = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & -1 \\ 0 & 1 & 0 \end{bmatrix}\)</span></p>
+<p>计算 <span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_x(\phi)">\(\boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_x(\phi)\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix} 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; -1 \\ 0 &amp; 1 &amp; 0 \end{bmatrix} \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; \cos\phi &amp; -\sin\phi \\ 0 &amp; \sin\phi &amp; \cos\phi \end{bmatrix} = \begin{bmatrix} 0 &amp; 0 &amp; 0 \\ 0 &amp; -\sin\phi &amp; -\cos\phi \\ 0 &amp; \cos\phi &amp; -\sin\phi \end{bmatrix}">\[\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & -1 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix} 1 & 0 & 0 \\ 0 & \cos\phi & -\sin\phi \\ 0 & \sin\phi & \cos\phi \end{bmatrix} = \begin{bmatrix} 0 & 0 & 0 \\ 0 & -\sin\phi & -\cos\phi \\ 0 & \cos\phi & -\sin\phi \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两者完全相等！✓</p>
+<p><strong>物理意义</strong>：这个引理将”对角度的导数”（几何量）与”基本公式 <span class="math inline" data-latex="\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{R}">\(\dot{\boldsymbol{R}} = \boldsymbol{S}(\boldsymbol{\omega})\boldsymbol{R}\)</span>“（运动学量）联系起来。无论实际角速度 <span class="math inline" data-latex="\dot{\phi}">\(\dot{\phi}\)</span> 是多少，几何关系 <span class="math inline" data-latex="\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)">\(\frac{d\boldsymbol{R}_x(\phi)}{d\phi} = \boldsymbol{S}(\boldsymbol{e}_x)\boldsymbol{R}_x(\phi)\)</span> 都成立。</p>
+</details>
+<p>因此： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial \boldsymbol{R}}{\partial \phi} = \boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_x(\phi)">\[\frac{\partial \boldsymbol{R}}{\partial \phi} = \boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_x(\phi)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>右乘 <span class="math inline" data-latex="\boldsymbol{R}^T = \boldsymbol{R}_x^T(\phi)\boldsymbol{R}_y^T(\theta)\boldsymbol{R}_z^T(\psi)">\(\boldsymbol{R}^T = \boldsymbol{R}_x^T(\phi)\boldsymbol{R}_y^T(\theta)\boldsymbol{R}_z^T(\psi)\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial \boldsymbol{R}}{\partial \phi} \boldsymbol{R}^T = \boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_y^T(\theta)\boldsymbol{R}_z^T(\psi)">\[\frac{\partial \boldsymbol{R}}{\partial \phi} \boldsymbol{R}^T = \boldsymbol{R}_z(\psi) \boldsymbol{R}_y(\theta) \boldsymbol{S}(\boldsymbol{e}_x) \boldsymbol{R}_y^T(\theta)\boldsymbol{R}_z^T(\psi)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>关键性质</strong>：对于任意旋转矩阵 <span class="math inline" data-latex="\boldsymbol{R}">\(\boldsymbol{R}\)</span> 和任意向量 <span class="math inline" data-latex="\boldsymbol{v}">\(\boldsymbol{v}\)</span>，有 <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}\boldsymbol{v})">\[\boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}\boldsymbol{v})\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<details>
+<summary>
+📋 性质的证明（点击展开）
+</summary>
+<p>回顾反对称矩阵与叉乘的关系：<span class="math inline" data-latex="\boldsymbol{S}(\boldsymbol{v})\boldsymbol{w} = \boldsymbol{v} \times \boldsymbol{w}">\(\boldsymbol{S}(\boldsymbol{v})\boldsymbol{w} = \boldsymbol{v} \times \boldsymbol{w}\)</span> （对任意向量 <span class="math inline" data-latex="\boldsymbol{w}">\(\boldsymbol{w}\)</span>）</p>
+<p>对于任意向量 <span class="math inline" data-latex="\boldsymbol{w}">\(\boldsymbol{w}\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) \boldsymbol{R}^T \boldsymbol{w} = \boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) (\boldsymbol{R}^T \boldsymbol{w}) = \boldsymbol{R} (\boldsymbol{v} \times \boldsymbol{R}^T \boldsymbol{w})">\[\boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) \boldsymbol{R}^T \boldsymbol{w} = \boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) (\boldsymbol{R}^T \boldsymbol{w}) = \boldsymbol{R} (\boldsymbol{v} \times \boldsymbol{R}^T \boldsymbol{w})\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用旋转矩阵保持叉乘结构的性质：<span class="math inline" data-latex="\boldsymbol{R}(\boldsymbol{a} \times \boldsymbol{b}) = (\boldsymbol{R}\boldsymbol{a}) \times (\boldsymbol{R}\boldsymbol{b})">\(\boldsymbol{R}(\boldsymbol{a} \times \boldsymbol{b}) = (\boldsymbol{R}\boldsymbol{a}) \times (\boldsymbol{R}\boldsymbol{b})\)</span> <div class="math-formula-wrapper">
+        <span class="math display" data-latex="= (\boldsymbol{R}\boldsymbol{v}) \times (\boldsymbol{R}\boldsymbol{R}^T\boldsymbol{w}) = (\boldsymbol{R}\boldsymbol{v}) \times \boldsymbol{w} = \boldsymbol{S}(\boldsymbol{R}\boldsymbol{v})\boldsymbol{w}">\[= (\boldsymbol{R}\boldsymbol{v}) \times (\boldsymbol{R}\boldsymbol{R}^T\boldsymbol{w}) = (\boldsymbol{R}\boldsymbol{v}) \times \boldsymbol{w} = \boldsymbol{S}(\boldsymbol{R}\boldsymbol{v})\boldsymbol{w}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>由于这对任意 <span class="math inline" data-latex="\boldsymbol{w}">\(\boldsymbol{w}\)</span> 都成立，所以：<span class="math inline" data-latex="\boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}\boldsymbol{v})">\(\boldsymbol{R} \boldsymbol{S}(\boldsymbol{v}) \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}\boldsymbol{v})\)</span> <span class="math inline" data-latex="\square">\(\square\)</span></p>
+<p><strong>物理意义</strong>：这个性质说明，反对称矩阵在旋转变换下的行为与向量一致。</p>
+</details>
+<p>应用此性质（取 <span class="math inline" data-latex="\boldsymbol{R} = \boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)">\(\boldsymbol{R} = \boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\)</span>，<span class="math inline" data-latex="\boldsymbol{v} = \boldsymbol{e}_x">\(\boldsymbol{v} = \boldsymbol{e}_x\)</span>）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial \boldsymbol{R}}{\partial \phi} \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x)">\[\frac{\partial \boldsymbol{R}}{\partial \phi} \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h4 id="b-第二项fracpartial-boldsymbolrpartial-theta">(b) 第二项：<span class="math inline" data-latex="\frac{\partial \boldsymbol{R}}{\partial \theta}">\(\frac{\partial \boldsymbol{R}}{\partial \theta}\)</span></h4>
+<p>类似地： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial \boldsymbol{R}}{\partial \theta} \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{e}_y)">\[\frac{\partial \boldsymbol{R}}{\partial \theta} \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{e}_y)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h4 id="c-第三项fracpartial-boldsymbolrpartial-psi">(c) 第三项：<span class="math inline" data-latex="\frac{\partial \boldsymbol{R}}{\partial \psi}">\(\frac{\partial \boldsymbol{R}}{\partial \psi}\)</span></h4>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial \boldsymbol{R}}{\partial \psi} \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{e}_z)">\[\frac{\partial \boldsymbol{R}}{\partial \psi} \boldsymbol{R}^T = \boldsymbol{S}(\boldsymbol{e}_z)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="提取角速度">6.6 提取角速度</h3>
+<p>将三项代入： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{S}(\boldsymbol{\omega}) = \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x)\dot{\phi} + \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{e}_y)\dot{\theta} + \boldsymbol{S}(\boldsymbol{e}_z)\dot{\psi}">\[\boldsymbol{S}(\boldsymbol{\omega}) = \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x)\dot{\phi} + \boldsymbol{S}(\boldsymbol{R}_z(\psi)\boldsymbol{e}_y)\dot{\theta} + \boldsymbol{S}(\boldsymbol{e}_z)\dot{\psi}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用反对称矩阵的线性性质： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{S}(\boldsymbol{\omega}) = \boldsymbol{S}\left(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x \cdot \dot{\phi} + \boldsymbol{R}_z(\psi)\boldsymbol{e}_y \cdot \dot{\theta} + \boldsymbol{e}_z \cdot \dot{\psi}\right)">\[\boldsymbol{S}(\boldsymbol{\omega}) = \boldsymbol{S}\left(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x \cdot \dot{\phi} + \boldsymbol{R}_z(\psi)\boldsymbol{e}_y \cdot \dot{\theta} + \boldsymbol{e}_z \cdot \dot{\psi}\right)\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>从反对称矩阵中提取角速度向量（<span class="math inline" data-latex="\boldsymbol{S}">\(\boldsymbol{S}\)</span> 是一一对应的映射）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{\omega} = \boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x \cdot \dot{\phi} + \boldsymbol{R}_z(\psi)\boldsymbol{e}_y \cdot \dot{\theta} + \boldsymbol{e}_z \cdot \dot{\psi}">\[\boldsymbol{\omega} = \boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x \cdot \dot{\phi} + \boldsymbol{R}_z(\psi)\boldsymbol{e}_y \cdot \dot{\theta} + \boldsymbol{e}_z \cdot \dot{\psi}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>写成矩阵形式： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\boldsymbol{\omega} = \begin{bmatrix} 
+\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x &amp; 
+\boldsymbol{R}_z(\psi)\boldsymbol{e}_y &amp; 
+\boldsymbol{e}_z
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}}">\[\boxed{\boldsymbol{\omega} = \begin{bmatrix} 
+\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x & 
+\boldsymbol{R}_z(\psi)\boldsymbol{e}_y & 
+\boldsymbol{e}_z
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>证毕。这就是 <span class="math inline" data-latex="E">\(E\)</span> 矩阵的数学推导。</strong></p>
+<h3 id="显式计算">6.7 显式计算</h3>
+<p>将旋转矩阵代入并计算（详细矩阵乘法省略）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x = \begin{bmatrix} \cos\psi\cos\theta \\ \sin\psi\cos\theta \\ -\sin\theta \end{bmatrix}">\[\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x = \begin{bmatrix} \cos\psi\cos\theta \\ \sin\psi\cos\theta \\ -\sin\theta \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}_z(\psi)\boldsymbol{e}_y = \begin{bmatrix} -\sin\psi \\ \cos\psi \\ 0 \end{bmatrix}">\[\boldsymbol{R}_z(\psi)\boldsymbol{e}_y = \begin{bmatrix} -\sin\psi \\ \cos\psi \\ 0 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{e}_z = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}">\[\boldsymbol{e}_z = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>最终得到： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\boldsymbol{\omega} = \begin{bmatrix}
+\cos\psi\cos\theta &amp; -\sin\psi &amp; 0 \\
+\sin\psi\cos\theta &amp; \cos\psi &amp; 0 \\
+-\sin\theta &amp; 0 &amp; 1
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}}">\[\boxed{\boldsymbol{\omega} = \begin{bmatrix}
+\cos\psi\cos\theta & -\sin\psi & 0 \\
+\sin\psi\cos\theta & \cos\psi & 0 \\
+-\sin\theta & 0 & 1
+\end{bmatrix} \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi} \end{bmatrix}}\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="与直觉的对应">6.8 与直觉的对应</h3>
+<p>注意到数学推导的结果<strong>完全吻合</strong>第4节的物理直觉：</p>
+<ul>
+<li><strong>第1列</strong>：<span class="math inline" data-latex="\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x">\(\boldsymbol{R}_z(\psi)\boldsymbol{R}_y(\theta)\boldsymbol{e}_x\)</span> = Roll轴（经过Yaw和Pitch后的X轴）在基坐标系中的方向</li>
+<li><strong>第2列</strong>：<span class="math inline" data-latex="\boldsymbol{R}_z(\psi)\boldsymbol{e}_y">\(\boldsymbol{R}_z(\psi)\boldsymbol{e}_y\)</span> = Pitch轴（经过Yaw后的Y轴）在基坐标系中的方向</li>
+<li><strong>第3列</strong>：<span class="math inline" data-latex="\boldsymbol{e}_z">\(\boldsymbol{e}_z\)</span> = Yaw轴（基坐标系Z轴）在基坐标系中的方向</li>
+</ul>
+<p><strong>物理直觉和数学严格性完美统一！</strong></p>
+<hr />
+<h2 id="总结">7. 总结</h2>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="category-chain-item">机器人</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/%E8%BF%90%E5%8A%A8%E5%AD%A6/" class="category-chain-item">运动学</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/Kinematics/" class="print-no-link">#Kinematics</a>
+      
+        <a href="/tags/Angular-Velocity/" class="print-no-link">#Angular Velocity</a>
+      
+        <a href="/tags/Euler-Angles/" class="print-no-link">#Euler Angles</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>角速度与欧拉角导数：一架飞机的故事</div>
+      <div>https://www.ohnn.cn/2025/11/29/angular-velocity-transformation/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/02/euler_method/" title="常微分方程求解之欧拉法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">常微分方程求解之欧拉法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/29/rotation-matrix-guide/" title="旋转矩阵：从零开始的直观操作指南">
+                        <span class="hidden-mobile">旋转矩阵：从零开始的直观操作指南</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

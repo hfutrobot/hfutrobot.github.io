@@ -1,0 +1,1686 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="本文系统介绍求解抛物型偏微分方程（如热传导方程）的5种经典差分格式，包括显式格式、隐式格式、Crank-Nicolson格式、Richardson格式和双层加权格式，并详细分析它们的稳定性和精度。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="抛物型偏微分方程的数值解法">
+<meta property="og:url" content="https://www.ohnn.cn/2025/12/03/parabolic_pde_schemes/index.html">
+<meta property="og:site_name" content="Oh 记事本">
+<meta property="og:description" content="本文系统介绍求解抛物型偏微分方程（如热传导方程）的5种经典差分格式，包括显式格式、隐式格式、Crank-Nicolson格式、Richardson格式和双层加权格式，并详细分析它们的稳定性和精度。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-03T02:41:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T13:44:48.968Z">
+<meta property="article:author" content="Yike">
+<meta property="article:tag" content="Yike">
+<meta property="article:tag" content="偏微分方程">
+<meta property="article:tag" content="数值计算">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>抛物型偏微分方程的数值解法 - Oh 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="抛物型偏微分方程的数值解法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-03 10:41" pubdate>
+          2025年12月3日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">抛物型偏微分方程的数值解法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文系统介绍求解抛物型偏微分方程（如热传导方程）的5种经典差分格式，包括显式格式、隐式格式、Crank-Nicolson格式、Richardson格式和双层加权格式，并详细分析它们的稳定性和精度。</p>
+<span id="more"></span>
+<h2 id="问题的提出">1. 问题的提出</h2>
+<h3 id="一维热传导方程">1.1 一维热传导方程</h3>
+<p>最典型的抛物型偏微分方程是<strong>一维热传导方程</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}, \quad x \in [0, L], \quad t &gt; 0">\[
+\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}, \quad x \in [0, L], \quad t > 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中： - <span class="math inline" data-latex="u(x, t)">\(u(x, t)\)</span>：温度分布 - <span class="math inline" data-latex="\alpha &gt; 0">\(\alpha > 0\)</span>：热扩散系数</p>
+<p><strong>初边值条件</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+u(x, 0) = f(x), &amp; x \in [0, L] \quad \text{(初始条件)} \\
+u(0, t) = g_0(t), &amp; t &gt; 0 \quad \text{(左边界)} \\
+u(L, t) = g_L(t), &amp; t &gt; 0 \quad \text{(右边界)}
+\end{cases}">\[
+\begin{cases}
+u(x, 0) = f(x), & x \in [0, L] \quad \text{(初始条件)} \\
+u(0, t) = g_0(t), & t > 0 \quad \text{(左边界)} \\
+u(L, t) = g_L(t), & t > 0 \quad \text{(右边界)}
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="离散化网格">1.2 离散化网格</h3>
+<p><strong>空间离散</strong>：将 <span class="math inline" data-latex="[0, L]">\([0, L]\)</span> 分为 <span class="math inline" data-latex="M">\(M\)</span> 个小区间，步长 <span class="math inline" data-latex="h = L/M">\(h = L/M\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="x_i = i h, \quad i = 0, 1, \ldots, M">\[
+x_i = i h, \quad i = 0, 1, \ldots, M
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>时间离散</strong>：时间步长 <span class="math inline" data-latex="\tau">\(\tau\)</span>，时间层：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="t_n = n \tau, \quad n = 0, 1, 2, \ldots">\[
+t_n = n \tau, \quad n = 0, 1, 2, \ldots
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>符号约定</strong>：<span class="math inline" data-latex="u_i^n \approx u(x_i, t_n)">\(u_i^n \approx u(x_i, t_n)\)</span> 表示数值解。</p>
+<p><strong>网比（Mesh ratio）</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="r = \frac{\tau}{h^2}">\[
+r = \frac{\tau}{h^2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这是分析稳定性的关键参数。</p>
+<hr />
+<h2 id="显式格式ftcs---forward-time-central-space">2. 显式格式（FTCS - Forward Time Central Space）</h2>
+<h3 id="格式推导">2.1 格式推导</h3>
+<p><strong>时间导数</strong>：用前向差分</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial u}{\partial t}\bigg|_{i}^{n} \approx \frac{u_i^{n+1} - u_i^n}{\tau}">\[
+\frac{\partial u}{\partial t}\bigg|_{i}^{n} \approx \frac{u_i^{n+1} - u_i^n}{\tau}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>空间二阶导数</strong>：用中心差分</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n} \approx \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}">\[
+\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n} \approx \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>显式格式</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}}">\[
+\boxed{\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理得：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_i^{n+1} = u_i^n + \alpha r(u_{i+1}^n - 2u_i^n + u_{i-1}^n)">\[
+u_i^{n+1} = u_i^n + \alpha r(u_{i+1}^n - 2u_i^n + u_{i-1}^n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>或写成：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{u_i^{n+1} = (1-2\alpha r)u_i^n + \alpha r u_{i+1}^n + \alpha r u_{i-1}^n}">\[
+\boxed{u_i^{n+1} = (1-2\alpha r)u_i^n + \alpha r u_{i+1}^n + \alpha r u_{i-1}^n}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="截断误差详细推导">2.2 截断误差详细推导</h3>
+<p>我们将精确解 <span class="math inline" data-latex="u(x, t)">\(u(x, t)\)</span> 代入差分方程，定义局部截断误差 <span class="math inline" data-latex="R_i^n">\(R_i^n\)</span> 为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^n = \frac{u(x_i, t_{n+1}) - u(x_i, t_n)}{\tau} - \alpha \frac{u(x_{i+1}, t_n) - 2u(x_i, t_n) + u(x_{i-1}, t_n)}{h^2}">\[
+R_i^n = \frac{u(x_i, t_{n+1}) - u(x_i, t_n)}{\tau} - \alpha \frac{u(x_{i+1}, t_n) - 2u(x_i, t_n) + u(x_{i-1}, t_n)}{h^2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>1. 时间项的Taylor展开</strong>： 在 <span class="math inline" data-latex="(x_i, t_n)">\((x_i, t_n)\)</span> 处对 <span class="math inline" data-latex="u(x_i, t_{n+1})">\(u(x_i, t_{n+1})\)</span> 进行展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u(x_i, t_{n+1}) = u(x_i, t_n) + \tau \frac{\partial u}{\partial t} + \frac{\tau^2}{2} \frac{\partial^2 u}{\partial t^2} + O(\tau^3)">\[
+u(x_i, t_{n+1}) = u(x_i, t_n) + \tau \frac{\partial u}{\partial t} + \frac{\tau^2}{2} \frac{\partial^2 u}{\partial t^2} + O(\tau^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入时间差分项：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u(x_i, t_{n+1}) - u(x_i, t_n)}{\tau} = \frac{\partial u}{\partial t} + \frac{\tau}{2} \frac{\partial^2 u}{\partial t^2} + O(\tau^2)">\[
+\frac{u(x_i, t_{n+1}) - u(x_i, t_n)}{\tau} = \frac{\partial u}{\partial t} + \frac{\tau}{2} \frac{\partial^2 u}{\partial t^2} + O(\tau^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>2. 空间项的Taylor展开</strong>： 在 <span class="math inline" data-latex="(x_i, t_n)">\((x_i, t_n)\)</span> 处对 <span class="math inline" data-latex="u(x_{i\pm 1}, t_n)">\(u(x_{i\pm 1}, t_n)\)</span> 进行展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u(x_{i\pm 1}, t_n) = u(x_i, t_n) \pm h \frac{\partial u}{\partial x} + \frac{h^2}{2} \frac{\partial^2 u}{\partial x^2} \pm \frac{h^3}{6} \frac{\partial^3 u}{\partial x^3} + \frac{h^4}{24} \frac{\partial^4 u}{\partial x^4} + O(h^5)">\[
+u(x_{i\pm 1}, t_n) = u(x_i, t_n) \pm h \frac{\partial u}{\partial x} + \frac{h^2}{2} \frac{\partial^2 u}{\partial x^2} \pm \frac{h^3}{6} \frac{\partial^3 u}{\partial x^3} + \frac{h^4}{24} \frac{\partial^4 u}{\partial x^4} + O(h^5)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相加：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u(x_{i+1}, t_n) + u(x_{i-1}, t_n) = 2u(x_i, t_n) + h^2 \frac{\partial^2 u}{\partial x^2} + \frac{h^4}{12} \frac{\partial^4 u}{\partial x^4} + O(h^6)">\[
+u(x_{i+1}, t_n) + u(x_{i-1}, t_n) = 2u(x_i, t_n) + h^2 \frac{\partial^2 u}{\partial x^2} + \frac{h^4}{12} \frac{\partial^4 u}{\partial x^4} + O(h^6)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入空间差分项：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u(x_{i+1}, t_n) - 2u(x_i, t_n) + u(x_{i-1}, t_n)}{h^2} = \frac{\partial^2 u}{\partial x^2} + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} + O(h^4)">\[
+\frac{u(x_{i+1}, t_n) - 2u(x_i, t_n) + u(x_{i-1}, t_n)}{h^2} = \frac{\partial^2 u}{\partial x^2} + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>3. 综合误差</strong>： 将上述两项代入 <span class="math inline" data-latex="R_i^n">\(R_i^n\)</span> 的定义式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^n = \left( \frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} \right) + \left( \frac{\tau}{2} \frac{\partial^2 u}{\partial t^2} - \alpha \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} \right) + O(\tau^2) + O(h^4)">\[
+R_i^n = \left( \frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} \right) + \left( \frac{\tau}{2} \frac{\partial^2 u}{\partial t^2} - \alpha \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} \right) + O(\tau^2) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用原方程 <span class="math inline" data-latex="\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}">\(\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}\)</span>，第一项为零。 利用 <span class="math inline" data-latex="u_t = \alpha u_{xx}">\(u_t = \alpha u_{xx}\)</span> 可推导 <span class="math inline" data-latex="u_{tt} = \alpha^2 u_{xxxx}">\(u_{tt} = \alpha^2 u_{xxxx}\)</span>，代入误差主项：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^n = \alpha \left( \frac{\alpha \tau}{2} - \frac{h^2}{12} \right) \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)">\[
+R_i^n = \alpha \left( \frac{\alpha \tau}{2} - \frac{h^2}{12} \right) \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>结论</strong>： - 当一般情况时，误差为 <strong><span class="math inline" data-latex="O(\tau) + O(h^2)">\(O(\tau) + O(h^2)\)</span></strong>。 - <strong>特殊情况</strong>：若取 <span class="math inline" data-latex="r = \frac{\tau}{h^2} = \frac{1}{6\alpha}">\(r = \frac{\tau}{h^2} = \frac{1}{6\alpha}\)</span>，则括号内为零，精度提升为 <span class="math inline" data-latex="O(\tau^2) + O(h^4)">\(O(\tau^2) + O(h^4)\)</span>。</p>
+<h3 id="优缺点">2.5 优缺点</h3>
+<p>✅ <strong>优点</strong>： - 编程简单，计算量小 - 每步只需矩阵-向量乘法</p>
+<p>❌ <strong>缺点</strong>： - <strong>条件稳定</strong>：<span class="math inline" data-latex="r \leq 1/2">\(r \leq 1/2\)</span>，时间步长受严格限制 - 空间步长减半，时间步长需减小至1/4 - 时间精度仅一阶</p>
+<hr />
+<h2 id="隐式格式btcs---backward-time-central-space">3. 隐式格式（BTCS - Backward Time Central Space）</h2>
+<h3 id="格式推导-1">3.1 格式推导</h3>
+<p><strong>时间导数</strong>：用后向差分</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial u}{\partial t}\bigg|_{i}^{n+1} \approx \frac{u_i^{n+1} - u_i^n}{\tau}">\[
+\frac{\partial u}{\partial t}\bigg|_{i}^{n+1} \approx \frac{u_i^{n+1} - u_i^n}{\tau}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>空间二阶导数</strong>：在<strong>新时间层</strong> <span class="math inline" data-latex="t^{n+1}">\(t^{n+1}\)</span> 上用中心差分</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1} \approx \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2}">\[
+\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1} \approx \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>隐式格式</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2}}">\[
+\boxed{\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2}}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理得：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{-\alpha r u_{i-1}^{n+1} + (1+2\alpha r) u_i^{n+1} - \alpha r u_{i+1}^{n+1} = u_i^n}">\[
+\boxed{-\alpha r u_{i-1}^{n+1} + (1+2\alpha r) u_i^{n+1} - \alpha r u_{i+1}^{n+1} = u_i^n}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="截断误差">3.3 截断误差</h3>
+<p>这是一个<strong>三对角线性方程组</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+1+2\alpha r &amp; -\alpha r &amp; &amp; &amp; \\
+-\alpha r &amp; 1+2\alpha r &amp; -\alpha r &amp; &amp; \\
+&amp; -\alpha r &amp; 1+2\alpha r &amp; -\alpha r &amp; \\
+&amp; &amp; \ddots &amp; \ddots &amp; \ddots \\
+&amp; &amp; &amp; -\alpha r &amp; 1+2\alpha r
+\end{bmatrix}
+\begin{bmatrix}
+u_1^{n+1} \\
+u_2^{n+1} \\
+u_3^{n+1} \\
+\vdots \\
+u_{M-1}^{n+1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+u_1^n + \alpha r u_0^{n+1} \\
+u_2^n \\
+u_3^n \\
+\vdots \\
+u_{M-1}^n + \alpha r u_M^{n+1}
+\end{bmatrix}">\[
+\begin{bmatrix}
+1+2\alpha r & -\alpha r & & & \\
+-\alpha r & 1+2\alpha r & -\alpha r & & \\
+& -\alpha r & 1+2\alpha r & -\alpha r & \\
+& & \ddots & \ddots & \ddots \\
+& & & -\alpha r & 1+2\alpha r
+\end{bmatrix}
+\begin{bmatrix}
+u_1^{n+1} \\
+u_2^{n+1} \\
+u_3^{n+1} \\
+\vdots \\
+u_{M-1}^{n+1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+u_1^n + \alpha r u_0^{n+1} \\
+u_2^n \\
+u_3^n \\
+\vdots \\
+u_{M-1}^n + \alpha r u_M^{n+1}
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>边界值 <span class="math inline" data-latex="u_0^{n+1}">\(u_0^{n+1}\)</span> 和 <span class="math inline" data-latex="u_M^{n+1}">\(u_M^{n+1}\)</span> 由边界条件给定。</p>
+<h3 id="截断误差-1">3.4 截断误差</h3>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^n = O(\tau) + O(h^2)">\[
+R_i^n = O(\tau) + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>与显式格式相同，时间一阶，空间二阶。</p>
+<h3 id="优缺点-1">3.5 优缺点</h3>
+<p>✅ <strong>优点</strong>： - <strong>无条件稳定</strong>：可以使用任意大的 <span class="math inline" data-latex="\tau">\(\tau\)</span> - 空间二阶精度</p>
+<p>❌ <strong>缺点</strong>： - 每步需求解三对角线性方程组（计算量大） - 时间仍为一阶精度 - 实现稍复杂</p>
+<hr />
+<h2 id="crank-nicolson格式cn格式">4. Crank-Nicolson格式（CN格式）</h2>
+<h3 id="格式推导-2">4.1 格式推导</h3>
+<p><strong>核心思想</strong>：为了获得时间方向的二阶精度，我们在<strong>半整数时间层</strong> <span class="math inline" data-latex="t_{n+1/2} = t_n + \tau/2">\(t_{n+1/2} = t_n + \tau/2\)</span> 处对方程进行离散。</p>
+<p>在 <span class="math inline" data-latex="(x_i, t_{n+1/2})">\((x_i, t_{n+1/2})\)</span> 处，方程为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial u}{\partial t}\bigg|_{i}^{n+1/2} = \alpha \frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1/2}">\[
+\frac{\partial u}{\partial t}\bigg|_{i}^{n+1/2} = \alpha \frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1/2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>1. 时间导数</strong>： 利用中心差分近似，误差为 <span class="math inline" data-latex="O(\tau^2)">\(O(\tau^2)\)</span>。 <strong>证明</strong>：在 <span class="math inline" data-latex="t_{n+1/2}">\(t_{n+1/2}\)</span> 处展开 <span class="math inline" data-latex="u^{n+1}">\(u^{n+1}\)</span> 和 <span class="math inline" data-latex="u^n">\(u^n\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+u^{n+1} &amp;= u^{n+1/2} + \frac{\tau}{2} \frac{\partial u}{\partial t} + \frac{1}{2}(\frac{\tau}{2})^2 \frac{\partial^2 u}{\partial t^2} + \frac{1}{6}(\frac{\tau}{2})^3 \frac{\partial^3 u}{\partial t^3} + \dots \\
+u^n &amp;= u^{n+1/2} - \frac{\tau}{2} \frac{\partial u}{\partial t} + \frac{1}{2}(\frac{\tau}{2})^2 \frac{\partial^2 u}{\partial t^2} - \frac{1}{6}(\frac{\tau}{2})^3 \frac{\partial^3 u}{\partial t^3} + \dots
+\end{aligned}">\[
+\begin{aligned}
+u^{n+1} &= u^{n+1/2} + \frac{\tau}{2} \frac{\partial u}{\partial t} + \frac{1}{2}(\frac{\tau}{2})^2 \frac{\partial^2 u}{\partial t^2} + \frac{1}{6}(\frac{\tau}{2})^3 \frac{\partial^3 u}{\partial t^3} + \dots \\
+u^n &= u^{n+1/2} - \frac{\tau}{2} \frac{\partial u}{\partial t} + \frac{1}{2}(\frac{\tau}{2})^2 \frac{\partial^2 u}{\partial t^2} - \frac{1}{6}(\frac{\tau}{2})^3 \frac{\partial^3 u}{\partial t^3} + \dots
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相减：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u^{n+1} - u^n = \tau \frac{\partial u}{\partial t}\bigg|^{n+1/2} + O(\tau^3) \implies \frac{\partial u}{\partial t}\bigg|^{n+1/2} = \frac{u^{n+1} - u^n}{\tau} + O(\tau^2)">\[
+u^{n+1} - u^n = \tau \frac{\partial u}{\partial t}\bigg|^{n+1/2} + O(\tau^3) \implies \frac{\partial u}{\partial t}\bigg|^{n+1/2} = \frac{u^{n+1} - u^n}{\tau} + O(\tau^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>2. 空间导数平均化</strong>： 由于 <span class="math inline" data-latex="u">\(u\)</span> 在 <span class="math inline" data-latex="t_{n+1/2}">\(t_{n+1/2}\)</span> 处的值可以用 <span class="math inline" data-latex="t_n">\(t_n\)</span> 和 <span class="math inline" data-latex="t_{n+1}">\(t_{n+1}\)</span> 的平均值近似（误差为 <span class="math inline" data-latex="O(\tau^2)">\(O(\tau^2)\)</span>）。 <strong>证明</strong>：将上述两个时间展开式相加：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u^{n+1} + u^n = 2u^{n+1/2} + O(\tau^2) \implies u^{n+1/2} = \frac{u^{n+1} + u^n}{2} + O(\tau^2)">\[
+u^{n+1} + u^n = 2u^{n+1/2} + O(\tau^2) \implies u^{n+1/2} = \frac{u^{n+1} + u^n}{2} + O(\tau^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此，空间二阶导数也可以用两层的平均值近似：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1/2} = \frac{1}{2} \left[ \frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1} + \frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n} \right] + O(\tau^2)">\[
+\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1/2} = \frac{1}{2} \left[ \frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1} + \frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n} \right] + O(\tau^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>3. 空间导数离散化</strong>： 我们知道中心差分公式具有 <span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span> 的精度：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{m} = \frac{u_{i+1}^m - 2u_i^m + u_{i-1}^m}{h^2} + O(h^2)">\[
+\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{m} = \frac{u_{i+1}^m - 2u_i^m + u_{i-1}^m}{h^2} + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>将此式分别应用于 <span class="math inline" data-latex="m=n+1">\(m=n+1\)</span> 和 <span class="math inline" data-latex="m=n">\(m=n\)</span>，代入到步骤2中的平均值公式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1/2} &amp;= \frac{1}{2} \left[ \left( \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + O(h^2) \right) + \left( \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} + O(h^2) \right) \right] + O(\tau^2) \\
+&amp;= \frac{1}{2} \left[ \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} \right] + O(h^2) + O(\tau^2)
+\end{aligned}">\[
+\begin{aligned}
+\frac{\partial^2 u}{\partial x^2}\bigg|_{i}^{n+1/2} &= \frac{1}{2} \left[ \left( \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + O(h^2) \right) + \left( \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} + O(h^2) \right) \right] + O(\tau^2) \\
+&= \frac{1}{2} \left[ \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} \right] + O(h^2) + O(\tau^2)
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>4. 得到格式</strong>： 忽略高阶小量，得到 Crank-Nicolson 格式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\frac{u_i^{n+1} - u_i^n}{\tau} = \frac{\alpha}{2} \left[\frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}\right]}">\[
+\boxed{\frac{u_i^{n+1} - u_i^n}{\tau} = \frac{\alpha}{2} \left[\frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}\right]}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{-\frac{\alpha r}{2} u_{i-1}^{n+1} + (1+\alpha r) u_i^{n+1} - \frac{\alpha r}{2} u_{i+1}^{n+1} = \frac{\alpha r}{2} u_{i-1}^n + (1-\alpha r) u_i^n + \frac{\alpha r}{2} u_{i+1}^n}">\[
+\boxed{-\frac{\alpha r}{2} u_{i-1}^{n+1} + (1+\alpha r) u_i^{n+1} - \frac{\alpha r}{2} u_{i+1}^{n+1} = \frac{\alpha r}{2} u_{i-1}^n + (1-\alpha r) u_i^n + \frac{\alpha r}{2} u_{i+1}^n}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="矩阵形式">4.3 矩阵形式</h3>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A \mathbf{u}^{n+1} = B \mathbf{u}^n">\[
+A \mathbf{u}^{n+1} = B \mathbf{u}^n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A = \begin{bmatrix}
+1+\alpha r &amp; -\frac{\alpha r}{2} &amp; &amp; \\
+-\frac{\alpha r}{2} &amp; 1+\alpha r &amp; -\frac{\alpha r}{2} &amp; \\
+&amp; \ddots &amp; \ddots &amp; \ddots \\
+&amp; &amp; -\frac{\alpha r}{2} &amp; 1+\alpha r
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+1-\alpha r &amp; \frac{\alpha r}{2} &amp; &amp; \\
+\frac{\alpha r}{2} &amp; 1-\alpha r &amp; \frac{\alpha r}{2} &amp; \\
+&amp; \ddots &amp; \ddots &amp; \ddots \\
+&amp; &amp; \frac{\alpha r}{2} &amp; 1-\alpha r
+\end{bmatrix}">\[
+A = \begin{bmatrix}
+1+\alpha r & -\frac{\alpha r}{2} & & \\
+-\frac{\alpha r}{2} & 1+\alpha r & -\frac{\alpha r}{2} & \\
+& \ddots & \ddots & \ddots \\
+& & -\frac{\alpha r}{2} & 1+\alpha r
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+1-\alpha r & \frac{\alpha r}{2} & & \\
+\frac{\alpha r}{2} & 1-\alpha r & \frac{\alpha r}{2} & \\
+& \ddots & \ddots & \ddots \\
+& & \frac{\alpha r}{2} & 1-\alpha r
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="截断误差-2">4.4 截断误差</h3>
+<p>Taylor展开分析表明：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^n = O((\tau)^2) + O(h^2)">\[
+R_i^n = O((\tau)^2) + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>时间和空间都是二阶精度！</strong></p>
+<h3 id="优缺点-2">4.5 优缺点</h3>
+<p>✅ <strong>优点</strong>： - <strong>无条件稳定</strong> - <strong>时间和空间都是二阶精度</strong> - 是求解抛物型方程的<strong>最佳选择之一</strong></p>
+<p>❌ <strong>缺点</strong>： - 需求解三对角线性方程组 - 实现稍复杂</p>
+<hr />
+<h2 id="richardson格式">5. Richardson格式</h2>
+<h3 id="格式推导-3">5.1 格式推导</h3>
+<p><strong>时间导数</strong>：用<strong>中心差分</strong>（跨越两个时间层）</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial u}{\partial t}\bigg|_i^n \approx \frac{u_i^{n+1} - u_i^{n-1}}{2\tau}">\[
+\frac{\partial u}{\partial t}\bigg|_i^n \approx \frac{u_i^{n+1} - u_i^{n-1}}{2\tau}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>空间二阶导数</strong>：用中心差分</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{\partial^2 u}{\partial x^2}\bigg|_i^n \approx \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}">\[
+\frac{\partial^2 u}{\partial x^2}\bigg|_i^n \approx \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>Richardson格式</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{\frac{u_i^{n+1} - u_i^{n-1}}{2\tau} = \alpha \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}}">\[
+\boxed{\frac{u_i^{n+1} - u_i^{n-1}}{2\tau} = \alpha \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2}}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{u_i^{n+1} = u_i^{n-1} + 2\alpha r(u_{i+1}^n - 2u_i^n + u_{i-1}^n)}">\[
+\boxed{u_i^{n+1} = u_i^{n-1} + 2\alpha r(u_{i+1}^n - 2u_i^n + u_{i-1}^n)}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="截断误差-3">5.2 截断误差</h3>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^n = O((\tau)^2) + O(h^2)">\[
+R_i^n = O((\tau)^2) + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>时间和空间都是二阶精度！</strong></p>
+<h3 id="优缺点-3">5.4 优缺点</h3>
+<p>✅ <strong>优点</strong>： - 时间和空间都是二阶精度 - 显式格式，易于编程</p>
+<p>❌ <strong>缺点</strong>： - <strong>无条件不稳定</strong>，实际中<strong>不可用</strong> - 需要两个初始时间层的值</p>
+<hr />
+<h2 id="双层加权格式-two-level-weighted-scheme">6. 双层加权格式 (Two-Level Weighted Scheme)</h2>
+<h3 id="格式推导-4">6.1 格式推导</h3>
+<p>为了从原方程自然导出双层加权格式，我们对热传导方程在时间区间 <span class="math inline" data-latex="[t_n, t_{n+1}]">\([t_n, t_{n+1}]\)</span> 上积分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\int_{t_n}^{t_{n+1}} \frac{\partial u}{\partial t} dt = \int_{t_n}^{t_{n+1}} \alpha \frac{\partial^2 u}{\partial x^2} dt">\[
+\int_{t_n}^{t_{n+1}} \frac{\partial u}{\partial t} dt = \int_{t_n}^{t_{n+1}} \alpha \frac{\partial^2 u}{\partial x^2} dt
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>左边</strong>：直接积分为 <span class="math inline" data-latex="u(x, t_{n+1}) - u(x, t_n)">\(u(x, t_{n+1}) - u(x, t_n)\)</span>。</p>
+<p><strong>右边</strong>：利用数值积分的<strong>加权平均公式</strong>（广义梯形公式）近似：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\int_{t_n}^{t_{n+1}} f(t) dt \approx \tau [\theta f(t_{n+1}) + (1-\theta) f(t_n)]">\[
+\int_{t_n}^{t_{n+1}} f(t) dt \approx \tau [\theta f(t_{n+1}) + (1-\theta) f(t_n)]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="0 \le \theta \le 1">\(0 \le \theta \le 1\)</span> 是权重参数。</p>
+<p>将 <span class="math inline" data-latex="f(t) = \alpha \frac{\partial^2 u}{\partial x^2}">\(f(t) = \alpha \frac{\partial^2 u}{\partial x^2}\)</span> 代入，得到：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_i^{n+1} - u_i^n \approx \tau \alpha \left[ \theta \frac{\partial^2 u}{\partial x^2}\bigg|_i^{n+1} + (1-\theta) \frac{\partial^2 u}{\partial x^2}\bigg|_i^n \right]">\[
+u_i^{n+1} - u_i^n \approx \tau \alpha \left[ \theta \frac{\partial^2 u}{\partial x^2}\bigg|_i^{n+1} + (1-\theta) \frac{\partial^2 u}{\partial x^2}\bigg|_i^n \right]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两边同时除以 <span class="math inline" data-latex="\tau">\(\tau\)</span>，即得到双层加权格式的微分形式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \left[ \theta \frac{\partial^2 u}{\partial x^2}\bigg|_i^{n+1} + (1-\theta) \frac{\partial^2 u}{\partial x^2}\bigg|_i^n \right]">\[
+\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \left[ \theta \frac{\partial^2 u}{\partial x^2}\bigg|_i^{n+1} + (1-\theta) \frac{\partial^2 u}{\partial x^2}\bigg|_i^n \right]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入中心差分公式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \left[ \theta \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + (1-\theta) \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} \right]">\[
+\frac{u_i^{n+1} - u_i^n}{\tau} = \alpha \left[ \theta \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + (1-\theta) \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} \right]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理得到通用格式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{-\alpha r \theta u_{i-1}^{n+1} + (1+2\alpha r \theta) u_i^{n+1} - \alpha r \theta u_{i+1}^{n+1} = \alpha r (1-\theta) u_{i-1}^n + [1-2\alpha r (1-\theta)] u_i^n + \alpha r (1-\theta) u_{i+1}^n}">\[
+\boxed{-\alpha r \theta u_{i-1}^{n+1} + (1+2\alpha r \theta) u_i^{n+1} - \alpha r \theta u_{i+1}^{n+1} = \alpha r (1-\theta) u_{i-1}^n + [1-2\alpha r (1-\theta)] u_i^n + \alpha r (1-\theta) u_{i+1}^n}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="特例分析">6.2 特例分析</h3>
+<p>该格式涵盖了前面介绍的几种经典格式：</p>
+<ul>
+<li><strong><span class="math inline" data-latex="\theta = 0">\(\theta = 0\)</span></strong>：显式格式 (FTCS)</li>
+<li><strong><span class="math inline" data-latex="\theta = 1">\(\theta = 1\)</span></strong>：隐式格式 (BTCS)</li>
+<li><strong><span class="math inline" data-latex="\theta = 1/2">\(\theta = 1/2\)</span></strong>：Crank-Nicolson 格式</li>
+</ul>
+<h3 id="截断误差详细推导-1">6.3 截断误差详细推导</h3>
+<h3 id="截断误差详细推导-2">6.3 截断误差详细推导</h3>
+<p>为了分析格式的精度，我们将精确解 <span class="math inline" data-latex="u(x, t)">\(u(x, t)\)</span> 代入差分方程，定义局部截断误差 <span class="math inline" data-latex="R_i^{n+1/2}">\(R_i^{n+1/2}\)</span> 为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^{n+1/2} = \underbrace{\frac{u(x_i, t_{n+1}) - u(x_i, t_n)}{\tau}}_{\text{左边项 (LHS)}} - \alpha \underbrace{\left[ \theta \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + (1-\theta) \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} \right]}_{\text{右边项 (RHS)}}">\[
+R_i^{n+1/2} = \underbrace{\frac{u(x_i, t_{n+1}) - u(x_i, t_n)}{\tau}}_{\text{左边项 (LHS)}} - \alpha \underbrace{\left[ \theta \frac{u_{i+1}^{n+1} - 2u_i^{n+1} + u_{i-1}^{n+1}}{h^2} + (1-\theta) \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{h^2} \right]}_{\text{右边项 (RHS)}}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>我们在 <span class="math inline" data-latex="(x_i, t_{n+1/2})">\((x_i, t_{n+1/2})\)</span> 处进行 Taylor 展开分析。</p>
+<p><strong>第一步：左边项（时间差分）展开</strong> 我们需要证明 <span class="math inline" data-latex="\frac{u^{n+1} - u^n}{\tau}">\(\frac{u^{n+1} - u^n}{\tau}\)</span> 是 <span class="math inline" data-latex="t_{n+1/2}">\(t_{n+1/2}\)</span> 处的二阶近似。 在 <span class="math inline" data-latex="t_{n+1/2}">\(t_{n+1/2}\)</span> 处分别展开 <span class="math inline" data-latex="u^{n+1}">\(u^{n+1}\)</span> 和 <span class="math inline" data-latex="u^n">\(u^n\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+u^{n+1} &amp;= u^{n+1/2} + \frac{\tau}{2} \frac{\partial u}{\partial t}\bigg|^{n+1/2} + \frac{1}{2}\left(\frac{\tau}{2}\right)^2 \frac{\partial^2 u}{\partial t^2}\bigg|^{n+1/2} + \frac{1}{6}\left(\frac{\tau}{2}\right)^3 \frac{\partial^3 u}{\partial t^3}\bigg|^{n+1/2} + \dots \\
+u^n &amp;= u^{n+1/2} - \frac{\tau}{2} \frac{\partial u}{\partial t}\bigg|^{n+1/2} + \frac{1}{2}\left(\frac{\tau}{2}\right)^2 \frac{\partial^2 u}{\partial t^2}\bigg|^{n+1/2} - \frac{1}{6}\left(\frac{\tau}{2}\right)^3 \frac{\partial^3 u}{\partial t^3}\bigg|^{n+1/2} + \dots
+\end{aligned}">\[
+\begin{aligned}
+u^{n+1} &= u^{n+1/2} + \frac{\tau}{2} \frac{\partial u}{\partial t}\bigg|^{n+1/2} + \frac{1}{2}\left(\frac{\tau}{2}\right)^2 \frac{\partial^2 u}{\partial t^2}\bigg|^{n+1/2} + \frac{1}{6}\left(\frac{\tau}{2}\right)^3 \frac{\partial^3 u}{\partial t^3}\bigg|^{n+1/2} + \dots \\
+u^n &= u^{n+1/2} - \frac{\tau}{2} \frac{\partial u}{\partial t}\bigg|^{n+1/2} + \frac{1}{2}\left(\frac{\tau}{2}\right)^2 \frac{\partial^2 u}{\partial t^2}\bigg|^{n+1/2} - \frac{1}{6}\left(\frac{\tau}{2}\right)^3 \frac{\partial^3 u}{\partial t^3}\bigg|^{n+1/2} + \dots
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相减：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u^{n+1} - u^n = \tau \frac{\partial u}{\partial t}\bigg|^{n+1/2} + \frac{\tau^3}{24} \frac{\partial^3 u}{\partial t^3}\bigg|^{n+1/2} + O(\tau^5)">\[
+u^{n+1} - u^n = \tau \frac{\partial u}{\partial t}\bigg|^{n+1/2} + \frac{\tau^3}{24} \frac{\partial^3 u}{\partial t^3}\bigg|^{n+1/2} + O(\tau^5)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两边除以 <span class="math inline" data-latex="\tau">\(\tau\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\text{LHS} = \frac{\partial u}{\partial t}\bigg|_{i}^{n+1/2} + \frac{\tau^2}{24} \frac{\partial^3 u}{\partial t^3}\bigg|_{i}^{n+1/2} + O(\tau^4) = \frac{\partial u}{\partial t}\bigg|_{i}^{n+1/2} + O(\tau^2)">\[
+\text{LHS} = \frac{\partial u}{\partial t}\bigg|_{i}^{n+1/2} + \frac{\tau^2}{24} \frac{\partial^3 u}{\partial t^3}\bigg|_{i}^{n+1/2} + O(\tau^4) = \frac{\partial u}{\partial t}\bigg|_{i}^{n+1/2} + O(\tau^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>第二步：右边项（空间差分）展开</strong> 右边项是两个时间层上空间差分算子的加权平均。 首先，空间差分算子近似二阶导数：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u_{i+1}^m - 2u_i^m + u_{i-1}^m}{h^2} = \frac{\partial^2 u}{\partial x^2}\bigg|_i^m + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4}\bigg|_i^m + O(h^4)">\[
+\frac{u_{i+1}^m - 2u_i^m + u_{i-1}^m}{h^2} = \frac{\partial^2 u}{\partial x^2}\bigg|_i^m + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4}\bigg|_i^m + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>将此式代入 RHS，并利用 <span class="math inline" data-latex="t_{n+1/2}">\(t_{n+1/2}\)</span> 处的展开： <span class="math inline" data-latex="\theta (\cdot)^{n+1} + (1-\theta) (\cdot)^n \approx (\cdot)^{n+1/2} + (2\theta - 1) \frac{\tau}{2} \frac{\partial}{\partial t}(\cdot)^{n+1/2}">\(\theta (\cdot)^{n+1} + (1-\theta) (\cdot)^n \approx (\cdot)^{n+1/2} + (2\theta - 1) \frac{\tau}{2} \frac{\partial}{\partial t}(\cdot)^{n+1/2}\)</span></p>
+<p>我们得到：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+\text{RHS} &amp;= \left[ \frac{\partial^2 u}{\partial x^2} + (2\theta - 1) \frac{\tau}{2} \frac{\partial}{\partial t}\left(\frac{\partial^2 u}{\partial x^2}\right) \right]^{n+1/2} + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4}\bigg|^{n+1/2} + O(\tau^2) + O(h^4) \\
+&amp;= \frac{\partial^2 u}{\partial x^2} + (2\theta - 1) \frac{\tau}{2} \frac{\partial^3 u}{\partial t \partial x^2} + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)
+\end{aligned}">\[
+\begin{aligned}
+\text{RHS} &= \left[ \frac{\partial^2 u}{\partial x^2} + (2\theta - 1) \frac{\tau}{2} \frac{\partial}{\partial t}\left(\frac{\partial^2 u}{\partial x^2}\right) \right]^{n+1/2} + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4}\bigg|^{n+1/2} + O(\tau^2) + O(h^4) \\
+&= \frac{\partial^2 u}{\partial x^2} + (2\theta - 1) \frac{\tau}{2} \frac{\partial^3 u}{\partial t \partial x^2} + \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<blockquote>
+<p><strong>注</strong>：中间项 <span class="math inline" data-latex="(2\theta - 1) \frac{\tau}{2} \frac{\partial^3 u}{\partial t \partial x^2}">\((2\theta - 1) \frac{\tau}{2} \frac{\partial^3 u}{\partial t \partial x^2}\)</span> 来源于加权平均（广义梯形公式）的误差。</p>
+</blockquote>
+<p><strong>第三步：综合误差</strong> 将 LHS 和 RHS 代入 <span class="math inline" data-latex="R_i^{n+1/2}">\(R_i^{n+1/2}\)</span> 定义式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^{n+1/2} = \left( \frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} \right) - \alpha (2\theta - 1) \frac{\tau}{2} \frac{\partial^3 u}{\partial t \partial x^2} - \alpha \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)">\[
+R_i^{n+1/2} = \left( \frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} \right) - \alpha (2\theta - 1) \frac{\tau}{2} \frac{\partial^3 u}{\partial t \partial x^2} - \alpha \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>第一项为零（原方程）。利用 <span class="math inline" data-latex="u_t = \alpha u_{xx}">\(u_t = \alpha u_{xx}\)</span> 将混合导数转化为纯空间导数 <span class="math inline" data-latex="\frac{\partial^3 u}{\partial t \partial x^2} = \alpha \frac{\partial^4 u}{\partial x^4}">\(\frac{\partial^3 u}{\partial t \partial x^2} = \alpha \frac{\partial^4 u}{\partial x^4}\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^{n+1/2} = - \alpha \left[ \alpha (2\theta - 1) \frac{\tau}{2} + \frac{h^2}{12} \right] \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)">\[
+R_i^{n+1/2} = - \alpha \left[ \alpha (2\theta - 1) \frac{\tau}{2} + \frac{h^2}{12} \right] \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用 <span class="math inline" data-latex="r = \tau/h^2">\(r = \tau/h^2\)</span> 提取公因式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i^{n+1/2} = - \alpha \frac{h^2}{12} \left[ 6\alpha r (2\theta - 1) + 1 \right] \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)">\[
+R_i^{n+1/2} = - \alpha \frac{h^2}{12} \left[ 6\alpha r (2\theta - 1) + 1 \right] \frac{\partial^4 u}{\partial x^4} + O(\tau^2) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>5. 结论与高精度格式</strong>：</p>
+<ol type="1">
+<li><strong>一般情况</strong>：误差为 <span class="math inline" data-latex="O(\tau) + O(h^2)">\(O(\tau) + O(h^2)\)</span>。</li>
+<li><strong>Crank-Nicolson (<span class="math inline" data-latex="\theta=1/2">\(\theta=1/2\)</span>)</strong>：第一项变为 <span class="math inline" data-latex="-\alpha \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4}">\(-\alpha \frac{h^2}{12} \frac{\partial^4 u}{\partial x^4}\)</span>，精度为 <span class="math inline" data-latex="O(\tau^2) + O(h^2)">\(O(\tau^2) + O(h^2)\)</span>。</li>
+<li><strong>高精度格式 (Douglas格式)</strong>： 如果我们选择 <span class="math inline" data-latex="\theta">\(\theta\)</span> 使得方括号内为零： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="6\alpha r (2\theta - 1) + 1 = 0 \implies \theta = \frac{1}{2} - \frac{1}{12\alpha r}">\[
+6\alpha r (2\theta - 1) + 1 = 0 \implies \theta = \frac{1}{2} - \frac{1}{12\alpha r}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 此时主误差项消失，格式的空间精度提升为 <strong><span class="math inline" data-latex="O(h^4)">\(O(h^4)\)</span></strong>！这就是著名的 <strong>Douglas 格式</strong>（或高精度隐式格式）。</li>
+</ol>
+<h3 id="优缺点-4">6.4 优缺点</h3>
+<p>✅ <strong>优点</strong>： - <strong>通用性强</strong>：一个公式涵盖多种格式 - <strong>灵活性</strong>：可通过调整 <span class="math inline" data-latex="\theta">\(\theta\)</span> 平衡稳定性和精度</p>
+<p>❌ <strong>缺点</strong>： - 当 <span class="math inline" data-latex="\theta \neq 0">\(\theta \neq 0\)</span> 时，仍需解方程组 - <span class="math inline" data-latex="\theta \neq 1/2">\(\theta \neq 1/2\)</span> 时只有一阶时间精度</p>
+<hr />
+<h2 id="五种格式的对比">7. 五种格式的对比</h2>
+<table style="width:100%;">
+
+<thead>
+<tr class="header">
+<th>格式</th>
+<th>稳定性</th>
+<th>时间精度</th>
+<th>空间精度</th>
+<th>计算量</th>
+<th>实用性</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>显式格式</strong></td>
+<td>条件稳定 <span class="math inline" data-latex="\alpha r \leq 1/2">\(\alpha r \leq 1/2\)</span></td>
+<td><span class="math inline" data-latex="O(\tau)">\(O(\tau)\)</span></td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span></td>
+<td>小（显式）</td>
+<td>适合教学、小规模</td>
+</tr>
+<tr class="even">
+<td><strong>隐式格式</strong></td>
+<td>无条件稳定</td>
+<td><span class="math inline" data-latex="O(\tau)">\(O(\tau)\)</span></td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span></td>
+<td>中（解方程组）</td>
+<td>实用，稳定可靠</td>
+</tr>
+<tr class="odd">
+<td><strong>Crank-Nicolson</strong></td>
+<td>无条件稳定</td>
+<td><span class="math inline" data-latex="O((\tau)^2)">\(O((\tau)^2)\)</span></td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span></td>
+<td>中（解方程组）</td>
+<td><strong>最佳选择</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Richardson</strong></td>
+<td>无条件不稳定</td>
+<td><span class="math inline" data-latex="O((\tau)^2)">\(O((\tau)^2)\)</span></td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span></td>
+<td>小（显式）</td>
+<td><strong>不可用</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>双层加权格式</strong></td>
+<td>取决于 <span class="math inline" data-latex="\theta">\(\theta\)</span></td>
+<td><span class="math inline" data-latex="O(\tau)">\(O(\tau)\)</span>*</td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span></td>
+<td>中（解方程组）</td>
+<td>通用框架</td>
+</tr>
+</tbody>
+</table>
+<p>*当 <span class="math inline" data-latex="\theta=1/2">\(\theta=1/2\)</span> 时为 <span class="math inline" data-latex="O(\tau^2)">\(O(\tau^2)\)</span></p>
+<hr />
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Morton, K. W., &amp; Mayers, D. F. (2005). <em>Numerical Solution of Partial Differential Equations</em> (2nd ed.). Cambridge University Press.</li>
+<li>LeVeque, R. J. (2007). <em>Finite Difference Methods for Ordinary and Partial Differential Equations</em>. SIAM.</li>
+<li>Strikwerda, J. C. (2004). <em>Finite Difference Schemes and Partial Differential Equations</em> (2nd ed.). SIAM.</li>
+<li>Smith, G. D. (1985). <em>Numerical Solution of Partial Differential Equations: Finite Difference Methods</em> (3rd ed.). Oxford University Press.</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="print-no-link">#数值计算</a>
+      
+        <a href="/tags/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" class="print-no-link">#偏微分方程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>抛物型偏微分方程的数值解法</div>
+      <div>https://www.ohnn.cn/2025/12/03/parabolic_pde_schemes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/03/elliptic-bvp/" title="两点边值问题的数值解法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">两点边值问题的数值解法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/02/predictor_corrector_rk/" title="常微分方程求解之预估校正与Runge-Kutta方法">
+                        <span class="hidden-mobile">常微分方程求解之预估校正与Runge-Kutta方法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

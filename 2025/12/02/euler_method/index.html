@@ -1,0 +1,1224 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="Euler法是求解常微分方程初值问题最基本的数值方法。本文将详细推导其基本公式,并严格证明截断误差、收敛性和稳定性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常微分方程求解之欧拉法">
+<meta property="og:url" content="https://www.ohnn.cn/2025/12/02/euler_method/index.html">
+<meta property="og:site_name" content="Oh 记事本">
+<meta property="og:description" content="Euler法是求解常微分方程初值问题最基本的数值方法。本文将详细推导其基本公式,并严格证明截断误差、收敛性和稳定性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-02T05:40:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T13:44:48.967Z">
+<meta property="article:author" content="Yike">
+<meta property="article:tag" content="Yike">
+<meta property="article:tag" content="常微分方程">
+<meta property="article:tag" content="数值计算">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>常微分方程求解之欧拉法 - Oh 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="常微分方程求解之欧拉法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-02 13:40" pubdate>
+          2025年12月2日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">常微分方程求解之欧拉法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Euler法是求解常微分方程初值问题最基本的数值方法。本文将详细推导其基本公式,并严格证明截断误差、收敛性和稳定性。</p>
+<span id="more"></span>
+<h2 id="问题背景">1. 问题背景</h2>
+<p>考虑常微分方程初值问题 (Initial Value Problem, IVP):</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+\frac{dy}{dx} = f(x, y) \\
+y(x_0) = y_0
+\end{cases}">\[
+\begin{cases}
+\frac{dy}{dx} = f(x, y) \\
+y(x_0) = y_0
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="f: [a, b] \times \mathbb{R} \to \mathbb{R}">\(f: [a, b] \times \mathbb{R} \to \mathbb{R}\)</span> 是已知函数,<span class="math inline" data-latex="x_0 \in [a, b]">\(x_0 \in [a, b]\)</span> 是初值点,<span class="math inline" data-latex="y_0">\(y_0\)</span> 是初值。</p>
+<p><strong>目标</strong>:在区间 <span class="math inline" data-latex="[x_0, X]">\([x_0, X]\)</span> 上求解该方程,得到数值解 <span class="math inline" data-latex="\{y_n\}">\(\{y_n\}\)</span> 近似精确解 <span class="math inline" data-latex="y(x_n)">\(y(x_n)\)</span>。</p>
+<h2 id="euler法的构造">2. Euler法的构造</h2>
+<h3 id="基本思想">2.1 基本思想</h3>
+<p>在区间 <span class="math inline" data-latex="[x_0, X]">\([x_0, X]\)</span> 上取步长 <span class="math inline" data-latex="h">\(h\)</span>,将区间等分为: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="x_n = x_0 + nh, \quad n = 0, 1, 2, \ldots, N, \quad X = x_0 + Nh">\[
+x_n = x_0 + nh, \quad n = 0, 1, 2, \ldots, N, \quad X = x_0 + Nh
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>几何解释</strong>:精确解 <span class="math inline" data-latex="y(x)">\(y(x)\)</span> 是一条光滑曲线,在每一点 <span class="math inline" data-latex="(x_n, y_n)">\((x_n, y_n)\)</span> 处,曲线的切线斜率为 <span class="math inline" data-latex="f(x_n, y_n)">\(f(x_n, y_n)\)</span>。Euler法用<strong>折线段</strong>代替曲线,即用切线近似曲线。</p>
+<h3 id="显式euler公式的推导">2.2 显式Euler公式的推导</h3>
+<p>从 <span class="math inline" data-latex="(x_n, y_n)">\((x_n, y_n)\)</span> 出发,沿切线方向前进一步: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{y_{n+1} = y_n + h f(x_n, y_n)}">\[
+\boxed{y_{n+1} = y_n + h f(x_n, y_n)}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这就是<strong>显式Euler公式 (Explicit/Forward Euler Method)</strong>。</p>
+<p><strong>算法步骤</strong>:</p>
+<ol type="1">
+<li>初始化:<span class="math inline" data-latex="y_0 = y(x_0)">\(y_0 = y(x_0)\)</span></li>
+<li>对 <span class="math inline" data-latex="n = 0, 1, 2, \ldots, N-1">\(n = 0, 1, 2, \ldots, N-1\)</span>:
+<ul>
+<li>计算 <span class="math inline" data-latex="y_{n+1} = y_n + h f(x_n, y_n)">\(y_{n+1} = y_n + h f(x_n, y_n)\)</span></li>
+<li><span class="math inline" data-latex="x_{n+1} = x_n + h">\(x_{n+1} = x_n + h\)</span></li>
+</ul></li>
+</ol>
+<h3 id="隐式euler公式的推导">2.3 隐式Euler公式的推导</h3>
+<p>如果用点 <span class="math inline" data-latex="(x_{n+1}, y_{n+1})">\((x_{n+1}, y_{n+1})\)</span> 处的切线斜率来构造格式: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{y_{n+1} = y_n + h f(x_{n+1}, y_{n+1})}">\[
+\boxed{y_{n+1} = y_n + h f(x_{n+1}, y_{n+1})}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这就是<strong>隐式Euler公式 (Implicit/Backward Euler Method)</strong>。</p>
+<p><strong>特点</strong>:<span class="math inline" data-latex="y_{n+1}">\(y_{n+1}\)</span> 出现在等式两边,需要用迭代法(如牛顿法)求解。</p>
+<hr />
+<h2 id="截断误差分析">3. 截断误差分析</h2>
+<h3 id="局部截断误差">3.1 局部截断误差</h3>
+<p><strong>定义 3.1 (局部截断误差)</strong><br />
+假设在 <span class="math inline" data-latex="x_n">\(x_n\)</span> 处精确解是准确的,即 <span class="math inline" data-latex="y_n = y(x_n)">\(y_n = y(x_n)\)</span>,则从 <span class="math inline" data-latex="x_n">\(x_n\)</span> 到 <span class="math inline" data-latex="x_{n+1}">\(x_{n+1}\)</span> 的一步计算的误差称为局部截断误差 (Local Truncation Error): <div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_n = y(x_{n+1}) - y_{n+1}">\[
+R_n = y(x_{n+1}) - y_{n+1}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>定理 3.1</strong><br />
+对于显式Euler法,局部截断误差为: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_n = \frac{h^2}{2} y&#39;&#39;(\xi_n), \quad \xi_n \in (x_n, x_{n+1})">\[
+R_n = \frac{h^2}{2} y''(\xi_n), \quad \xi_n \in (x_n, x_{n+1})
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 即 <span class="math inline" data-latex="R_n = O(h^2)">\(R_n = O(h^2)\)</span>。</p>
+<p><strong>证明</strong>:</p>
+<p>假设 <span class="math inline" data-latex="y_n = y(x_n)">\(y_n = y(x_n)\)</span> (前一步精确),对精确解 <span class="math inline" data-latex="y(x)">\(y(x)\)</span> 在 <span class="math inline" data-latex="x_n">\(x_n\)</span> 处进行Taylor展开: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y(x_n + h) = y(x_n) + h y&#39;(x_n) + \frac{h^2}{2} y&#39;&#39;(\xi_n)">\[
+y(x_{n+1}) = y(x_n + h) = y(x_n) + h y'(x_n) + \frac{h^2}{2} y''(\xi_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 其中 <span class="math inline" data-latex="\xi_n \in (x_n, x_{n+1})">\(\xi_n \in (x_n, x_{n+1})\)</span> (Taylor定理余项)。</p>
+<p>由微分方程 <span class="math inline" data-latex="y&#39;(x_n) = f(x_n, y(x_n))">\(y'(x_n) = f(x_n, y(x_n))\)</span>,且 <span class="math inline" data-latex="y_n = y(x_n)">\(y_n = y(x_n)\)</span>,有: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y_n + h f(x_n, y_n) + \frac{h^2}{2} y&#39;&#39;(\xi_n)">\[
+y(x_{n+1}) = y_n + h f(x_n, y_n) + \frac{h^2}{2} y''(\xi_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>而Euler法给出: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + h f(x_n, y_n)">\[
+y_{n+1} = y_n + h f(x_n, y_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相减: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_n = y(x_{n+1}) - y_{n+1} = \frac{h^2}{2} y&#39;&#39;(\xi_n) = O(h^2) \quad \square">\[
+R_n = y(x_{n+1}) - y_{n+1} = \frac{h^2}{2} y''(\xi_n) = O(h^2) \quad \square
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="整体截断误差">3.2 整体截断误差</h3>
+<p><strong>定义 3.2 (整体截断误差)</strong><br />
+从初值 <span class="math inline" data-latex="y_0">\(y_0\)</span> 开始,经过 <span class="math inline" data-latex="n">\(n\)</span> 步迭代积累的总误差: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\epsilon_n = y(x_n) - y_n">\[
+\epsilon_n = y(x_n) - y_n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>定理 3.2</strong><br />
+在区间 <span class="math inline" data-latex="[x_0, X]">\([x_0, X]\)</span> 上,若 <span class="math inline" data-latex="|y&#39;&#39;(x)| \le M">\(|y''(x)| \le M\)</span>,则Euler法的整体截断误差满足: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="|\epsilon_n| \le \frac{M}{2L} \left( e^{L(x_n - x_0)} - 1 \right) h = O(h)">\[
+|\epsilon_n| \le \frac{M}{2L} \left( e^{L(x_n - x_0)} - 1 \right) h = O(h)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 其中 <span class="math inline" data-latex="L">\(L\)</span> 是Lipschitz常数。</p>
+<p><strong>证明</strong>:</p>
+<p>设 <span class="math inline" data-latex="\epsilon_n = y(x_n) - y_n">\(\epsilon_n = y(x_n) - y_n\)</span>,则: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\epsilon_{n+1} = y(x_{n+1}) - y_{n+1}">\[
+\epsilon_{n+1} = y(x_{n+1}) - y_{n+1}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>分解为: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y(x_n) + h f(x_n, y(x_n)) + R_n">\[
+y(x_{n+1}) = y(x_n) + h f(x_n, y(x_n)) + R_n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + h f(x_n, y_n)">\[
+y_{n+1} = y_n + h f(x_n, y_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相减: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\epsilon_{n+1} = \epsilon_n + h[f(x_n, y(x_n)) - f(x_n, y_n)] + R_n">\[
+\epsilon_{n+1} = \epsilon_n + h[f(x_n, y(x_n)) - f(x_n, y_n)] + R_n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>由Lipschitz条件 <span class="math inline" data-latex="|f(x, u) - f(x, v)| \le L|u - v|">\(|f(x, u) - f(x, v)| \le L|u - v|\)</span>: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="|\epsilon_{n+1}| \le |\epsilon_n| + hL|\epsilon_n| + |R_n|">\[
+|\epsilon_{n+1}| \le |\epsilon_n| + hL|\epsilon_n| + |R_n|
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <div class="math-formula-wrapper">
+        <span class="math display" data-latex="|\epsilon_{n+1}| \le (1 + hL)|\epsilon_n| + |R_n|">\[
+|\epsilon_{n+1}| \le (1 + hL)|\epsilon_n| + |R_n|
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>由定理3.1,<span class="math inline" data-latex="|R_n| \le \frac{Mh^2}{2}">\(|R_n| \le \frac{Mh^2}{2}\)</span>。递推得: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="|\epsilon_n| \le (1 + hL)^n |\epsilon_0| + \frac{Mh^2}{2} \sum_{k=0}^{n-1} (1 + hL)^k">\[
+|\epsilon_n| \le (1 + hL)^n |\epsilon_0| + \frac{Mh^2}{2} \sum_{k=0}^{n-1} (1 + hL)^k
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>初值精确 <span class="math inline" data-latex="\epsilon_0 = 0">\(\epsilon_0 = 0\)</span>,几何级数求和: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="|\epsilon_n| \le \frac{Mh^2}{2} \cdot \frac{(1 + hL)^n - 1}{hL} = \frac{Mh}{2L} [(1 + hL)^n - 1]">\[
+|\epsilon_n| \le \frac{Mh^2}{2} \cdot \frac{(1 + hL)^n - 1}{hL} = \frac{Mh}{2L} [(1 + hL)^n - 1]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>由 <span class="math inline" data-latex="(1 + hL)^n \le e^{nhL} = e^{L(x_n - x_0)}">\((1 + hL)^n \le e^{nhL} = e^{L(x_n - x_0)}\)</span> (当 <span class="math inline" data-latex="h">\(h\)</span> 充分小时): <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{|\epsilon_n| \le \frac{Mh}{2L} \left( e^{L(x_n - x_0)} - 1 \right)} \quad \square">\[
+\boxed{|\epsilon_n| \le \frac{Mh}{2L} \left( e^{L(x_n - x_0)} - 1 \right)} \quad \square
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>结论</strong>:Euler法的整体截断误差是 <span class="math inline" data-latex="O(h)">\(O(h)\)</span>,比局部截断误差 <span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span> 低一阶,因此称为<strong>一阶方法</strong>。</p>
+<hr />
+<h2 id="收敛性证明">4. 收敛性证明</h2>
+<h3 id="收敛性的定义">4.1 收敛性的定义</h3>
+<p><strong>定义 4.1 (收敛性)</strong><br />
+如果当步长 <span class="math inline" data-latex="h \to 0">\(h \to 0\)</span> 时,对固定的 <span class="math inline" data-latex="x_n = x_0 + nh">\(x_n = x_0 + nh\)</span>(保持 <span class="math inline" data-latex="x_n">\(x_n\)</span> 固定),有: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\lim_{h \to 0} y_n = y(x_n)">\[
+\lim_{h \to 0} y_n = y(x_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 则称该数值方法是<strong>收敛的</strong>。</p>
+<h3 id="主要定理">4.2 主要定理</h3>
+<p><strong>定理 4.1 (Euler法的收敛性)</strong><br />
+若函数 <span class="math inline" data-latex="f(x, y)">\(f(x, y)\)</span> 在区域 <span class="math inline" data-latex="D = \{(x, y) : |x - x_0| \le a, |y - y_0| \le b\}">\(D = \{(x, y) : |x - x_0| \le a, |y - y_0| \le b\}\)</span> 内:</p>
+<ol type="1">
+<li><strong>连续</strong></li>
+<li>关于 <span class="math inline" data-latex="y">\(y\)</span> 满足 <strong>Lipschitz条件</strong>:<span class="math inline" data-latex="|f(x, y_1) - f(x, y_2)| \le L|y_1 - y_2|">\(|f(x, y_1) - f(x, y_2)| \le L|y_1 - y_2|\)</span> 固定 <span class="math inline" data-latex="x_n">\(x_n\)</span>,令 <span class="math inline" data-latex="h \to 0">\(h \to 0\)</span>(意味着 <span class="math inline" data-latex="n \to \infty">\(n \to \infty\)</span> 但 <span class="math inline" data-latex="nh = x_n - x_0">\(nh = x_n - x_0\)</span> 保持不变):</li>
+</ol>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\lim_{h \to 0} |\epsilon_n| \le \lim_{h \to 0} \frac{Mh}{2L} \left( e^{L(x_n - x_0)} - 1 \right) = 0">\[
+\lim_{h \to 0} |\epsilon_n| \le \lim_{h \to 0} \frac{Mh}{2L} \left( e^{L(x_n - x_0)} - 1 \right) = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\lim_{h \to 0} |y(x_n) - y_n| = 0 \quad \square">\[
+\lim_{h \to 0} |y(x_n) - y_n| = 0 \quad \square
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="收敛阶">4.3 收敛阶</h3>
+<p>由误差估计式可知: <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\max_{0 \le n \le N} |y(x_n) - y_n| = O(h)">\[
+\max_{0 \le n \le N} |y(x_n) - y_n| = O(h)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此Euler法是<strong>一阶收敛</strong>的。</p>
+<hr />
+<h2 id="绝对稳定性分析">5. 绝对稳定性分析</h2>
+<h3 id="显式欧拉法-explicit-euler">5.1 显式欧拉法 (Explicit Euler)</h3>
+<p><strong>测试方程</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y&#39; = \lambda y">\[
+y' = \lambda y
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>递推公式</strong>： 代入显式欧拉公式 <span class="math inline" data-latex="y_{n+1} = y_n + h f(x_n, y_n)">\(y_{n+1} = y_n + h f(x_n, y_n)\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + h \lambda y_n = (1 + h\lambda) y_n">\[
+y_{n+1} = y_n + h \lambda y_n = (1 + h\lambda) y_n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>增长因子</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="G(z) = 1 + z, \quad z = h\lambda">\[
+G(z) = 1 + z, \quad z = h\lambda
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>稳定性条件</strong>： 要求 <span class="math inline" data-latex="|G(z)| \leq 1">\(|G(z)| \leq 1\)</span>，即： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="|1 + h\lambda| \leq 1">\[
+|1 + h\lambda| \leq 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<ul>
+<li><p><strong>实数域分析</strong>（<span class="math inline" data-latex="\lambda">\(\lambda\)</span> 为实数）： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="-1 \leq 1 + h\lambda \leq 1 \implies -2 \leq h\lambda \leq 0">\[
+-1 \leq 1 + h\lambda \leq 1 \implies -2 \leq h\lambda \leq 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 即步长必须满足： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="h \leq \frac{2}{|\lambda|}">\[
+h \leq \frac{2}{|\lambda|}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p></li>
+<li><p><strong>复平面分析</strong>（<span class="math inline" data-latex="\lambda">\(\lambda\)</span> 为复数）： 稳定域是复平面上以 <span class="math inline" data-latex="(-1, 0)">\((-1, 0)\)</span> 为圆心，半径为 1 的<strong>圆盘</strong>。</p></li>
+</ul>
+<p><strong>结论</strong>：显式欧拉法是<strong>条件稳定</strong>的。对于刚性问题（<span class="math inline" data-latex="|\lambda|">\(|\lambda|\)</span> 很大），必须取极小的步长。</p>
+<h3 id="隐式欧拉法-implicit-euler">5.2 隐式欧拉法 (Implicit Euler)</h3>
+<p><strong>递推公式</strong>： 代入隐式欧拉公式 <span class="math inline" data-latex="y_{n+1} = y_n + h f(x_{n+1}, y_{n+1})">\(y_{n+1} = y_n + h f(x_{n+1}, y_{n+1})\)</span>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + h \lambda y_{n+1}">\[
+y_{n+1} = y_n + h \lambda y_{n+1}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 整理得： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} (1 - h\lambda) = y_n \implies y_{n+1} = \frac{1}{1 - h\lambda} y_n">\[
+y_{n+1} (1 - h\lambda) = y_n \implies y_{n+1} = \frac{1}{1 - h\lambda} y_n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>增长因子</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="G(z) = \frac{1}{1 - z}, \quad z = h\lambda">\[
+G(z) = \frac{1}{1 - z}, \quad z = h\lambda
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>稳定性条件</strong>： 要求 <span class="math inline" data-latex="|G(z)| \leq 1">\(|G(z)| \leq 1\)</span>，即： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\left| \frac{1}{1 - h\lambda} \right| \leq 1 \implies |1 - h\lambda| \geq 1">\[
+\left| \frac{1}{1 - h\lambda} \right| \leq 1 \implies |1 - h\lambda| \geq 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<ul>
+<li><strong>复平面分析</strong>： 稳定域是复平面上以 <span class="math inline" data-latex="(1, 0)">\((1, 0)\)</span> 为圆心，半径为 1 的<strong>圆外区域</strong>。 显然，整个左半复平面（<span class="math inline" data-latex="\text{Re}(z) &lt; 0">\(\text{Re}(z) < 0\)</span>）都在稳定域内。</li>
+</ul>
+<p><strong>结论</strong>：隐式欧拉法是 <strong>A-稳定 (Unconditionally Stable)</strong> 的。无论步长 <span class="math inline" data-latex="h">\(h\)</span> 取多大（只要 <span class="math inline" data-latex="\text{Re}(\lambda) &lt; 0">\(\text{Re}(\lambda) < 0\)</span>），数值解都能保持稳定衰减。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Süli, E., &amp; Mayers, D. F. (2003). <em>An Introduction to Numerical Analysis</em>. Cambridge University Press.</li>
+<li>Butcher, J. C. (2016). <em>Numerical Methods for Ordinary Differential Equations</em> (3rd ed.). Wiley.</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="print-no-link">#数值计算</a>
+      
+        <a href="/tags/%E5%B8%B8%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" class="print-no-link">#常微分方程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>常微分方程求解之欧拉法</div>
+      <div>https://www.ohnn.cn/2025/12/02/euler_method/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/02/trapezoidal_method/" title="常微分方程求解之梯形法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">常微分方程求解之梯形法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/29/angular-velocity-transformation/" title="角速度与欧拉角导数：一架飞机的故事">
+                        <span class="hidden-mobile">角速度与欧拉角导数：一架飞机的故事</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

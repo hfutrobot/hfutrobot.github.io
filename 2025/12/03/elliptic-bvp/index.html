@@ -1,0 +1,2258 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="本文系统介绍两点边值问题的一般形式及其数值求解方法，重点讨论有限差分法和积分插值法的理论基础、离散格式推导和误差分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="两点边值问题的数值解法">
+<meta property="og:url" content="https://www.ohnn.cn/2025/12/03/elliptic-bvp/index.html">
+<meta property="og:site_name" content="Oh 记事本">
+<meta property="og:description" content="本文系统介绍两点边值问题的一般形式及其数值求解方法，重点讨论有限差分法和积分插值法的理论基础、离散格式推导和误差分析。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-03T11:54:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T13:44:48.967Z">
+<meta property="article:author" content="Yike">
+<meta property="article:tag" content="Yike">
+<meta property="article:tag" content="偏微分方程">
+<meta property="article:tag" content="数值计算">
+<meta property="article:tag" content="边值问题">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>两点边值问题的数值解法 - Oh 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="两点边值问题的数值解法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-03 19:54" pubdate>
+          2025年12月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">两点边值问题的数值解法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文系统介绍两点边值问题的一般形式及其数值求解方法，重点讨论有限差分法和积分插值法的理论基础、离散格式推导和误差分析。</p>
+<span id="more"></span>
+<h2 id="两点边值问题">1. 两点边值问题</h2>
+<h3 id="一般形式">1.1 一般形式</h3>
+<p>考虑二阶常微分方程的两点边值问题：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+L[u] = -\dfrac{d}{dx}\left(p(x)\dfrac{du}{dx}\right) + q(x)u = f(x), &amp; x \in (a, b) \\[10pt]
+u(a) = \alpha, \quad u(b) = \beta
+\end{cases}">\[
+\begin{cases}
+L[u] = -\dfrac{d}{dx}\left(p(x)\dfrac{du}{dx}\right) + q(x)u = f(x), & x \in (a, b) \\[10pt]
+u(a) = \alpha, \quad u(b) = \beta
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中： - <span class="math inline" data-latex="p(x), q(x), f(x)">\(p(x), q(x), f(x)\)</span> 为已知函数，<span class="math inline" data-latex="p(x) &gt; 0">\(p(x) > 0\)</span>，<span class="math inline" data-latex="q(x) \geq 0">\(q(x) \geq 0\)</span> - <span class="math inline" data-latex="\alpha, \beta">\(\alpha, \beta\)</span> 为边界值 - <span class="math inline" data-latex="u(x)">\(u(x)\)</span> 为待求函数</p>
+<h3 id="边界条件类型">1.2 边界条件类型</h3>
+<p><strong>第一类边界条件（Dirichlet）</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u(a) = \alpha, \quad u(b) = \beta">\[
+u(a) = \alpha, \quad u(b) = \beta
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>第二类边界条件（Neumann）</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u&#39;(a) = \alpha, \quad u&#39;(b) = \beta">\[
+u'(a) = \alpha, \quad u'(b) = \beta
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>第三类边界条件（Robin）</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\sigma_1 u(a) + \sigma_2 u&#39;(a) = \alpha, \quad \tau_1 u(b) + \tau_2 u&#39;(b) = \beta">\[
+\sigma_1 u(a) + \sigma_2 u'(a) = \alpha, \quad \tau_1 u(b) + \tau_2 u'(b) = \beta
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="解的存在唯一性">1.3 解的存在唯一性</h3>
+<p><strong>定理</strong>：若 <span class="math inline" data-latex="p(x) \in C^1[a,b]">\(p(x) \in C^1[a,b]\)</span>，<span class="math inline" data-latex="q(x), f(x) \in C[a,b]">\(q(x), f(x) \in C[a,b]\)</span>，且存在常数 <span class="math inline" data-latex="p_0 &gt; 0">\(p_0 > 0\)</span> 使得：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="p(x) \geq p_0, \quad q(x) \geq 0, \quad \forall x \in [a, b]">\[
+p(x) \geq p_0, \quad q(x) \geq 0, \quad \forall x \in [a, b]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>则第一类边值问题存在唯一解。</p>
+<p><strong>证明思路</strong>：基于极大值原理或变分原理。</p>
+<hr />
+<h2 id="有限差分法">2. 有限差分法</h2>
+<p>有限差分法将微分方程转化为代数方程组求解。下面按照完整的求解流程介绍。</p>
+<h3 id="求解流程概述">2.1 求解流程概述</h3>
+<p><strong>Step 1</strong>：网格剖分 → 离散定义域<br />
+<strong>Step 2</strong>：差分逼近 → 用差商代替导数<br />
+<strong>Step 3</strong>：形成方程 → 在每个内部节点列差分方程<br />
+<strong>Step 4</strong>：处理边界 → 代入边界条件<br />
+<strong>Step 5</strong>：矩阵求解 → 求解线性方程组 <span class="math inline" data-latex="A\mathbf{u} = \mathbf{b}">\(A\mathbf{u} = \mathbf{b}\)</span></p>
+<hr />
+<h3 id="step-1网格剖分">2.2 Step 1：网格剖分</h3>
+<p>将区间 <span class="math inline" data-latex="[a, b]">\([a, b]\)</span> 均匀剖分为 <span class="math inline" data-latex="n">\(n\)</span> 段：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="h = \frac{b-a}{n}, \quad x_i = a + ih, \quad i = 0, 1, \ldots, n">\[
+h = \frac{b-a}{n}, \quad x_i = a + ih, \quad i = 0, 1, \ldots, n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>节点分类</strong>： - <strong>总节点数</strong>：<span class="math inline" data-latex="n+1">\(n+1\)</span> 个（<span class="math inline" data-latex="x_0, x_1, \ldots, x_n">\(x_0, x_1, \ldots, x_n\)</span>） - <strong>边界节点</strong>：<span class="math inline" data-latex="x_0 = a">\(x_0 = a\)</span>，<span class="math inline" data-latex="x_n = b">\(x_n = b\)</span>（边界值已知或由边界条件确定） - <strong>内部节点数</strong>：<span class="math inline" data-latex="n-1">\(n-1\)</span> 个，即 <span class="math inline" data-latex="x_1, x_2, \ldots, x_{n-1}">\(x_1, x_2, \ldots, x_{n-1}\)</span>（待求）</p>
+<p>在实际求解中： - <strong><span class="math inline" data-latex="n">\(n\)</span> 是我们选择的参数</strong>（剖分的段数） - <strong><span class="math inline" data-latex="h">\(h\)</span> 是根据 <span class="math inline" data-latex="n">\(n\)</span> 计算的</strong>：<span class="math inline" data-latex="h = \frac{b-a}{n}">\(h = \frac{b-a}{n}\)</span> - <strong>内部节点数</strong>为 <span class="math inline" data-latex="n-1">\(n-1\)</span> - 节点位置 <span class="math inline" data-latex="x_i">\(x_i\)</span> 由 <span class="math inline" data-latex="n">\(n\)</span> 和 <span class="math inline" data-latex="h">\(h\)</span> 确定</p>
+<p><strong>记号</strong>：<span class="math inline" data-latex="u_i \approx u(x_i)">\(u_i \approx u(x_i)\)</span>，<span class="math inline" data-latex="p_i = p(x_i)">\(p_i = p(x_i)\)</span>，<span class="math inline" data-latex="q_i = q(x_i)">\(q_i = q(x_i)\)</span>，<span class="math inline" data-latex="f_i = f(x_i)">\(f_i = f(x_i)\)</span></p>
+<hr />
+<h3 id="step-2差分逼近">2.3 Step 2：差分逼近</h3>
+<h4 id="基本差分公式">2.3.1 基本差分公式</h4>
+<p>利用Taylor展开推导差商逼近导数。</p>
+<p><strong>一阶导数的中心差分</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u&#39;(x_i) = \frac{u_{i+1} - u_{i-1}}{2h} + O(h^2)">\[
+u'(x_i) = \frac{u_{i+1} - u_{i-1}}{2h} + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>二阶导数的中心差分</strong>：</p>
+<p>由Taylor展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{i+1} = u_i + hu&#39;_i + \frac{h^2}{2}u&#39;&#39;_i + \frac{h^3}{6}u&#39;&#39;&#39;_i + O(h^4)">\[
+u_{i+1} = u_i + hu'_i + \frac{h^2}{2}u''_i + \frac{h^3}{6}u'''_i + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{i-1} = u_i - hu&#39;_i + \frac{h^2}{2}u&#39;&#39;_i - \frac{h^3}{6}u&#39;&#39;&#39;_i + O(h^4)">\[
+u_{i-1} = u_i - hu'_i + \frac{h^2}{2}u''_i - \frac{h^3}{6}u'''_i + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相加：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{i+1} + u_{i-1} = 2u_i + h^2 u&#39;&#39;_i + O(h^4)">\[
+u_{i+1} + u_{i-1} = 2u_i + h^2 u''_i + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u&#39;&#39;(x_i) = \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} + O(h^2)">\[
+u''(x_i) = \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>局部截断误差</strong>：<span class="math inline" data-latex="T_i = O(h^2)">\(T_i = O(h^2)\)</span>，格式为<strong>二阶精度</strong>。</p>
+<h4 id="变系数项-dfracddxleftpdfracdudxright-的离散">2.3.2 变系数项 <span class="math inline" data-latex="\dfrac{d}{dx}\left(p\dfrac{du}{dx}\right)">\(\dfrac{d}{dx}\left(p\dfrac{du}{dx}\right)\)</span> 的离散</h4>
+<p><strong>错误方法</strong>：直接用 <span class="math inline" data-latex="p_i \dfrac{u_{i-1} - 2u_i + u_{i+1}}{h^2}">\(p_i \dfrac{u_{i-1} - 2u_i + u_{i+1}}{h^2}\)</span></p>
+<p>这会丢失 <span class="math inline" data-latex="p&#39;u&#39;">\(p'u'\)</span> 项，不是二阶精度！</p>
+<p><strong>正确方法：半节点格式</strong></p>
+<p>引入半节点 <span class="math inline" data-latex="x_{i\pm\frac{1}{2}} = x_i \pm \dfrac{h}{2}">\(x_{i\pm\frac{1}{2}} = x_i \pm \dfrac{h}{2}\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d}{dx}\left(p\frac{du}{dx}\right)\bigg|_{x_i} = \frac{1}{h}\left[\left(p\frac{du}{dx}\right)\bigg|_{x_{i+\frac{1}{2}}} - \left(p\frac{du}{dx}\right)\bigg|_{x_{i-\frac{1}{2}}}\right]">\[
+\frac{d}{dx}\left(p\frac{du}{dx}\right)\bigg|_{x_i} = \frac{1}{h}\left[\left(p\frac{du}{dx}\right)\bigg|_{x_{i+\frac{1}{2}}} - \left(p\frac{du}{dx}\right)\bigg|_{x_{i-\frac{1}{2}}}\right]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在半节点处用差商：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\left(p\frac{du}{dx}\right)\bigg|_{x_{i+\frac{1}{2}}} \approx p_{i+\frac{1}{2}} \cdot \frac{u_{i+1} - u_i}{h}">\[
+\left(p\frac{du}{dx}\right)\bigg|_{x_{i+\frac{1}{2}}} \approx p_{i+\frac{1}{2}} \cdot \frac{u_{i+1} - u_i}{h}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\left(p\frac{du}{dx}\right)\bigg|_{x_{i-\frac{1}{2}}} \approx p_{i-\frac{1}{2}} \cdot \frac{u_i - u_{i-1}}{h}">\[
+\left(p\frac{du}{dx}\right)\bigg|_{x_{i-\frac{1}{2}}} \approx p_{i-\frac{1}{2}} \cdot \frac{u_i - u_{i-1}}{h}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入得：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d}{dx}\left(p\frac{du}{dx}\right)\bigg|_{x_i} = \frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + O(h^2)">\[
+\frac{d}{dx}\left(p\frac{du}{dx}\right)\bigg|_{x_i} = \frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>半节点系数</strong>：<span class="math inline" data-latex="p_{i+\frac{1}{2}} = p(x_i + h/2)">\(p_{i+\frac{1}{2}} = p(x_i + h/2)\)</span> 或 <span class="math inline" data-latex="\dfrac{p_i + p_{i+1}}{2}">\(\dfrac{p_i + p_{i+1}}{2}\)</span></p>
+<hr />
+<h3 id="step-3形成差分方程">2.4 Step 3：形成差分方程</h3>
+<p>将原方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{d}{dx}\left(p(x)\frac{du}{dx}\right) + q(x)u = f(x)">\[
+-\frac{d}{dx}\left(p(x)\frac{du}{dx}\right) + q(x)u = f(x)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在节点 <span class="math inline" data-latex="x_i">\(x_i\)</span> 处用差分逼近：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + q_i u_i = f_i">\[
+-\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + q_i u_i = f_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理成标准形式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-A_i u_{i-1} + B_i u_i - C_i u_{i+1} = F_i, \quad i = 1, 2, \ldots, n">\[
+-A_i u_{i-1} + B_i u_i - C_i u_{i+1} = F_i, \quad i = 1, 2, \ldots, n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中系数：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+A_i &amp;= \frac{p_{i-\frac{1}{2}}}{h^2} \\
+B_i &amp;= \frac{p_{i-\frac{1}{2}} + p_{i+\frac{1}{2}}}{h^2} + q_i \\
+C_i &amp;= \frac{p_{i+\frac{1}{2}}}{h^2} \\
+F_i &amp;= f_i
+\end{aligned}">\[
+\begin{aligned}
+A_i &= \frac{p_{i-\frac{1}{2}}}{h^2} \\
+B_i &= \frac{p_{i-\frac{1}{2}} + p_{i+\frac{1}{2}}}{h^2} + q_i \\
+C_i &= \frac{p_{i+\frac{1}{2}}}{h^2} \\
+F_i &= f_i
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>注意</strong>： - 对 <span class="math inline" data-latex="i = 1, 2, \ldots, n">\(i = 1, 2, \ldots, n\)</span> 列方程（<span class="math inline" data-latex="n">\(n\)</span> 个方程，<span class="math inline" data-latex="n">\(n\)</span> 个未知数） - 边界条件将在下一步处理</p>
+<hr />
+<h3 id="step-4处理边界条件">2.5 Step 4：处理边界条件</h3>
+<p>边界条件的处理直接影响方程组的形式。</p>
+<h4 id="第一类边界条件dirichlet">2.5.1 第一类边界条件（Dirichlet）</h4>
+<p><strong>条件</strong>：<span class="math inline" data-latex="u(a) = \alpha">\(u(a) = \alpha\)</span>，<span class="math inline" data-latex="u(b) = \beta">\(u(b) = \beta\)</span></p>
+<p><strong>处理</strong>：直接设定 <span class="math inline" data-latex="u_0 = \alpha">\(u_0 = \alpha\)</span>，<span class="math inline" data-latex="u_{n+1} = \beta">\(u_{n+1} = \beta\)</span></p>
+<p><strong>影响</strong>：</p>
+<ul>
+<li><span class="math inline" data-latex="i=1">\(i=1\)</span> 时：<span class="math inline" data-latex="-A_1 u_0 + B_1 u_1 - C_1 u_2 = F_1">\(-A_1 u_0 + B_1 u_1 - C_1 u_2 = F_1\)</span> → 右端项改为 <span class="math inline" data-latex="F_1 + A_1 \alpha">\(F_1 + A_1 \alpha\)</span></li>
+<li><span class="math inline" data-latex="i=n">\(i=n\)</span> 时：<span class="math inline" data-latex="-A_n u_{n-1} + B_n u_n - C_n u_{n+1} = F_n">\(-A_n u_{n-1} + B_n u_n - C_n u_{n+1} = F_n\)</span> → 右端项改为 <span class="math inline" data-latex="F_n + C_n \beta">\(F_n + C_n \beta\)</span></li>
+</ul>
+<details>
+<summary>
+<b>📘 完整例子：第一类边界条件</b>（点击展开）
+</summary>
+<p><strong>问题</strong>：<span class="math inline" data-latex="-u&#39;&#39; = x, \, u(0)=1, \, u(1)=2">\(-u'' = x, \, u(0)=1, \, u(1)=2\)</span></p>
+<p><strong>网格剖分</strong>：</p>
+<ul>
+<li>剖分为 <span class="math inline" data-latex="n=4">\(n=4\)</span> 段</li>
+<li>步长：<span class="math inline" data-latex="h = \frac{1-0}{4} = 0.25">\(h = \frac{1-0}{4} = 0.25\)</span></li>
+<li>节点：<span class="math inline" data-latex="x_0=0, x_1=0.25, x_2=0.5, x_3=0.75, x_4=1">\(x_0=0, x_1=0.25, x_2=0.5, x_3=0.75, x_4=1\)</span>（共5个节点）</li>
+<li>待求：<span class="math inline" data-latex="u_1, u_2, u_3">\(u_1, u_2, u_3\)</span>（3个内部节点）</li>
+</ul>
+<p><strong>差分方程</strong>：<span class="math inline" data-latex="u_{i-1} - 2u_i + u_{i+1} = -h^2 x_i">\(u_{i-1} - 2u_i + u_{i+1} = -h^2 x_i\)</span></p>
+<p><strong>列方程</strong>（<span class="math inline" data-latex="i=1,2,3">\(i=1,2,3\)</span>）：</p>
+<ul>
+<li><span class="math inline" data-latex="i=1">\(i=1\)</span>：<span class="math inline" data-latex="u_0 - 2u_1 + u_2 = -0.015625">\(u_0 - 2u_1 + u_2 = -0.015625\)</span></li>
+<li><span class="math inline" data-latex="i=2">\(i=2\)</span>：<span class="math inline" data-latex="u_1 - 2u_2 + u_3 = -0.03125">\(u_1 - 2u_2 + u_3 = -0.03125\)</span></li>
+<li><span class="math inline" data-latex="i=3">\(i=3\)</span>：<span class="math inline" data-latex="u_2 - 2u_3 + u_4 = -0.046875">\(u_2 - 2u_3 + u_4 = -0.046875\)</span></li>
+</ul>
+<p><strong>代入边界</strong>：<span class="math inline" data-latex="u_0=1">\(u_0=1\)</span>，<span class="math inline" data-latex="u_4=2">\(u_4=2\)</span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+-2 &amp; 1 &amp; 0 \\
+1 &amp; -2 &amp; 1 \\
+0 &amp; 1 &amp; -2
+\end{bmatrix}
+\begin{bmatrix}
+u_1 \\ u_2 \\ u_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+-1.015625 \\
+-0.03125 \\
+-2.046875
+\end{bmatrix}">\[
+\begin{bmatrix}
+-2 & 1 & 0 \\
+1 & -2 & 1 \\
+0 & 1 & -2
+\end{bmatrix}
+\begin{bmatrix}
+u_1 \\ u_2 \\ u_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+-1.015625 \\
+-0.03125 \\
+-2.046875
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解</strong>：<span class="math inline" data-latex="u_1 = 1.1172, \, u_2 = 1.4453, \, u_3 = 1.9844">\(u_1 = 1.1172, \, u_2 = 1.4453, \, u_3 = 1.9844\)</span></p>
+</details>
+<h4 id="第二类边界条件neumann">2.5.2 第二类边界条件（Neumann）</h4>
+<p><strong>条件</strong>：<span class="math inline" data-latex="u&#39;(a) = \alpha">\(u'(a) = \alpha\)</span>，<span class="math inline" data-latex="u&#39;(b) = \beta">\(u'(b) = \beta\)</span></p>
+<p><strong>方法</strong>：虚拟节点法</p>
+<p><strong>左边界处理</strong>：引入虚拟节点 <span class="math inline" data-latex="u_{-1}">\(u_{-1}\)</span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u_1 - u_{-1}}{2h} = \alpha \quad \Rightarrow \quad u_{-1} = u_1 - 2h\alpha">\[
+\frac{u_1 - u_{-1}}{2h} = \alpha \quad \Rightarrow \quad u_{-1} = u_1 - 2h\alpha
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处列差分方程并代入 <span class="math inline" data-latex="u_{-1}">\(u_{-1}\)</span>。</p>
+<details>
+<summary>
+<b>📘 完整例子：第二类边界条件</b>（点击展开）
+</summary>
+<p><strong>问题</strong>：<span class="math inline" data-latex="-u&#39;&#39; = 2, \, u&#39;(0)=0, \, u&#39;(1)=0">\(-u'' = 2, \, u'(0)=0, \, u'(1)=0\)</span></p>
+<p><strong>网格剖分</strong>：</p>
+<ul>
+<li>剖分为 <span class="math inline" data-latex="n=4">\(n=4\)</span> 段，步长 <span class="math inline" data-latex="h = 0.25">\(h = 0.25\)</span></li>
+<li>待求：<span class="math inline" data-latex="u_0, u_1, u_2, u_3, u_4">\(u_0, u_1, u_2, u_3, u_4\)</span>（5个节点，因为边界条件是导数）</li>
+</ul>
+<p><strong>左边界</strong>：<span class="math inline" data-latex="u_{-1} = u_1">\(u_{-1} = u_1\)</span>（由 <span class="math inline" data-latex="u&#39;(0)=0">\(u'(0)=0\)</span>）</p>
+<p><strong>右边界</strong>：<span class="math inline" data-latex="u_5 = u_3">\(u_5 = u_3\)</span>（由 <span class="math inline" data-latex="u&#39;(1)=0">\(u'(1)=0\)</span>）</p>
+<p><strong>在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处</strong>：<span class="math inline" data-latex="u_{-1} - 2u_0 + u_1 = -0.125">\(u_{-1} - 2u_0 + u_1 = -0.125\)</span> → <span class="math inline" data-latex="2u_1 - 2u_0 = -0.125">\(2u_1 - 2u_0 = -0.125\)</span></p>
+<p><strong>内部节点</strong>：</p>
+<ul>
+<li><span class="math inline" data-latex="u_0 - 2u_1 + u_2 = -0.125">\(u_0 - 2u_1 + u_2 = -0.125\)</span></li>
+<li><span class="math inline" data-latex="u_1 - 2u_2 + u_3 = -0.125">\(u_1 - 2u_2 + u_3 = -0.125\)</span></li>
+</ul>
+<p><strong>在 <span class="math inline" data-latex="x_4">\(x_4\)</span> 处</strong>：<span class="math inline" data-latex="u_3 - 2u_4 + u_5 = -0.125">\(u_3 - 2u_4 + u_5 = -0.125\)</span> → <span class="math inline" data-latex="2u_3 - 2u_4 = -0.125">\(2u_3 - 2u_4 = -0.125\)</span></p>
+<p><strong>矩阵形式</strong>（5个未知数）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+-2 &amp; 2 &amp; 0 &amp; 0 &amp; 0 \\
+1 &amp; -2 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; -2 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 1 \\
+0 &amp; 0 &amp; 0 &amp; 2 &amp; -2
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.125 \\ -0.125 \\ -0.125 \\ -0.125 \\ -0.125
+\end{bmatrix}">\[
+\begin{bmatrix}
+-2 & 2 & 0 & 0 & 0 \\
+1 & -2 & 1 & 0 & 0 \\
+0 & 1 & -2 & 1 & 0 \\
+0 & 0 & 1 & -2 & 1 \\
+0 & 0 & 0 & 2 & -2
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.125 \\ -0.125 \\ -0.125 \\ -0.125 \\ -0.125
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>注</strong>：Neumann问题解不唯一（相差常数），需附加条件。</p>
+</details>
+<h4 id="第三类边界条件robin">2.5.3 第三类边界条件（Robin）</h4>
+<p><strong>条件</strong>：<span class="math inline" data-latex="\sigma_1 u(a) + \sigma_2 u&#39;(a) = \alpha">\(\sigma_1 u(a) + \sigma_2 u'(a) = \alpha\)</span></p>
+<p><strong>方法</strong>：结合边界条件和差分方程消去虚拟节点</p>
+<details>
+<summary>
+<b>📘 完整例子：第三类边界条件</b>（点击展开）
+</summary>
+<p><strong>问题</strong>：<span class="math inline" data-latex="-u&#39;&#39; + u = x, \, u(0)-u&#39;(0)=1, \, u(1)+2u&#39;(1)=3">\(-u'' + u = x, \, u(0)-u'(0)=1, \, u(1)+2u'(1)=3\)</span></p>
+<p><strong>网格剖分</strong>：</p>
+<ul>
+<li>剖分为 <span class="math inline" data-latex="n=4">\(n=4\)</span> 段，步长 <span class="math inline" data-latex="h = 0.25">\(h = 0.25\)</span></li>
+<li>待求：<span class="math inline" data-latex="u_0, u_1, u_2, u_3, u_4">\(u_0, u_1, u_2, u_3, u_4\)</span>（5个节点）</li>
+</ul>
+<p><strong>左边界</strong>：<span class="math inline" data-latex="u_0 - \dfrac{u_1-u_{-1}}{2h} = 1">\(u_0 - \dfrac{u_1-u_{-1}}{2h} = 1\)</span></p>
+<p>在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处：<span class="math inline" data-latex="u_{-1} - 2u_0 + u_1 + h^2u_0 = 0">\(u_{-1} - 2u_0 + u_1 + h^2u_0 = 0\)</span></p>
+<p>消去 <span class="math inline" data-latex="u_{-1}">\(u_{-1}\)</span> 得：<span class="math inline" data-latex="-2.5u_0 + 2u_1 = -0.5">\(-2.5u_0 + 2u_1 = -0.5\)</span></p>
+<p><strong>内部节点</strong>：</p>
+<ul>
+<li><span class="math inline" data-latex="u_0 - 1.9375u_1 + u_2 = 0.015625">\(u_0 - 1.9375u_1 + u_2 = 0.015625\)</span></li>
+<li><span class="math inline" data-latex="u_1 - 1.9375u_2 + u_3 = 0.03125">\(u_1 - 1.9375u_2 + u_3 = 0.03125\)</span></li>
+</ul>
+<p><strong>右边界</strong>：<span class="math inline" data-latex="u_4 + 2\dfrac{u_5-u_3}{2h} = 3">\(u_4 + 2\dfrac{u_5-u_3}{2h} = 3\)</span></p>
+<p>即：<span class="math inline" data-latex="u_4 + \dfrac{u_5-u_3}{h} = 3">\(u_4 + \dfrac{u_5-u_3}{h} = 3\)</span></p>
+<p>在 <span class="math inline" data-latex="x_4">\(x_4\)</span> 处：<span class="math inline" data-latex="u_3 - 2u_4 + u_5 + h^2u_4 = 1">\(u_3 - 2u_4 + u_5 + h^2u_4 = 1\)</span></p>
+<p>即：<span class="math inline" data-latex="u_3 - 2u_4 + u_5 + 0.0625u_4 = 1">\(u_3 - 2u_4 + u_5 + 0.0625u_4 = 1\)</span></p>
+<p>从边界条件：<span class="math inline" data-latex="u_5 = u_3 + h(3 - u_4) = u_3 + 0.25(3 - u_4)">\(u_5 = u_3 + h(3 - u_4) = u_3 + 0.25(3 - u_4)\)</span></p>
+<p>代入差分方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_3 - 2u_4 + u_3 + 0.25(3 - u_4) + 0.0625u_4 = 1">\[
+u_3 - 2u_4 + u_3 + 0.25(3 - u_4) + 0.0625u_4 = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="2u_3 - 2u_4 - 0.25u_4 + 0.0625u_4 + 0.75 = 1">\[
+2u_3 - 2u_4 - 0.25u_4 + 0.0625u_4 + 0.75 = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="2u_3 - 2.1875u_4 = 0.25">\[
+2u_3 - 2.1875u_4 = 0.25
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>矩阵形式</strong>（5个未知数）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+-2.5 &amp; 2 &amp; 0 &amp; 0 &amp; 0 \\
+1 &amp; -1.9375 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; -1.9375 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; -1.9375 &amp; 1 \\
+0 &amp; 0 &amp; 0 &amp; 2 &amp; -2.1875
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.5 \\ 0.015625 \\ 0.03125 \\ 0.046875 \\ 0.25
+\end{bmatrix}">\[
+\begin{bmatrix}
+-2.5 & 2 & 0 & 0 & 0 \\
+1 & -1.9375 & 1 & 0 & 0 \\
+0 & 1 & -1.9375 & 1 & 0 \\
+0 & 0 & 1 & -1.9375 & 1 \\
+0 & 0 & 0 & 2 & -2.1875
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.5 \\ 0.015625 \\ 0.03125 \\ 0.046875 \\ 0.25
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解</strong>：使用追赶法或直接求解获得数值解。</p>
+</details>
+<hr />
+<h3 id="局部截断误差">2.6 局部截断误差</h3>
+<p>设 <span class="math inline" data-latex="u(x)">\(u(x)\)</span> 是精确解，将其代入差分格式，定义<strong>局部截断误差</strong>为差分算子作用于精确解的结果。</p>
+<p>对于差分格式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + q_i u_i = f_i">\[
+-\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + q_i u_i = f_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>将精确解 <span class="math inline" data-latex="u(x)">\(u(x)\)</span> 在 <span class="math inline" data-latex="x_i">\(x_i\)</span> 处进行Taylor展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+u(x_{i\pm 1}) &amp;= u_i \pm h u&#39;_i + \frac{h^2}{2}u&#39;&#39;_i \pm \frac{h^3}{6}u&#39;&#39;&#39;_i + \frac{h^4}{24}u^{(4)}_i \pm \frac{h^5}{120}u^{(5)}_i + O(h^6)
+\end{aligned}">\[
+\begin{aligned}
+u(x_{i\pm 1}) &= u_i \pm h u'_i + \frac{h^2}{2}u''_i \pm \frac{h^3}{6}u'''_i + \frac{h^4}{24}u^{(4)}_i \pm \frac{h^5}{120}u^{(5)}_i + O(h^6)
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入差分格式并展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+&amp;\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] \\
+&amp;= \frac{1}{h^2}\left[p_{i+\frac{1}{2}}\left(h u&#39;_i + \frac{h^2}{2}u&#39;&#39;_i + \frac{h^3}{6}u&#39;&#39;&#39;_i + O(h^4)\right) - p_{i-\frac{1}{2}}\left(-h u&#39;_i + \frac{h^2}{2}u&#39;&#39;_i - \frac{h^3}{6}u&#39;&#39;&#39;_i + O(h^4)\right)\right] \\
+&amp;= \frac{1}{h^2}\left[(p_{i+\frac{1}{2}} + p_{i-\frac{1}{2}})h u&#39;_i + (p_{i+\frac{1}{2}} - p_{i-\frac{1}{2}})\frac{h^2}{2}u&#39;&#39;_i + (p_{i+\frac{1}{2}} + p_{i-\frac{1}{2}})\frac{h^3}{6}u&#39;&#39;&#39;_i + O(h^4)\right]
+\end{aligned}">\[
+\begin{aligned}
+&\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] \\
+&= \frac{1}{h^2}\left[p_{i+\frac{1}{2}}\left(h u'_i + \frac{h^2}{2}u''_i + \frac{h^3}{6}u'''_i + O(h^4)\right) - p_{i-\frac{1}{2}}\left(-h u'_i + \frac{h^2}{2}u''_i - \frac{h^3}{6}u'''_i + O(h^4)\right)\right] \\
+&= \frac{1}{h^2}\left[(p_{i+\frac{1}{2}} + p_{i-\frac{1}{2}})h u'_i + (p_{i+\frac{1}{2}} - p_{i-\frac{1}{2}})\frac{h^2}{2}u''_i + (p_{i+\frac{1}{2}} + p_{i-\frac{1}{2}})\frac{h^3}{6}u'''_i + O(h^4)\right]
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>注意到 <span class="math inline" data-latex="p_{i+\frac{1}{2}} - p_{i-\frac{1}{2}} = hp&#39;_i + O(h^2)">\(p_{i+\frac{1}{2}} - p_{i-\frac{1}{2}} = hp'_i + O(h^2)\)</span>，且 <span class="math inline" data-latex="p_{i+\frac{1}{2}} + p_{i-\frac{1}{2}} = 2p_i + O(h^2)">\(p_{i+\frac{1}{2}} + p_{i-\frac{1}{2}} = 2p_i + O(h^2)\)</span>，因此：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= p_i u&#39;&#39;_i + \frac{h}{2}p&#39;_i u&#39;&#39;_i + \frac{h^2}{12}p_i u^{(4)}_i + O(h^3)">\[
+= p_i u''_i + \frac{h}{2}p'_i u''_i + \frac{h^2}{12}p_i u^{(4)}_i + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>而精确的微分算子为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{d}{dx}\left(p\frac{du}{dx}\right) = p u&#39;&#39; + p&#39; u&#39;">\[
+\frac{d}{dx}\left(p\frac{du}{dx}\right) = p u'' + p' u'
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此局部截断误差为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_i = \frac{h^2}{12}p_i u^{(4)}(\xi_i) + O(h^3) = O(h^2)">\[
+R_i = \frac{h^2}{12}p_i u^{(4)}(\xi_i) + O(h^3) = O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>结论</strong>：该差分格式是<strong>二阶精度</strong>的。</p>
+<hr />
+<h2 id="积分插值法">3. 积分插值法</h2>
+<h3 id="基本思想与动机">3.1 基本思想与动机</h3>
+<p>积分插值法是一种<strong>先积分再离散</strong>的方法，与有限差分法的思路不同。</p>
+<p><strong>核心步骤</strong>： 1. 将微分方程在小区间上<strong>积分</strong>（减少对解的光滑性要求） 2. 用<strong>插值多项式</strong>逼近未知函数（利用已知的节点值） 3. 建立代数方程组</p>
+<p><strong>优势</strong>：相比直接差分，积分后再离散往往能获得更高精度。</p>
+<hr />
+<h3 id="方法推导半步长积分法">3.2 方法推导（半步长积分法）</h3>
+<h4 id="在半步长区间上积分">3.2.1 在半步长区间上积分</h4>
+<p>课本的标准做法是在<strong>半步长区间</strong> <span class="math inline" data-latex="[x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]">\([x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]\)</span> 上对原方程积分。</p>
+<p>对微分方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{d}{dx}\left(p\frac{du}{dx}\right) + qu = f">\[
+-\frac{d}{dx}\left(p\frac{du}{dx}\right) + qu = f
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在区间 <span class="math inline" data-latex="[x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]">\([x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]\)</span> 上积分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} \frac{d}{dx}\left(p\frac{du}{dx}\right) dx + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx">\[
+-\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} \frac{d}{dx}\left(p\frac{du}{dx}\right) dx + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>第一项利用微积分基本定理：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\left[p\frac{du}{dx}\right]_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx">\[
+-\left[p\frac{du}{dx}\right]_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>即：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-p_{i+\frac{1}{2}}\frac{du}{dx}\bigg|_{x_{i+\frac{1}{2}}} + p_{i-\frac{1}{2}}\frac{du}{dx}\bigg|_{x_{i-\frac{1}{2}}} + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx">\[
+-p_{i+\frac{1}{2}}\frac{du}{dx}\bigg|_{x_{i+\frac{1}{2}}} + p_{i-\frac{1}{2}}\frac{du}{dx}\bigg|_{x_{i-\frac{1}{2}}} + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>关键问题</strong>： - 半节点处的导数：<span class="math inline" data-latex="\frac{du}{dx}\bigg|_{x_{i\pm\frac{1}{2}}}">\(\frac{du}{dx}\bigg|_{x_{i\pm\frac{1}{2}}}\)</span> 如何表示？ - 积分项：<span class="math inline" data-latex="\int qu\,dx">\(\int qu\,dx\)</span> 和 <span class="math inline" data-latex="\int f\,dx">\(\int f\,dx\)</span> 如何计算？</p>
+<hr />
+<h4 id="线性插值逼近导数">3.2.2 线性插值逼近导数</h4>
+<p>在区间 <span class="math inline" data-latex="[x_{i-1}, x_i]">\([x_{i-1}, x_i]\)</span> 上，用<strong>线性插值</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u(x) \approx u_{i-1} + \frac{u_i - u_{i-1}}{h}(x - x_{i-1})">\[
+u(x) \approx u_{i-1} + \frac{u_i - u_{i-1}}{h}(x - x_{i-1})
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此在 <span class="math inline" data-latex="x_{i-\frac{1}{2}}">\(x_{i-\frac{1}{2}}\)</span> 处的导数：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{du}{dx}\bigg|_{x_{i-\frac{1}{2}}} \approx \frac{u_i - u_{i-1}}{h}">\[
+\frac{du}{dx}\bigg|_{x_{i-\frac{1}{2}}} \approx \frac{u_i - u_{i-1}}{h}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>同理，在 <span class="math inline" data-latex="x_{i+\frac{1}{2}}">\(x_{i+\frac{1}{2}}\)</span> 处：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{du}{dx}\bigg|_{x_{i+\frac{1}{2}}} \approx \frac{u_{i+1} - u_i}{h}">\[
+\frac{du}{dx}\bigg|_{x_{i+\frac{1}{2}}} \approx \frac{u_{i+1} - u_i}{h}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入得：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-p_{i+\frac{1}{2}}\frac{u_{i+1} - u_i}{h} + p_{i-\frac{1}{2}}\frac{u_i - u_{i-1}}{h} + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx">\[
+-p_{i+\frac{1}{2}}\frac{u_{i+1} - u_i}{h} + p_{i-\frac{1}{2}}\frac{u_i - u_{i-1}}{h} + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{1}{h}\left[p_{i-\frac{1}{2}}(u_i - u_{i-1}) - p_{i+\frac{1}{2}}(u_{i+1} - u_i)\right] + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx">\[
+\frac{1}{h}\left[p_{i-\frac{1}{2}}(u_i - u_{i-1}) - p_{i+\frac{1}{2}}(u_{i+1} - u_i)\right] + \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx = \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<hr />
+<h4 id="积分项的计算中点公式">3.2.3 积分项的计算（中点公式）</h4>
+<p>对于区间 <span class="math inline" data-latex="[x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]">\([x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]\)</span> 上的积分，使用<strong>中点公式</strong>：</p>
+<p>用节点 <span class="math inline" data-latex="x_i">\(x_i\)</span> 处的值近似整个区间的积分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx \approx q_i u_i \cdot h">\[
+\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} qu \, dx \approx q_i u_i \cdot h
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx \approx f_i \cdot h">\[
+\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} f \, dx \approx f_i \cdot h
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>精度</strong>：中点公式对线性函数精确，对一般函数有 <span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span> 精度。</p>
+<hr />
+<h4 id="最终的差分格式">3.2.4 最终的差分格式</h4>
+<p>代入中点公式，得到积分插值法的差分格式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{1}{h}\left[p_{i-\frac{1}{2}}(u_i - u_{i-1}) - p_{i+\frac{1}{2}}(u_{i+1} - u_i)\right] + q_i u_i h = f_i h">\[
+\frac{1}{h}\left[p_{i-\frac{1}{2}}(u_i - u_{i-1}) - p_{i+\frac{1}{2}}(u_{i+1} - u_i)\right] + q_i u_i h = f_i h
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>整理：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + q_i u_i = f_i">\[
+-\frac{1}{h^2}\left[p_{i+\frac{1}{2}}(u_{i+1} - u_i) - p_{i-\frac{1}{2}}(u_i - u_{i-1})\right] + q_i u_i = f_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>常系数情况</strong>（<span class="math inline" data-latex="p(x) = p_0">\(p(x) = p_0\)</span>，<span class="math inline" data-latex="q(x) = q_0">\(q(x) = q_0\)</span>）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{p_0}{h^2}(u_{i-1} - 2u_i + u_{i+1}) + q_0 u_i = f_i">\[
+-\frac{p_0}{h^2}(u_{i-1} - 2u_i + u_{i+1}) + q_0 u_i = f_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这与有限差分法的格式<strong>完全相同</strong>！</p>
+<hr />
+<h3 id="边界条件处理">3.3 边界条件处理</h3>
+<p>积分插值法在边界条件处理上与有限差分法类似。</p>
+<h4 id="第一类边界条件dirichlet-1">3.3.1 第一类边界条件（Dirichlet）</h4>
+<p><strong>条件</strong>：<span class="math inline" data-latex="u(a) = \alpha">\(u(a) = \alpha\)</span>，<span class="math inline" data-latex="u(b) = \beta">\(u(b) = \beta\)</span></p>
+<p><strong>处理</strong>：直接设定 <span class="math inline" data-latex="u_0 = \alpha">\(u_0 = \alpha\)</span>，<span class="math inline" data-latex="u_{n+1} = \beta">\(u_{n+1} = \beta\)</span></p>
+<p>与有限差分法完全相同。</p>
+<details>
+<summary>
+<b>📘 例1：第一类边界条件</b>（点击展开）
+</summary>
+<p><strong>问题</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+-u&#39;&#39; = 1, \quad x \in (0, 1) \\
+u(0) = 0, \quad u(1) = 0
+\end{cases}">\[
+\begin{cases}
+-u'' = 1, \quad x \in (0, 1) \\
+u(0) = 0, \quad u(1) = 0
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>精确解</strong>：<span class="math inline" data-latex="u(x) = \frac{1}{2}x(1-x)">\(u(x) = \frac{1}{2}x(1-x)\)</span></p>
+<p><strong>网格剖分</strong>：</p>
+<ul>
+<li>剖分为 <span class="math inline" data-latex="n=4">\(n=4\)</span> 段</li>
+<li>步长：<span class="math inline" data-latex="h = \frac{1-0}{4} = 0.25">\(h = \frac{1-0}{4} = 0.25\)</span></li>
+<li>节点：<span class="math inline" data-latex="x_0=0, x_1=0.25, x_2=0.5, x_3=0.75, x_4=1">\(x_0=0, x_1=0.25, x_2=0.5, x_3=0.75, x_4=1\)</span>（共5个节点）</li>
+<li>待求：<span class="math inline" data-latex="u_1, u_2, u_3">\(u_1, u_2, u_3\)</span>（3个内部节点）</li>
+</ul>
+<p><strong>差分格式</strong>：</p>
+<p>对于 <span class="math inline" data-latex="i=1,2,3">\(i=1,2,3\)</span>，在半步长区间 <span class="math inline" data-latex="[x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]">\([x_{i-\frac{1}{2}}, x_{i+\frac{1}{2}}]\)</span> 上积分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(u_{i-1} - 2u_i + u_{i+1}) = 1">\[
+-\frac{1}{h^2}(u_{i-1} - 2u_i + u_{i+1}) = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>即：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(u_{i-1} - 2u_i + u_{i+1}) = 1">\[
+-16(u_{i-1} - 2u_i + u_{i+1}) = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>列方程</strong>：</p>
+<ul>
+<li><span class="math inline" data-latex="i=1">\(i=1\)</span>：<span class="math inline" data-latex="-16(u_0 - 2u_1 + u_2) = 1">\(-16(u_0 - 2u_1 + u_2) = 1\)</span>，代入 <span class="math inline" data-latex="u_0=0">\(u_0=0\)</span></li>
+<li><span class="math inline" data-latex="i=2">\(i=2\)</span>：<span class="math inline" data-latex="-16(u_1 - 2u_2 + u_3) = 1">\(-16(u_1 - 2u_2 + u_3) = 1\)</span></li>
+<li><span class="math inline" data-latex="i=3">\(i=3\)</span>：<span class="math inline" data-latex="-16(u_2 - 2u_3 + u_4) = 1">\(-16(u_2 - 2u_3 + u_4) = 1\)</span>，代入 <span class="math inline" data-latex="u_4=0">\(u_4=0\)</span></li>
+</ul>
+<p><strong>矩阵形式</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16\begin{bmatrix}
+-2 &amp; 1 &amp; 0 \\
+1 &amp; -2 &amp; 1 \\
+0 &amp; 1 &amp; -2
+\end{bmatrix}
+\begin{bmatrix}
+u_1 \\ u_2 \\ u_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 \\ 1 \\ 1
+\end{bmatrix}">\[
+-16\begin{bmatrix}
+-2 & 1 & 0 \\
+1 & -2 & 1 \\
+0 & 1 & -2
+\end{bmatrix}
+\begin{bmatrix}
+u_1 \\ u_2 \\ u_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 \\ 1 \\ 1
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>即：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+32 &amp; -16 &amp; 0 \\
+-16 &amp; 32 &amp; -16 \\
+0 &amp; -16 &amp; 32
+\end{bmatrix}
+\begin{bmatrix}
+u_1 \\ u_2 \\ u_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 \\ 1 \\ 1
+\end{bmatrix}">\[
+\begin{bmatrix}
+32 & -16 & 0 \\
+-16 & 32 & -16 \\
+0 & -16 & 32
+\end{bmatrix}
+\begin{bmatrix}
+u_1 \\ u_2 \\ u_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 \\ 1 \\ 1
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+u_1 &amp;= 0.09375 \\
+u_2 &amp;= 0.125 \\
+u_3 &amp;= 0.09375
+\end{aligned}">\[
+\begin{aligned}
+u_1 &= 0.09375 \\
+u_2 &= 0.125 \\
+u_3 &= 0.09375
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>精确解</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{aligned}
+u(0.25) &amp;= 0.09375 \\
+u(0.5) &amp;= 0.125 \\
+u(0.75) &amp;= 0.09375
+\end{aligned}">\[
+\begin{aligned}
+u(0.25) &= 0.09375 \\
+u(0.5) &= 0.125 \\
+u(0.75) &= 0.09375
+\end{aligned}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>结果</strong>：数值解与精确解<strong>完全吻合</strong>！</p>
+</details>
+<hr />
+<h4 id="第二类边界条件neumann-1">3.3.2 第二类边界条件（Neumann）</h4>
+<p><strong>条件</strong>：<span class="math inline" data-latex="u&#39;(a) = \alpha">\(u'(a) = \alpha\)</span>，<span class="math inline" data-latex="u&#39;(b) = \beta">\(u'(b) = \beta\)</span></p>
+<p><strong>左边界处理</strong>：在半步长区间 <span class="math inline" data-latex="[x_{-\frac{1}{2}}, x_{\frac{1}{2}}]">\([x_{-\frac{1}{2}}, x_{\frac{1}{2}}]\)</span> 上积分</p>
+<p>对于 <span class="math inline" data-latex="x_0">\(x_0\)</span> 点，边界导数直接给定：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="p_0 u&#39;(a) = p_0 \alpha">\[
+p_0 u'(a) = p_0 \alpha
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>使用中心差分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u&#39;(x_0) = \frac{u_1 - u_{-1}}{2h} = \alpha \quad \Rightarrow \quad u_{-1} = u_1 - 2h\alpha">\[
+u'(x_0) = \frac{u_1 - u_{-1}}{2h} = \alpha \quad \Rightarrow \quad u_{-1} = u_1 - 2h\alpha
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>然后在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处列差分方程并代入虚拟节点。</p>
+<details>
+<summary>
+<b>📘 例2：第二类边界条件</b>（点击展开）
+</summary>
+<p><strong>问题</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+-u&#39;&#39; = 2, \quad x \in (0, 1) \\
+u&#39;(0) = 0, \quad u&#39;(1) = 0
+\end{cases}">\[
+\begin{cases}
+-u'' = 2, \quad x \in (0, 1) \\
+u'(0) = 0, \quad u'(1) = 0
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>网格剖分</strong>：</p>
+<ul>
+<li>剖分为 <span class="math inline" data-latex="n=4">\(n=4\)</span> 段，步长 <span class="math inline" data-latex="h = 0.25">\(h = 0.25\)</span></li>
+<li>节点：<span class="math inline" data-latex="x_0, x_1, x_2, x_3, x_4">\(x_0, x_1, x_2, x_3, x_4\)</span>（共5个节点）</li>
+<li>待求：<span class="math inline" data-latex="u_0, u_1, u_2, u_3, u_4">\(u_0, u_1, u_2, u_3, u_4\)</span>（5个未知数，因为边界条件是导数）</li>
+</ul>
+<p><strong>左边界</strong>（<span class="math inline" data-latex="x_0">\(x_0\)</span>）：</p>
+<p>由 <span class="math inline" data-latex="u&#39;(0) = 0">\(u'(0) = 0\)</span>，使用中心差分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\frac{u_1 - u_{-1}}{2h} = 0 \quad \Rightarrow \quad u_{-1} = u_1">\[
+\frac{u_1 - u_{-1}}{2h} = 0 \quad \Rightarrow \quad u_{-1} = u_1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处列差分方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(u_{-1} - 2u_0 + u_1) = 2">\[
+-\frac{1}{h^2}(u_{-1} - 2u_0 + u_1) = 2
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="u_{-1} = u_1">\(u_{-1} = u_1\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(2u_1 - 2u_0) = 2 \quad \Rightarrow \quad -32(u_1 - u_0) = 1">\[
+-\frac{1}{h^2}(2u_1 - 2u_0) = 2 \quad \Rightarrow \quad -32(u_1 - u_0) = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>右边界</strong>（<span class="math inline" data-latex="x_4">\(x_4\)</span>）：</p>
+<p>由 <span class="math inline" data-latex="u&#39;(1) = 0">\(u'(1) = 0\)</span>，同理：<span class="math inline" data-latex="u_5 = u_3">\(u_5 = u_3\)</span></p>
+<p>在 <span class="math inline" data-latex="x_4">\(x_4\)</span> 处：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-32(u_3 - u_4) = 1">\[
+-32(u_3 - u_4) = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>内部节点</strong>（<span class="math inline" data-latex="i=1,2,3">\(i=1,2,3\)</span>）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(u_{i-1} - 2u_i + u_{i+1}) = 1">\[
+-16(u_{i-1} - 2u_i + u_{i+1}) = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>矩阵形式</strong>（5个未知数 <span class="math inline" data-latex="u_0, u_1, u_2, u_3, u_4">\(u_0, u_1, u_2, u_3, u_4\)</span>）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+32 &amp; -32 &amp; 0 &amp; 0 &amp; 0 \\
+-16 &amp; 32 &amp; -16 &amp; 0 &amp; 0 \\
+0 &amp; -16 &amp; 32 &amp; -16 &amp; 0 \\
+0 &amp; 0 &amp; -16 &amp; 32 &amp; -16 \\
+0 &amp; 0 &amp; 0 &amp; -32 &amp; 32
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 \\ 1 \\ 1 \\ 1 \\ 1
+\end{bmatrix}">\[
+\begin{bmatrix}
+32 & -32 & 0 & 0 & 0 \\
+-16 & 32 & -16 & 0 & 0 \\
+0 & -16 & 32 & -16 & 0 \\
+0 & 0 & -16 & 32 & -16 \\
+0 & 0 & 0 & -32 & 32
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 \\ 1 \\ 1 \\ 1 \\ 1
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>注意</strong>：Neumann问题解不唯一（相差常数），需要附加条件（如 <span class="math inline" data-latex="u_0 = 0">\(u_0 = 0\)</span>）。</p>
+</details>
+<hr />
+<h4 id="第三类边界条件robin-1">3.3.3 第三类边界条件（Robin）</h4>
+<p><strong>条件</strong>：<span class="math inline" data-latex="\sigma_1 u(a) + \sigma_2 u&#39;(a) = \alpha">\(\sigma_1 u(a) + \sigma_2 u'(a) = \alpha\)</span></p>
+<p><strong>左边界处理</strong>：结合边界条件和差分方程消去虚拟节点</p>
+<p>边界条件：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\sigma_1 u_0 + \sigma_2 \frac{u_1 - u_{-1}}{2h} = \alpha \quad \Rightarrow \quad u_{-1} = u_1 - \frac{2h}{\sigma_2}(\alpha - \sigma_1 u_0)">\[
+\sigma_1 u_0 + \sigma_2 \frac{u_1 - u_{-1}}{2h} = \alpha \quad \Rightarrow \quad u_{-1} = u_1 - \frac{2h}{\sigma_2}(\alpha - \sigma_1 u_0)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处列差分方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(u_{-1} - 2u_0 + u_1) + q_0 u_0 = f_0">\[
+-\frac{1}{h^2}(u_{-1} - 2u_0 + u_1) + q_0 u_0 = f_0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="u_{-1}">\(u_{-1}\)</span> 表达式，消去虚拟节点，得到只含 <span class="math inline" data-latex="u_0, u_1">\(u_0, u_1\)</span> 的方程。</p>
+<details>
+<summary>
+<b>📘 例3：第三类边界条件</b>（点击展开）
+</summary>
+<p><strong>问题</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+-u&#39;&#39; + u = x, \quad x \in (0, 1) \\
+u(0) - u&#39;(0) = 1, \quad u(1) + 2u&#39;(1) = 3
+\end{cases}">\[
+\begin{cases}
+-u'' + u = x, \quad x \in (0, 1) \\
+u(0) - u'(0) = 1, \quad u(1) + 2u'(1) = 3
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>网格剖分</strong>：</p>
+<ul>
+<li>剖分为 <span class="math inline" data-latex="n=4">\(n=4\)</span> 段，步长 <span class="math inline" data-latex="h = 0.25">\(h = 0.25\)</span></li>
+<li>节点：<span class="math inline" data-latex="x_0, x_1, x_2, x_3, x_4">\(x_0, x_1, x_2, x_3, x_4\)</span>（共5个节点）</li>
+<li>待求：<span class="math inline" data-latex="u_0, u_1, u_2, u_3, u_4">\(u_0, u_1, u_2, u_3, u_4\)</span>（5个未知数）</li>
+</ul>
+<p><strong>左边界</strong>（<span class="math inline" data-latex="x_0">\(x_0\)</span>）：</p>
+<p>边界条件：<span class="math inline" data-latex="u_0 - u&#39;(0) = 1">\(u_0 - u'(0) = 1\)</span></p>
+<p>使用中心差分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_0 - \frac{u_1 - u_{-1}}{2h} = 1 \quad \Rightarrow \quad u_{-1} = u_1 - 2h(u_0 - 1)">\[
+u_0 - \frac{u_1 - u_{-1}}{2h} = 1 \quad \Rightarrow \quad u_{-1} = u_1 - 2h(u_0 - 1)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在 <span class="math inline" data-latex="x_0">\(x_0\)</span> 处列差分方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(u_{-1} - 2u_0 + u_1) + u_0 = 0">\[
+-\frac{1}{h^2}(u_{-1} - 2u_0 + u_1) + u_0 = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="u_{-1}">\(u_{-1}\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(u_1 - 2h(u_0-1) - 2u_0 + u_1) + u_0 = 0">\[
+-\frac{1}{h^2}(u_1 - 2h(u_0-1) - 2u_0 + u_1) + u_0 = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(2u_1 - 2u_0 - 2h(u_0-1)) + u_0 = 0">\[
+-\frac{1}{h^2}(2u_1 - 2u_0 - 2h(u_0-1)) + u_0 = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(2u_1 - 2u_0 - 0.5(u_0-1)) + u_0 = 0">\[
+-16(2u_1 - 2u_0 - 0.5(u_0-1)) + u_0 = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-32u_1 + 32u_0 + 8(u_0-1) + u_0 = 0">\[
+-32u_1 + 32u_0 + 8(u_0-1) + u_0 = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="41u_0 - 32u_1 = 8">\[
+41u_0 - 32u_1 = 8
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>内部节点</strong>：</p>
+<p>对于 <span class="math inline" data-latex="i=1,2,3">\(i=1,2,3\)</span>，差分格式为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{1}{h^2}(u_{i-1} - 2u_i + u_{i+1}) + u_i = x_i">\[
+-\frac{1}{h^2}(u_{i-1} - 2u_i + u_{i+1}) + u_i = x_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>即：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(u_{i-1} - 2u_i + u_{i+1}) + u_i = x_i">\[
+-16(u_{i-1} - 2u_i + u_{i+1}) + u_i = x_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16u_{i-1} + 33u_i - 16u_{i+1} = x_i">\[
+-16u_{i-1} + 33u_i - 16u_{i+1} = x_i
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<ul>
+<li><span class="math inline" data-latex="i=1">\(i=1\)</span>：<span class="math inline" data-latex="-16u_0 + 33u_1 - 16u_2 = 0.25">\(-16u_0 + 33u_1 - 16u_2 = 0.25\)</span></li>
+<li><span class="math inline" data-latex="i=2">\(i=2\)</span>：<span class="math inline" data-latex="-16u_1 + 33u_2 - 16u_3 = 0.5">\(-16u_1 + 33u_2 - 16u_3 = 0.5\)</span></li>
+<li><span class="math inline" data-latex="i=3">\(i=3\)</span>：<span class="math inline" data-latex="-16u_2 + 33u_3 - 16u_4 = 0.75">\(-16u_2 + 33u_3 - 16u_4 = 0.75\)</span></li>
+</ul>
+<p><strong>右边界</strong>（<span class="math inline" data-latex="x_4">\(x_4\)</span>）：</p>
+<p>边界条件：<span class="math inline" data-latex="u_4 + 2u&#39;(1) = 3">\(u_4 + 2u'(1) = 3\)</span></p>
+<p>使用中心差分：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_4 + 2\frac{u_5 - u_3}{2h} = 3 \quad \Rightarrow \quad u_5 = u_3 + h(3 - u_4)">\[
+u_4 + 2\frac{u_5 - u_3}{2h} = 3 \quad \Rightarrow \quad u_5 = u_3 + h(3 - u_4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>在 <span class="math inline" data-latex="x_4">\(x_4\)</span> 处列差分方程：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(u_3 - 2u_4 + u_5) + u_4 = 1">\[
+-16(u_3 - 2u_4 + u_5) + u_4 = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="u_5">\(u_5\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(u_3 - 2u_4 + u_3 + 0.25(3-u_4)) + u_4 = 1">\[
+-16(u_3 - 2u_4 + u_3 + 0.25(3-u_4)) + u_4 = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-16(2u_3 - 2u_4 + 0.75 - 0.25u_4) + u_4 = 1">\[
+-16(2u_3 - 2u_4 + 0.75 - 0.25u_4) + u_4 = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-32u_3 + 32u_4 - 12 + 4u_4 + u_4 = 1">\[
+-32u_3 + 32u_4 - 12 + 4u_4 + u_4 = 1
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-32u_3 + 37u_4 = 13">\[
+-32u_3 + 37u_4 = 13
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>矩阵形式</strong>（5个未知数）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+41 &amp; -32 &amp; 0 &amp; 0 &amp; 0 \\
+-16 &amp; 33 &amp; -16 &amp; 0 &amp; 0 \\
+0 &amp; -16 &amp; 33 &amp; -16 &amp; 0 \\
+0 &amp; 0 &amp; -16 &amp; 33 &amp; -16 \\
+0 &amp; 0 &amp; 0 &amp; -32 &amp; 37
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+8 \\ 0.25 \\ 0.5 \\ 0.75 \\ 13
+\end{bmatrix}">\[
+\begin{bmatrix}
+41 & -32 & 0 & 0 & 0 \\
+-16 & 33 & -16 & 0 & 0 \\
+0 & -16 & 33 & -16 & 0 \\
+0 & 0 & -16 & 33 & -16 \\
+0 & 0 & 0 & -32 & 37
+\end{bmatrix}
+\begin{bmatrix}
+u_0 \\ u_1 \\ u_2 \\ u_3 \\ u_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+8 \\ 0.25 \\ 0.5 \\ 0.75 \\ 13
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解</strong>：使用追赶法或直接求解获得数值解。</p>
+</details>
+<hr />
+<h3 id="小结">3.4 小结</h3>
+<table>
+
+<thead>
+<tr class="header">
+<th>对比项</th>
+<th>有限差分法</th>
+<th>积分插值法（半步长）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>推导思路</strong></td>
+<td>直接用差商逼近导数（Taylor展开）</td>
+<td>先积分后离散（积分+插值）</td>
+</tr>
+<tr class="even">
+<td><strong>常系数格式</strong></td>
+<td><span class="math inline" data-latex="-\frac{p_0}{h^2}(u_{i-1} - 2u_i + u_{i+1}) + q_0 u_i = f_i">\(-\frac{p_0}{h^2}(u_{i-1} - 2u_i + u_{i+1}) + q_0 u_i = f_i\)</span></td>
+<td><strong>完全相同</strong> ✅</td>
+</tr>
+<tr class="odd">
+<td><strong>局部截断误差</strong></td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span></td>
+<td><span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span> <strong>相同</strong> ✅</td>
+</tr>
+<tr class="even">
+<td><strong>整体精度</strong></td>
+<td>二阶</td>
+<td>二阶</td>
+</tr>
+<tr class="odd">
+<td><strong>物理意义</strong></td>
+<td>导数逼近</td>
+<td><strong>守恒律</strong>（更符合物理）</td>
+</tr>
+<tr class="even">
+<td><strong>理论基础</strong></td>
+<td>Taylor级数</td>
+<td>积分恒等式</td>
+</tr>
+<tr class="odd">
+<td><strong>推广方向</strong></td>
+<td>高阶紧致格式</td>
+<td>有限元法、有限体积法</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>李荣华, 刘播. 微分方程数值解法（第四版）. 高等教育出版社, 2009.</li>
+<li>陆金甫, 关治. 偏微分方程数值解法（第二版）. 清华大学出版社, 2004.</li>
+<li>Keller, H. B. Numerical Methods for Two-Point Boundary-Value Problems. Dover, 1992.</li>
+<li>Ascher, U. M., Mattheij, R. M., Russell, R. D. Numerical Solution of Boundary Value Problems for Ordinary Differential Equations. SIAM, 1995.</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="print-no-link">#数值计算</a>
+      
+        <a href="/tags/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" class="print-no-link">#偏微分方程</a>
+      
+        <a href="/tags/%E8%BE%B9%E5%80%BC%E9%97%AE%E9%A2%98/" class="print-no-link">#边值问题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>两点边值问题的数值解法</div>
+      <div>https://www.ohnn.cn/2025/12/03/elliptic-bvp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/04/elliptic-pde-five-point-scheme/" title="二维椭圆型方程的五点差分格式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">二维椭圆型方程的五点差分格式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/03/parabolic_pde_schemes/" title="抛物型偏微分方程的数值解法">
+                        <span class="hidden-mobile">抛物型偏微分方程的数值解法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

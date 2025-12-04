@@ -1,0 +1,939 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="不要被”矩阵”这个词吓倒。旋转矩阵其实非常简单，它就是把三个箭头（坐标轴）打包在一起而已。本文将抛弃复杂的数学定义，用最直观的方式告诉你：旋转矩阵是什么，怎么构建它，以及怎么用它来控制机器人。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="旋转矩阵：从零开始的直观操作指南">
+<meta property="og:url" content="https://www.ohnn.cn/2025/11/29/rotation-matrix-guide/index.html">
+<meta property="og:site_name" content="Oh 记事本">
+<meta property="og:description" content="不要被”矩阵”这个词吓倒。旋转矩阵其实非常简单，它就是把三个箭头（坐标轴）打包在一起而已。本文将抛弃复杂的数学定义，用最直观的方式告诉你：旋转矩阵是什么，怎么构建它，以及怎么用它来控制机器人。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-29T05:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T13:44:48.968Z">
+<meta property="article:author" content="Yike">
+<meta property="article:tag" content="Beginner">
+<meta property="article:tag" content="Rotation Matrix">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Yike">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>旋转矩阵：从零开始的直观操作指南 - Oh 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="旋转矩阵：从零开始的直观操作指南"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-29 13:00" pubdate>
+          2025年11月29日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">旋转矩阵：从零开始的直观操作指南</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>不要被”矩阵”这个词吓倒。旋转矩阵其实非常简单，它就是<strong>把三个箭头（坐标轴）打包在一起</strong>而已。本文将抛弃复杂的数学定义，用最直观的方式告诉你：旋转矩阵是什么，怎么构建它，以及怎么用它来控制机器人。</p>
+<span id="more"></span>
+<h2 id="第一步忘掉矩阵想象三个箭头">1. 第一步：忘掉矩阵，想象三个箭头</h2>
+<p>想象你手里拿着一个小飞机模型。 * <strong>机头</strong>指向前方（我们叫它 <strong>X轴</strong>，红色箭头）。 * <strong>左机翼</strong>指向左方（我们叫它 <strong>Y轴</strong>，绿色箭头）。 * <strong>垂直尾翼</strong>指向上方（我们叫它 <strong>Z轴</strong>，蓝色箭头）。</p>
+<p>这三个箭头（X, Y, Z）就构成了一个<strong>坐标系</strong>。 无论你把飞机怎么转，这三个箭头始终跟着飞机动。</p>
+<p><strong>所谓的”姿态”，就是问你：这三个箭头现在分别指向哪里？</strong></p>
+<hr />
+<h2 id="第二步如何构建旋转矩阵">2. 第二步：如何构建旋转矩阵？</h2>
+<p>旋转矩阵 <span class="math inline" data-latex="\boldsymbol{R}">\(\boldsymbol{R}\)</span> 其实就是把这三个箭头的<strong>当前方向</strong>记录下来，拼成一个表格。</p>
+<h3 id="核心操作投影projection">2.1 核心操作：投影（Projection）</h3>
+<p>假设地面上也有一个坐标系（基坐标系，不动）。 你需要回答三个问题： 1. 飞机的 <strong>X轴（机头）</strong> 现在指向哪里？（记下它的坐标 <span class="math inline" data-latex="[r_{11}, r_{21}, r_{31}]^T">\([r_{11}, r_{21}, r_{31}]^T\)</span>） 2. 飞机的 <strong>Y轴（左翼）</strong> 现在指向哪里？（记下它的坐标 <span class="math inline" data-latex="[r_{12}, r_{22}, r_{32}]^T">\([r_{12}, r_{22}, r_{32}]^T\)</span>） 3. 飞机的 <strong>Z轴（尾翼）</strong> 现在指向哪里？（记下它的坐标 <span class="math inline" data-latex="[r_{13}, r_{23}, r_{33}]^T">\([r_{13}, r_{23}, r_{33}]^T\)</span>）</p>
+<h3 id="拼图游戏">2.2 拼图游戏</h3>
+<p>把这三个坐标竖着放，拼在一起，就是旋转矩阵！</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R} = \begin{bmatrix}
+| &amp; | &amp; | \\
+\text{机头X的方向} &amp; \text{左翼Y的方向} &amp; \text{尾翼Z的方向} \\
+| &amp; | &amp; |
+\end{bmatrix}">\[
+\boldsymbol{R} = \begin{bmatrix}
+| & | & | \\
+\text{机头X的方向} & \text{左翼Y的方向} & \text{尾翼Z的方向} \\
+| & | & |
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>这就是旋转矩阵的全部秘密：它的每一列，就是对应轴在基坐标系里的方向。</strong></p>
+<h3 id="举个例子动手试一试">2.3 举个例子（动手试一试）</h3>
+<p><strong>场景</strong>：把飞机平放在桌面上（初始状态）。 * X轴指向正北 <span class="math inline" data-latex="[1, 0, 0]">\([1, 0, 0]\)</span> * Y轴指向正西 <span class="math inline" data-latex="[0, 1, 0]">\([0, 1, 0]\)</span> * Z轴指向正上 <span class="math inline" data-latex="[0, 0, 1]">\([0, 0, 1]\)</span> 此时矩阵是单位矩阵 <span class="math inline" data-latex="\boldsymbol{I}">\(\boldsymbol{I}\)</span>。</p>
+<p><strong>操作</strong>：把飞机<strong>绕Z轴（原地）逆时针转90度</strong>。 * <strong>机头X</strong>：原来指北，现在指西了。坐标变成了 <span class="math inline" data-latex="[0, 1, 0]">\([0, 1, 0]\)</span>。 * <strong>左翼Y</strong>：原来指西，现在指南了。坐标变成了 <span class="math inline" data-latex="[-1, 0, 0]">\([-1, 0, 0]\)</span>。 * <strong>尾翼Z</strong>：没动，还是指上。坐标还是 <span class="math inline" data-latex="[0, 0, 1]">\([0, 0, 1]\)</span>。</p>
+<p><strong>构建矩阵</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R} = \begin{bmatrix}
+0 &amp; -1 &amp; 0 \\
+1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1
+\end{bmatrix}">\[
+\boldsymbol{R} = \begin{bmatrix}
+0 & -1 & 0 \\
+1 & 0 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> 看！不需要背公式，你已经自己写出了旋转矩阵。</p>
+<hr />
+<h2 id="第三步如何使用旋转矩阵">3. 第三步：如何使用旋转矩阵？</h2>
+<p>有了 <span class="math inline" data-latex="\boldsymbol{R}">\(\boldsymbol{R}\)</span>，我们能干什么？</p>
+<h3 id="用法一把本地话翻译成全局话">3.1 用法一：把”本地话”翻译成”全局话”</h3>
+<p>假设飞机上坐着一只蚂蚁，它说：“我要往<strong>我前方</strong>走1米”。 * “我前方”是飞机坐标系的 X 轴，即向量 <span class="math inline" data-latex="\boldsymbol{v}_{body} = [1, 0, 0]^T">\(\boldsymbol{v}_{body} = [1, 0, 0]^T\)</span>。</p>
+<p>我们在地面上，想知道它到底往<strong>东南西北</strong>哪个方向走了？ 很简单，用矩阵乘法：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{v}_{global} = \boldsymbol{R} \cdot \boldsymbol{v}_{body}">\[
+\boldsymbol{v}_{global} = \boldsymbol{R} \cdot \boldsymbol{v}_{body}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>直观理解</strong>： * <span class="math inline" data-latex="\boldsymbol{v}_{body}">\(\boldsymbol{v}_{body}\)</span> 说：“我要 1 份 X轴”。 * <span class="math inline" data-latex="\boldsymbol{R}">\(\boldsymbol{R}\)</span> 说：“好的，现在的 X轴 指向西边”。 * 结果：蚂蚁往西边走了 1 米。</p>
+<h3 id="用法二控制机器人lookat-模式">3.2 用法二：控制机器人（LookAt 模式）</h3>
+<p>这是最实用的功能。假设你想让机器人的末端（Z轴）<strong>指向某个目标点</strong>。</p>
+<p><strong>操作步骤（Recipe）</strong>：</p>
+<ol type="1">
+<li><p><strong>算Z轴</strong>：算出从机器人到目标的向量，归一化。这就是你想要的 <strong>第三列</strong>。 <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{z}_{new} = \text{normalize}(\text{Target} - \text{Current})">\[ \boldsymbol{z}_{new} = \text{normalize}(\text{Target} - \text{Current}) \]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p></li>
+<li><p><strong>算X轴</strong>：规定一个”参考方向”（比如大致向前），用叉乘算出垂直的X轴。这就是 <strong>第一列</strong>。 <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{x}_{new} = \text{normalize}(\text{Ref} \times \boldsymbol{z}_{new})">\[ \boldsymbol{x}_{new} = \text{normalize}(\text{Ref} \times \boldsymbol{z}_{new}) \]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p></li>
+<li><p><strong>算Y轴</strong>：Z和X都有了，Y轴就是它们的叉乘。这就是 <strong>第二列</strong>。 <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{y}_{new} = \boldsymbol{z}_{new} \times \boldsymbol{x}_{new}">\[ \boldsymbol{y}_{new} = \boldsymbol{z}_{new} \times \boldsymbol{x}_{new} \]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p></li>
+<li><p><strong>拼矩阵</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}_{target} = [\boldsymbol{x}_{new}, \boldsymbol{y}_{new}, \boldsymbol{z}_{new}]">\[ \boldsymbol{R}_{target} = [\boldsymbol{x}_{new}, \boldsymbol{y}_{new}, \boldsymbol{z}_{new}] \]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p></li>
+</ol>
+<p>现在你得到了期望的姿态矩阵 <span class="math inline" data-latex="\boldsymbol{R}_{target}">\(\boldsymbol{R}_{target}\)</span>。如果控制器需要欧拉角，就用公式把 <span class="math inline" data-latex="\boldsymbol{R}_{target}">\(\boldsymbol{R}_{target}\)</span> 换算成 <span class="math inline" data-latex="\alpha, \beta, \gamma">\(\alpha, \beta, \gamma\)</span> 即可。</p>
+<hr />
+<h2 id="进阶旋转顺序的秘密-the-order-of-rotation">4. 进阶：旋转顺序的秘密 (The Order of Rotation)</h2>
+<p>“先转X还是先转Z？” “矩阵是从左往右乘还是从右往左乘？” 这是最让人头晕的地方。其实规则只有两条：</p>
+<h3 id="绕动轴旋转-intrinsic-to-从左向右乘">4.1 绕”动轴”旋转 (Intrinsic) <span class="math inline" data-latex="\to">\(\to\)</span> 从左向右乘</h3>
+<p><strong>场景</strong>：大多数时候我们说的欧拉角（如 Z-Y-X 顺序）。 * 第1步：绕<strong>基坐标系</strong>的 Z 轴转 <span class="math inline" data-latex="\psi">\(\psi\)</span> (<span class="math inline" data-latex="\boldsymbol{R}_z">\(\boldsymbol{R}_z\)</span>)。 * 第2步：绕<strong>转完之后</strong>的 <strong>新Y轴</strong> 转 <span class="math inline" data-latex="\theta">\(\theta\)</span> (<span class="math inline" data-latex="\boldsymbol{R}_y">\(\boldsymbol{R}_y\)</span>)。 * 第3步：绕<strong>再转完之后</strong>的 <strong>新X轴</strong> 转 <span class="math inline" data-latex="\phi">\(\phi\)</span> (<span class="math inline" data-latex="\boldsymbol{R}_x">\(\boldsymbol{R}_x\)</span>)。</p>
+<p><strong>公式</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}_{total} = \boldsymbol{R}_z(\psi) \cdot \boldsymbol{R}_y(\theta) \cdot \boldsymbol{R}_x(\phi)">\[
+\boldsymbol{R}_{total} = \boldsymbol{R}_z(\psi) \cdot \boldsymbol{R}_y(\theta) \cdot \boldsymbol{R}_x(\phi)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <strong>记忆</strong>：因为是”顺着走”，每一步都是在基础之上继续叠加，所以矩阵<strong>顺着写</strong>（从左向右）。</p>
+<h3 id="绕定轴旋转-extrinsic-to-从右向左乘">4.2 绕”定轴”旋转 (Extrinsic) <span class="math inline" data-latex="\to">\(\to\)</span> 从右向左乘</h3>
+<p><strong>场景</strong>：如果你每次都非要绕<strong>不动的基坐标系</strong>旋转。 * 第1步：绕<strong>基坐标系</strong>的 Z 轴转 <span class="math inline" data-latex="\psi">\(\psi\)</span> (<span class="math inline" data-latex="\boldsymbol{R}_z">\(\boldsymbol{R}_z\)</span>)。 * 第2步：绕<strong>基坐标系</strong>的 Y 轴转 <span class="math inline" data-latex="\theta">\(\theta\)</span> (<span class="math inline" data-latex="\boldsymbol{R}_y">\(\boldsymbol{R}_y\)</span>)。 * 第3步：绕<strong>基坐标系</strong>的 X 轴转 <span class="math inline" data-latex="\phi">\(\phi\)</span> (<span class="math inline" data-latex="\boldsymbol{R}_x">\(\boldsymbol{R}_x\)</span>)。</p>
+<p><strong>公式</strong>： <div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boldsymbol{R}_{total} = \boldsymbol{R}_x(\phi) \cdot \boldsymbol{R}_y(\theta) \cdot \boldsymbol{R}_z(\psi)">\[
+\boldsymbol{R}_{total} = \boldsymbol{R}_x(\phi) \cdot \boldsymbol{R}_y(\theta) \cdot \boldsymbol{R}_z(\psi)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div> <strong>记忆</strong>：这就像数学里的函数复合 <span class="math inline" data-latex="f(g(h(x)))">\(f(g(h(x)))\)</span>，后发生的写在左边。</p>
+<blockquote>
+<p><strong>实战经验</strong>： 在航空航天和机器人领域，<strong>99%的情况都是用第一种（绕动轴 Z-Y-X）</strong>。 所以你只需要记住：<strong>先Yaw，再Pitch，最后Roll <span class="math inline" data-latex="\to">\(\to\)</span> <span class="math inline" data-latex="\boldsymbol{R}_z \cdot \boldsymbol{R}_y \cdot \boldsymbol{R}_x">\(\boldsymbol{R}_z \cdot \boldsymbol{R}_y \cdot \boldsymbol{R}_x\)</span></strong>。</p>
+</blockquote>
+<hr />
+<h2 id="总结操作口诀">5. 总结：操作口诀</h2>
+<ol type="1">
+<li><strong>矩阵就是三个轴</strong>：列向量 = X、Y、Z轴在基坐标系的投影。</li>
+<li><strong>左乘R</strong>：把”本地”变成”全局”。</li>
+<li><strong>左乘R转置</strong>：把”全局”变成”本地”。</li>
+<li><strong>想指向哪里</strong>：直接构造Z轴，算出X、Y轴，拼成矩阵。</li>
+</ol>
+<p>希望这个指南能让你觉得旋转矩阵不再神秘！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="category-chain-item">机器人</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA/%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" class="category-chain-item">基础教程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/Rotation-Matrix/" class="print-no-link">#Rotation Matrix</a>
+      
+        <a href="/tags/Tutorial/" class="print-no-link">#Tutorial</a>
+      
+        <a href="/tags/Beginner/" class="print-no-link">#Beginner</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>旋转矩阵：从零开始的直观操作指南</div>
+      <div>https://www.ohnn.cn/2025/11/29/rotation-matrix-guide/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/29/angular-velocity-transformation/" title="角速度与欧拉角导数：一架飞机的故事">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">角速度与欧拉角导数：一架飞机的故事</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/28/cdpr-formulas/" title="柔索并联机器人基本公式推导">
+                        <span class="hidden-mobile">柔索并联机器人基本公式推导</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -8,7 +8,7 @@
   /* 字体系统 - 恢复原来的配置 */
   --font-family-sans-serif: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-family-serif: 'Merriweather', Georgia, "Times New Roman", serif;
-  
+
   /* 卡片式配色 - 浅色模式 */
   --body-bg-color: #f8fafc;
   --board-bg-color: #ffffff;
@@ -16,23 +16,23 @@
   --sec-text-color: #64748b;
   --post-text-color: #334155;
   --post-heading-color: #0f172a;
-  
+
   /* 现代蓝色主题 */
   --post-link-color: #2563eb;
   --link-hover-color: #1d4ed8;
   --link-hover-bg-color: #f1f5f9;
-  
+
   /* 卡片与边框 */
   --line-color: #e2e8f0;
   --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --card-radius: 0.75rem;
-  
+
   /* 导航与强调色 */
   --navbar-bg-color: #1e40af;
   --navbar-text-color: #f8fafc;
   --subtitle-color: #f8fafc;
-  
+
   /* 代码高亮背景 */
   --highlight-bg-color: #f8fafc;
   --inlinecode-bg-color: rgba(100, 116, 139, 0.1);
@@ -46,15 +46,15 @@
   --sec-text-color: #94a3b8;
   --post-text-color: #cbd5e1;
   --post-heading-color: #f1f5f9;
-  
+
   --post-link-color: #3b82f6;
   --link-hover-color: #60a5fa;
   --link-hover-bg-color: #334155;
-  
+
   --line-color: #334155;
   --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  
+
   --navbar-bg-color: #0f172a;
   --highlight-bg-color: #1e293b;
   --inlinecode-bg-color: rgba(148, 163, 184, 0.2);
@@ -128,10 +128,10 @@ body {
 
 /* 图片卡片化 */
 .index-img img,
-.markdown-body p > img,
-.markdown-body p > a > img,
-.markdown-body figure > img,
-.markdown-body figure > a > img {
+.markdown-body p>img,
+.markdown-body p>a>img,
+.markdown-body figure>img,
+.markdown-body figure>a>img {
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   transition: all 0.3s ease;
@@ -302,7 +302,7 @@ html[data-user-color-scheme="light"] figure.highlight figcaption {
   background-color: var(--highlight-bg-color);
   border-left: 4px solid var(--post-link-color);
   border-radius: 0 var(--card-radius) var(--card-radius) 0;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   margin: 1.5rem 0;
   box-shadow: var(--card-shadow);
 }
@@ -427,16 +427,16 @@ html[data-user-color-scheme="light"] figure.highlight figcaption {
     margin-right: 1rem;
     border-radius: 0.5rem;
   }
-  
+
   .index-card {
     padding: 1rem;
     border-radius: 0.5rem;
   }
-  
+
   .markdown-body {
     font-size: 1rem;
   }
-  
+
   .post-metas {
     flex-direction: column;
     align-items: flex-start;
@@ -460,14 +460,16 @@ a:hover {
 }
 
 /* 按钮统一样式 */
-.btn, button {
+.btn,
+button {
   border-radius: 0.5rem;
   transition: all 0.3s ease;
   font-weight: 500;
   box-shadow: var(--card-shadow);
 }
 
-.btn:hover, button:hover {
+.btn:hover,
+button:hover {
   box-shadow: var(--card-shadow-hover);
   transform: translateY(-1px);
 }
@@ -567,16 +569,211 @@ a:hover {
   .tag-list {
     gap: 0.75rem;
   }
-  
+
   .tag-list-item {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   .tag-list-title {
     font-size: 1.5rem;
   }
-  
+
+  .author-tags-section {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+}
+
+/* ========== 数学公式复制功能样式 ========== */
+
+/* 数学公式包装器 */
+.math-formula-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.math-formula-wrapper:hover .math-copy-btn {
+  opacity: 1;
+}
+
+/* 块级公式可显示工具提示 */
+/* 已移除 hover 背景色效果，避免布局跳动 */
+/* 如果需要 hover 效果，可以使用以下代码：
+.math.display[data-latex] {
+  transition: background-color 0.2s ease;
+  padding: 0.25rem;
+  margin: -0.25rem;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+}
+
+.math.display[data-latex]:hover {
+  background-color: var(--link-hover-bg-color);
+}
+*/
+
+/* 复制按钮 */
+.math-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--board-bg-color);
+  border: 1px solid var(--line-color);
+  border-radius: 0.375rem;
+  padding: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: var(--sec-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--card-shadow);
+  z-index: 10;
+}
+
+.math-copy-btn:hover {
+  background: var(--post-link-color);
+  color: white;
+  border-color: var(--post-link-color);
+  transform: scale(1.1);
+}
+
+.math-copy-btn:active {
+  transform: scale(0.95);
+}
+
+.math-copy-btn svg {
+  display: block;
+}
+
+/* 数学公式工具提示（行内和块级共用） */
+.math-tooltip {
+  position: fixed;
+  background: var(--board-bg-color);
+  border: 1px solid var(--line-color);
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  box-shadow: var(--card-shadow-hover);
+  z-index: 1000;
+  max-width: 600px;
+  max-height: 400px;
+  overflow: auto;
+  word-break: break-all;
+  transform: translateY(-1px);
+}
+
+/* 标签页面美化 - 突出作者标签 */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.tag-list-item {
+  background: var(--board-bg-color);
+  border: 2px solid var(--line-color);
+  border-radius: var(--card-radius);
+  padding: 0.75rem 1.5rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--post-link-color);
+  color: var(--post-link-color);
+}
+
+/* 作者标签特殊样式 */
+.tag-list-item[href*="YIKE"],
+.tag-list-item[href*="张三"],
+.tag-list-item[href*="李四"] {
+  background: linear-gradient(135deg, var(--post-link-color), #3b82f6);
+  color: white;
+  border-color: var(--post-link-color);
+  position: relative;
+}
+
+.tag-list-item[href*="YIKE"]:before,
+.tag-list-item[href*="张三"]:before,
+.tag-list-item[href*="李四"]:before {
+  content: "👤 ";
+  margin-right: 0.5rem;
+  font-size: 1.1em;
+}
+
+.tag-list-item[href*="YIKE"]:hover,
+.tag-list-item[href*="张三"]:hover,
+.tag-list-item[href*="李四"]:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  transform: translateY(-3px) scale(1.05);
+  color: white;
+}
+
+/* 标签页面标题美化 */
+.tag-list-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--post-heading-color);
+  margin-bottom: 1rem;
+  border-bottom: 3px solid var(--post-link-color);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* 标签分类显示 */
+.author-tags-section {
+  background: var(--board-bg-color);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: var(--card-shadow);
+  border-left: 4px solid var(--post-link-color);
+}
+
+.author-tags-section h3 {
+  color: var(--post-link-color);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.author-tags-section h3:before {
+  content: "👥";
+  font-size: 1.2em;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .tag-list {
+    gap: 0.75rem;
+  }
+
+  .tag-list-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .tag-list-title {
+    font-size: 1.5rem;
+  }
+
   .author-tags-section {
     padding: 1.5rem;
     margin: 1rem 0;
@@ -677,4 +874,97 @@ a:hover {
 
 .math.inline[data-latex]:hover {
   background-color: var(--link-hover-bg-color);
+}
+
+/* ========== 折叠块样式美化 ========== */
+
+/* 折叠块容器 - 卡片样式 */
+.markdown-body details {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #3b82f6;
+  border-radius: var(--card-radius);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.markdown-body details:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* 暗色模式折叠块 */
+[data-user-color-scheme="dark"] .markdown-body details {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%);
+  border-color: #3b82f6;
+}
+
+/* 折叠块标题 */
+.markdown-body details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #1e40af;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0;
+  margin: 0 0 0.15rem 0;
+  user-select: none;
+  transition: color 0.2s ease;
+  list-style: none;
+}
+
+[data-user-color-scheme="dark"] .markdown-body details summary {
+  color: #60a5fa;
+}
+
+/* 自定义展开/折叠图标 */
+.markdown-body details summary::before {
+  content: "▶";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.3s ease;
+  color: #3b82f6;
+  font-size: 0.8em;
+}
+
+.markdown-body details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.markdown-body details summary:hover {
+  color: #1e3a8a;
+}
+
+[data-user-color-scheme="dark"] .markdown-body details summary:hover {
+  color: #93c5fd;
+}
+
+/* 折叠块内容区域 */
+.markdown-body details>*:not(summary) {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 折叠块内的代码块适配 */
+.markdown-body details .markdown-body pre,
+.markdown-body details figure.highlight {
+  margin-top: 1rem;
+}
+
+/* 移除Webkit默认的summary三角形 */
+.markdown-body details summary::-webkit-details-marker {
+  display: none;
 }

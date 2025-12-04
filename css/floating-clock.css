@@ -1,0 +1,389 @@
+/* 浮动时钟样式 - Floating Clock Styles */
+
+/* 亮色模式 - 白色卡片 */
+#floating-clock {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #2c3e50;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+        0 1px 3px rgba(0, 0, 0, 0.06);
+    z-index: 9999;
+    cursor: move;
+    user-select: none;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s ease,
+        opacity 0.4s ease;
+    animation: slideInLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* 边缘收起状态 */
+#floating-clock.collapsed-left {
+    transform: translateX(-90%);
+    opacity: 0.6;
+}
+
+#floating-clock.collapsed-right {
+    transform: translateX(90%);
+    opacity: 0.6;
+}
+
+#floating-clock.collapsed-top {
+    transform: translateY(-90%);
+    opacity: 0.6;
+}
+
+#floating-clock.collapsed-bottom {
+    transform: translateY(90%);
+    opacity: 0.6;
+}
+
+/* 悬停时完全展开 */
+#floating-clock.collapsed-left:hover,
+#floating-clock.collapsed-right:hover,
+#floating-clock.collapsed-top:hover,
+#floating-clock.collapsed-bottom:hover {
+    transform: translate(0, 0);
+    opacity: 1;
+}
+
+#floating-clock:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+        0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+#floating-clock.dragging {
+    cursor: grabbing;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 暗色模式 - 深灰卡片 */
+[data-user-color-scheme="dark"] #floating-clock {
+    background: rgba(30, 33, 40, 0.95);
+    color: #e8eaed;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-user-color-scheme="dark"] #floating-clock:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+[data-user-color-scheme="dark"] #floating-clock.dragging {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 时钟内容布局 */
+.clock-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 模拟时钟 - 亮色模式 */
+.analog-clock {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    position: relative;
+    flex-shrink: 0;
+}
+
+[data-user-color-scheme="dark"] .analog-clock {
+    background: #1a1d23;
+    border: 2px solid #3a3f4b;
+}
+
+/* 时钟中心点 */
+.analog-clock::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #2c3e50;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+[data-user-color-scheme="dark"] .analog-clock::after {
+    background: #e8eaed;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 时钟刻度 */
+.clock-mark {
+    position: absolute;
+    width: 1px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.25);
+    left: 50%;
+    top: 2px;
+    transform-origin: center 23px;
+}
+
+[data-user-color-scheme="dark"] .clock-mark {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.clock-mark:nth-child(1) {
+    transform: translateX(-50%) rotate(0deg);
+    height: 6px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.clock-mark:nth-child(2) {
+    transform: translateX(-50%) rotate(30deg);
+}
+
+.clock-mark:nth-child(3) {
+    transform: translateX(-50%) rotate(60deg);
+}
+
+.clock-mark:nth-child(4) {
+    transform: translateX(-50%) rotate(90deg);
+    height: 6px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.clock-mark:nth-child(5) {
+    transform: translateX(-50%) rotate(120deg);
+}
+
+.clock-mark:nth-child(6) {
+    transform: translateX(-50%) rotate(150deg);
+}
+
+.clock-mark:nth-child(7) {
+    transform: translateX(-50%) rotate(180deg);
+    height: 6px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.clock-mark:nth-child(8) {
+    transform: translateX(-50%) rotate(210deg);
+}
+
+.clock-mark:nth-child(9) {
+    transform: translateX(-50%) rotate(240deg);
+}
+
+.clock-mark:nth-child(10) {
+    transform: translateX(-50%) rotate(270deg);
+    height: 6px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.clock-mark:nth-child(11) {
+    transform: translateX(-50%) rotate(300deg);
+}
+
+.clock-mark:nth-child(12) {
+    transform: translateX(-50%) rotate(330deg);
+}
+
+[data-user-color-scheme="dark"] .clock-mark:nth-child(1),
+[data-user-color-scheme="dark"] .clock-mark:nth-child(4),
+[data-user-color-scheme="dark"] .clock-mark:nth-child(7),
+[data-user-color-scheme="dark"] .clock-mark:nth-child(10) {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* 时针 */
+.hour-hand {
+    position: absolute;
+    width: 3px;
+    height: 14px;
+    background: #2c3e50;
+    border-radius: 2px;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: center bottom;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+[data-user-color-scheme="dark"] .hour-hand {
+    background: #e8eaed;
+}
+
+/* 分针 */
+.minute-hand {
+    position: absolute;
+    width: 2.5px;
+    height: 18px;
+    background: #34495e;
+    border-radius: 2px;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: center bottom;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+[data-user-color-scheme="dark"] .minute-hand {
+    background: #d1d3d6;
+}
+
+/* 秒针 - 红色强调 */
+.second-hand {
+    position: absolute;
+    width: 1.5px;
+    height: 20px;
+    background: #e74c3c;
+    border-radius: 2px;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: center bottom;
+    transform: translateX(-50%);
+    z-index: 3;
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-user-color-scheme="dark"] .second-hand {
+    background: #ff6b6b;
+}
+
+/* 数字时间容器 */
+.digital-time {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* 时间显示 */
+.time-display {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+    color: #1a202c;
+}
+
+[data-user-color-scheme="dark"] .time-display {
+    color: #e8eaed;
+}
+
+/* 日期和星期行 */
+.date-weekday-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #5a6c7d;
+}
+
+[data-user-color-scheme="dark"] .date-weekday-row {
+    color: #9aa0a6;
+}
+
+/* 日期显示 */
+.date-display {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* 星期显示 */
+.weekday-display {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+[data-user-color-scheme="dark"] .weekday-display {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* 淡入动画 */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    #floating-clock {
+        bottom: 15px;
+        left: 15px;
+        padding: 12px 16px;
+    }
+
+    .analog-clock {
+        width: 45px;
+        height: 45px;
+    }
+
+    .time-display {
+        font-size: 20px;
+        letter-spacing: 1.5px;
+    }
+
+    .date-weekday-row {
+        font-size: 10px;
+    }
+}
+
+/* 小屏幕优化 */
+@media (max-width: 480px) {
+    #floating-clock {
+        bottom: 12px;
+        left: 12px;
+        padding: 10px 14px;
+    }
+
+    .analog-clock {
+        width: 40px;
+        height: 40px;
+    }
+
+    .clock-mark {
+        transform-origin: center 18px;
+    }
+
+    .hour-hand {
+        height: 12px;
+    }
+
+    .minute-hand {
+        height: 15px;
+    }
+
+    .second-hand {
+        height: 17px;
+    }
+
+    .time-display {
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+
+    .date-weekday-row {
+        font-size: 9px;
+        gap: 6px;
+    }
+}

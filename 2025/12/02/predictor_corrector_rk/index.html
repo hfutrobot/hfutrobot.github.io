@@ -1,0 +1,1514 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yike">
+  <meta name="keywords" content="技术分享,学习笔记,编程,开发">
+  
+    <meta name="description" content="预估校正方法通过结合显式和隐式方法的优点，为求解常微分方程提供了高效且精确的途径。本文将详细推导预估校正方法的基本思想，并自然过渡到经典的Runge-Kutta方法体系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常微分方程求解之预估校正与Runge-Kutta方法">
+<meta property="og:url" content="https://www.ohnn.cn/2025/12/02/predictor_corrector_rk/index.html">
+<meta property="og:site_name" content="Oh 记事本">
+<meta property="og:description" content="预估校正方法通过结合显式和隐式方法的优点，为求解常微分方程提供了高效且精确的途径。本文将详细推导预估校正方法的基本思想，并自然过渡到经典的Runge-Kutta方法体系。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-02T13:50:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T13:44:48.968Z">
+<meta property="article:author" content="Yike">
+<meta property="article:tag" content="Yike">
+<meta property="article:tag" content="常微分方程">
+<meta property="article:tag" content="数值计算">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>常微分方程求解之预估校正与Runge-Kutta方法 - Oh 记事本</title>
+
+  <link  rel="stylesheet" href="/js/vendor/bootstrap/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="/js/vendor/github-markdown/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="/js/vendor/fancybox/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/floating-clock.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Oh 记事本</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/latex-editor/" target="_self">
+                <i class="iconfont icon-pen"></i>
+                <span>LaTeX</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner-post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="常微分方程求解之预估校正与Runge-Kutta方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Yike
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-02 21:50" pubdate>
+          2025年12月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">常微分方程求解之预估校正与Runge-Kutta方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>预估校正方法通过结合显式和隐式方法的优点，为求解常微分方程提供了高效且精确的途径。本文将详细推导预估校正方法的基本思想，并自然过渡到经典的Runge-Kutta方法体系。</p>
+<span id="more"></span>
+<h2 id="引言与动机">1. 引言与动机</h2>
+<h3 id="核心矛盾">1.1 核心矛盾</h3>
+<p><strong>显式方法 vs 隐式方法</strong>：</p>
+<ul>
+<li><strong>显式方法</strong>：易于计算，但精度低、稳定性差</li>
+<li><strong>隐式方法</strong>：精度高、稳定性好，但每步都需要求解非线性方程</li>
+</ul>
+<p><strong>核心问题</strong>：能否结合两者优点，既避免隐式求解的复杂性，又提高显式方法的精度？</p>
+<h3 id="预估校正的基本思想">1.2 预估校正的基本思想</h3>
+<p><strong>答案</strong>：<strong>预估-校正 (Predictor-Corrector, P-C)</strong> 策略</p>
+<ol type="1">
+<li><strong>预估 (Predict)</strong>：用简单的显式方法得到初步估计值 <span class="math inline" data-latex="y_{n+1}^{(0)}">\(y_{n+1}^{(0)}\)</span></li>
+<li><strong>校正 (Correct)</strong>：用该估计值代入隐式公式右端，计算校正值 <span class="math inline" data-latex="y_{n+1}^{(1)}">\(y_{n+1}^{(1)}\)</span></li>
+</ol>
+<p>这样就避免了求解非线性方程，同时提高了精度！</p>
+<hr />
+<h2 id="预估-校正方法的构造">2. 预估-校正方法的构造</h2>
+<h3 id="euler-梯形预估校正法">2.1 Euler-梯形预估校正法</h3>
+<p>这是最经典的预估校正组合。</p>
+<h4 id="预估步-predictor-显式euler法"><strong>预估步 (Predictor)</strong> —— 显式Euler法</h4>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1}^{(0)} = y_n + h f(x_n, y_n)">\[
+y_{n+1}^{(0)} = y_n + h f(x_n, y_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>这一步给出了 <span class="math inline" data-latex="y_{n+1}">\(y_{n+1}\)</span> 的粗略估计。</p>
+<h4 id="校正步-corrector-梯形法"><strong>校正步 (Corrector)</strong> —— 梯形法</h4>
+<p>用预估值 <span class="math inline" data-latex="y_{n+1}^{(0)}">\(y_{n+1}^{(0)}\)</span> 代入梯形公式的右端：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + \frac{h}{2}\left[ f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)}) \right]">\[
+y_{n+1} = y_n + \frac{h}{2}\left[ f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)}) \right]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>关键观察</strong>：现在右端全部都是已知量！</p>
+<hr />
+<h2 id="误差分析">3. 误差分析</h2>
+<h3 id="局部截断误差">3.1 局部截断误差</h3>
+<p><strong>定理 3.1</strong><br />
+Euler-梯形预估校正法的局部截断误差为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_{n+1} = -\frac{5h^3}{12} y&#39;&#39;&#39;(\xi) + O(h^4), \quad \xi \in (x_n, x_{n+1})">\[
+R_{n+1} = -\frac{5h^3}{12} y'''(\xi) + O(h^4), \quad \xi \in (x_n, x_{n+1})
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>即 <span class="math inline" data-latex="R_{n+1} = O(h^3)">\(R_{n+1} = O(h^3)\)</span>，因此该方法具有 <strong>2阶精度</strong>。</p>
+<p><strong>证明</strong>：</p>
+<p><strong>符号约定</strong>：设 <span class="math inline" data-latex="y_n = y(x_n)">\(y_n = y(x_n)\)</span>（假设第 <span class="math inline" data-latex="n">\(n\)</span> 步是精确的），则对精确解 <span class="math inline" data-latex="y(x)">\(y(x)\)</span> 在 <span class="math inline" data-latex="x_n">\(x_n\)</span> 处Taylor展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y(x_n) + h y&#39;(x_n) + \frac{h^2}{2} y&#39;&#39;(x_n) + \frac{h^3}{6} y&#39;&#39;&#39;(x_n) + O(h^4)">\[
+y(x_{n+1}) = y(x_n) + h y'(x_n) + \frac{h^2}{2} y''(x_n) + \frac{h^3}{6} y'''(x_n) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>预估步</strong>（显式Euler）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1}^{(0)} = y_n + h f(x_n, y_n) = y(x_n) + h y&#39;(x_n)">\[
+y_{n+1}^{(0)} = y_n + h f(x_n, y_n) = y(x_n) + h y'(x_n)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>与精确解比较：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) - y_{n+1}^{(0)} = \frac{h^2}{2} y&#39;&#39;(x_n) + \frac{h^3}{6} y&#39;&#39;&#39;(x_n) + O(h^4)">\[
+y(x_{n+1}) - y_{n+1}^{(0)} = \frac{h^2}{2} y''(x_n) + \frac{h^3}{6} y'''(x_n) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>校正步</strong>（梯形法）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)})]">\[
+y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)})]
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>对 <span class="math inline" data-latex="f(x_{n+1}, y_{n+1}^{(0)})">\(f(x_{n+1}, y_{n+1}^{(0)})\)</span> 进行Taylor展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="f(x_{n+1}, y_{n+1}^{(0)}) = f(x_{n+1}, y(x_{n+1})) - f_y \cdot [y(x_{n+1}) - y_{n+1}^{(0)}] + O(h^4)">\[
+f(x_{n+1}, y_{n+1}^{(0)}) = f(x_{n+1}, y(x_{n+1})) - f_y \cdot [y(x_{n+1}) - y_{n+1}^{(0)}] + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<details style="background-color: #f0f8ff; padding: 15px; border-left: 4px solid #4a90e2; margin: 10px 0;">
+<summary style="cursor: pointer; font-weight: bold; color: #2c5aa0;">
+💡 为什么误差项是 O(h⁴)？（点击展开）
+</summary>
+<div style="margin-top: 10px;">
+<p>对二元函数 <span class="math inline" data-latex="f(x, y)">\(f(x, y)\)</span> 关于 <span class="math inline" data-latex="y">\(y\)</span> 在点 <span class="math inline" data-latex="(x_{n+1}, y(x_{n+1}))">\((x_{n+1}, y(x_{n+1}))\)</span> 处进行Taylor展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="f(x_{n+1}, y_{n+1}^{(0)}) = f(x_{n+1}, y(x_{n+1})) + f_y \cdot [y_{n+1}^{(0)} - y(x_{n+1})] + \frac{1}{2}f_{yy} \cdot [y_{n+1}^{(0)} - y(x_{n+1})]^2 + \cdots">\[
+f(x_{n+1}, y_{n+1}^{(0)}) = f(x_{n+1}, y(x_{n+1})) + f_y \cdot [y_{n+1}^{(0)} - y(x_{n+1})] + \frac{1}{2}f_{yy} \cdot [y_{n+1}^{(0)} - y(x_{n+1})]^2 + \cdots
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>由于 <span class="math inline" data-latex="y_{n+1}^{(0)}">\(y_{n+1}^{(0)}\)</span> 是Euler法预估值，其误差为 <span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) - y_{n+1}^{(0)} = \frac{h^2}{2}y&#39;&#39;(x_n) + O(h^3)">\[
+y(x_{n+1}) - y_{n+1}^{(0)} = \frac{h^2}{2}y''(x_n) + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此：</p>
+<ul>
+<li><strong>一阶项</strong>：<span class="math inline" data-latex="f_y \cdot O(h^2) = O(h^2)">\(f_y \cdot O(h^2) = O(h^2)\)</span></li>
+<li><strong>二阶项</strong>：<span class="math inline" data-latex="\frac{1}{2}f_{yy} \cdot [O(h^2)]^2 = O(h^4)">\(\frac{1}{2}f_{yy} \cdot [O(h^2)]^2 = O(h^4)\)</span></li>
+</ul>
+<p>即高阶项从 <span class="math inline" data-latex="O(h^4)">\(O(h^4)\)</span> 开始，故可合并写成上述形式。</p>
+</div>
+</details>
+<p>代入预估误差：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="f(x_{n+1}, y_{n+1}^{(0)}) = y&#39;(x_{n+1}) - f_y \cdot \left(\frac{h^2}{2} y&#39;&#39;(x_n) + O(h^3)\right) + O(h^4)">\[
+f(x_{n+1}, y_{n+1}^{(0)}) = y'(x_{n+1}) - f_y \cdot \left(\frac{h^2}{2} y''(x_n) + O(h^3)\right) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= y&#39;(x_{n+1}) - \frac{h^2}{2} f_y y&#39;&#39;(x_n) + O(h^3)">\[
+= y'(x_{n+1}) - \frac{h^2}{2} f_y y''(x_n) + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入校正公式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y(x_n) + \frac{h}{2}\left[ y&#39;(x_n) + y&#39;(x_{n+1}) - \frac{h^2}{2} f_y y&#39;&#39;(x_n) \right] + O(h^4)">\[
+y_{n+1} = y(x_n) + \frac{h}{2}\left[ y'(x_n) + y'(x_{n+1}) - \frac{h^2}{2} f_y y''(x_n) \right] + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用 <span class="math inline" data-latex="y&#39;(x_{n+1}) = y&#39;(x_n) + h y&#39;&#39;(x_n) + \frac{h^2}{2} y&#39;&#39;&#39;(x_n) + O(h^3)">\(y'(x_{n+1}) = y'(x_n) + h y''(x_n) + \frac{h^2}{2} y'''(x_n) + O(h^3)\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y(x_n) + h y&#39;(x_n) + \frac{h^2}{2} y&#39;&#39;(x_n) + \frac{h^3}{4} y&#39;&#39;&#39;(x_n) - \frac{h^3}{4} f_y y&#39;&#39;(x_n) + O(h^4)">\[
+y_{n+1} = y(x_n) + h y'(x_n) + \frac{h^2}{2} y''(x_n) + \frac{h^3}{4} y'''(x_n) - \frac{h^3}{4} f_y y''(x_n) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>而精确解在 <span class="math inline" data-latex="x_n">\(x_n\)</span> 处的标准Taylor展开为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y(x_n) + h y&#39;(x_n) + \frac{h^2}{2} y&#39;&#39;(x_n) + \frac{h^3}{6} y&#39;&#39;&#39;(x_n) + O(h^4)">\[
+y(x_{n+1}) = y(x_n) + h y'(x_n) + \frac{h^2}{2} y''(x_n) + \frac{h^3}{6} y'''(x_n) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相减得到局部截断误差：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_{n+1} = y(x_{n+1}) - y_{n+1} = \left(\frac{1}{6} - \frac{1}{4}\right)h^3 y&#39;&#39;&#39;(x_n) + \frac{h^3}{4} f_y y&#39;&#39;(x_n) + O(h^4)">\[
+R_{n+1} = y(x_{n+1}) - y_{n+1} = \left(\frac{1}{6} - \frac{1}{4}\right)h^3 y'''(x_n) + \frac{h^3}{4} f_y y''(x_n) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= -\frac{h^3}{12} y&#39;&#39;&#39;(x_n) + O(h^4)">\[
+= -\frac{h^3}{12} y'''(x_n) + O(h^4)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此，局部截断误差为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{R_{n+1} = -\frac{h^3}{12} y&#39;&#39;&#39;(x_n) + O(h^4) = O(h^3)}">\[
+\boxed{R_{n+1} = -\frac{h^3}{12} y'''(x_n) + O(h^4) = O(h^3)}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>结论</strong>：预估校正法保持了 <strong>2阶精度</strong>（局部误差 <span class="math inline" data-latex="O(h^3)">\(O(h^3)\)</span>，整体误差 <span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span>）。 <span class="math inline" data-latex="\square">\(\square\)</span></p>
+<h3 id="整体误差">3.2 整体误差</h3>
+<p>类似梯形法的推导，可以证明：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="|y(x_n) - y_n| \leq K h^2">\[
+|y(x_n) - y_n| \leq K h^2
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>即整体误差为 <span class="math inline" data-latex="O(h^2)">\(O(h^2)\)</span>，方法是 <strong>2阶收敛</strong>的。</p>
+<h3 id="与纯梯形法的比较">3.3 与纯梯形法的比较</h3>
+<table>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>纯梯形法</th>
+<th>Euler-梯形P-C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>精度阶数</td>
+<td>2阶</td>
+<td>2阶</td>
+</tr>
+<tr class="even">
+<td>每步计算</td>
+<td>需迭代求解非线性方程</td>
+<td>仅需2次函数评估</td>
+</tr>
+<tr class="odd">
+<td>稳定性</td>
+<td>A-稳定</td>
+<td>稳定性略差（非A-稳定）</td>
+</tr>
+<tr class="even">
+<td>计算效率</td>
+<td>低（迭代）</td>
+<td><strong>高（显式）</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong>：P-C方法通过牺牲少量稳定性，换取了显式计算的便利性和高效率。</p>
+<hr />
+<h2 id="从预估校正到runge-kutta方法">4. 从预估校正到Runge-Kutta方法</h2>
+<h3 id="核心思想的演化">4.1 核心思想的演化</h3>
+<p>预估校正方法启发我们：</p>
+<blockquote>
+<p><strong>核心思想</strong>：通过在区间内<strong>多次评估</strong>函数 <span class="math inline" data-latex="f(x,y)">\(f(x,y)\)</span>，并巧妙地组合这些值，可以构造出高精度的数值格式。</p>
+</blockquote>
+<p><strong>Runge-Kutta (RK) 方法</strong>将这一思想系统化：</p>
+<ul>
+<li><strong>不依赖</strong>以往时刻的信息（单步法）</li>
+<li>通过在<strong>区间内的多个中间点</strong>评估函数</li>
+<li>用这些值的<strong>加权平均</strong>来更新解</li>
+</ul>
+<h3 id="二阶runge-kutta方法-rk2">4.2 二阶Runge-Kutta方法 (RK2)</h3>
+<h4 id="一般形式">一般形式</h4>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + \alpha h, y_n + \beta h k_1) \\
+y_{n+1} = y_n + h(a_1 k_1 + a_2 k_2)
+\end{cases}">\[
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + \alpha h, y_n + \beta h k_1) \\
+y_{n+1} = y_n + h(a_1 k_1 + a_2 k_2)
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>目标</strong>：选择参数 <span class="math inline" data-latex="\alpha, \beta, a_1, a_2">\(\alpha, \beta, a_1, a_2\)</span> 使得方法达到2阶精度。</p>
+<h4 id="taylor匹配">Taylor匹配</h4>
+<p><strong>符号约定</strong>：设第 <span class="math inline" data-latex="n">\(n\)</span> 步精确（<span class="math inline" data-latex="y_n = y(x_n)">\(y_n = y(x_n)\)</span>），对精确解 <span class="math inline" data-latex="y(x)">\(y(x)\)</span> 进行Taylor展开。</p>
+<p>对精确解展开：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y(x_n) + h y&#39;(x_n) + \frac{h^2}{2} y&#39;&#39;(x_n) + O(h^3)">\[
+y(x_{n+1}) = y(x_n) + h y'(x_n) + \frac{h^2}{2} y''(x_n) + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>利用链式法则计算二阶导数：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y&#39;&#39;(x_n) = \frac{df}{dx}\bigg|_{x_n} = f_x + f_y \cdot f">\[
+y''(x_n) = \frac{df}{dx}\bigg|_{x_n} = f_x + f_y \cdot f
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y(x_{n+1}) = y(x_n) + h f(x_n, y_n) + \frac{h^2}{2}[f_x + f_y \cdot f] + O(h^3)">\[
+y(x_{n+1}) = y(x_n) + h f(x_n, y_n) + \frac{h^2}{2}[f_x + f_y \cdot f] + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>对 <span class="math inline" data-latex="k_2">\(k_2\)</span> 进行Taylor展开。利用二元函数的一阶Taylor展开公式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="f(x_0 + \Delta x, y_0 + \Delta y) = f(x_0, y_0) + f_x(x_0, y_0) \Delta x + f_y(x_0, y_0) \Delta y + O(\Delta^2)">\[
+f(x_0 + \Delta x, y_0 + \Delta y) = f(x_0, y_0) + f_x(x_0, y_0) \Delta x + f_y(x_0, y_0) \Delta y + O(\Delta^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中 <span class="math inline" data-latex="\Delta^2">\(\Delta^2\)</span> 表示 <span class="math inline" data-latex="\Delta x^2, \Delta y^2, \Delta x \Delta y">\(\Delta x^2, \Delta y^2, \Delta x \Delta y\)</span> 等二阶项。</p>
+<p>对于 <span class="math inline" data-latex="k_2 = f(x_n + \alpha h, y_n + \beta h k_1)">\(k_2 = f(x_n + \alpha h, y_n + \beta h k_1)\)</span>（注意 <span class="math inline" data-latex="k_1 = f(x_n, y_n)">\(k_1 = f(x_n, y_n)\)</span>），有：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="k_2 = f(x_n + \alpha h, y_n + \beta h k_1)">\[
+k_2 = f(x_n + \alpha h, y_n + \beta h k_1)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= f(x_n, y_n) + \alpha h f_x(x_n, y_n) + \beta h k_1 f_y(x_n, y_n) + O(h^2)">\[
+= f(x_n, y_n) + \alpha h f_x(x_n, y_n) + \beta h k_1 f_y(x_n, y_n) + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= f(x_n, y_n) + \alpha h f_x(x_n, y_n) + \beta h f(x_n, y_n) f_y(x_n, y_n) + O(h^2)">\[
+= f(x_n, y_n) + \alpha h f_x(x_n, y_n) + \beta h f(x_n, y_n) f_y(x_n, y_n) + O(h^2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入RK2公式：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="y_{n+1} = y_n + h(a_1 k_1 + a_2 k_2)">\[
+y_{n+1} = y_n + h(a_1 k_1 + a_2 k_2)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= y(x_n) + h\Big(a_1 f(x_n, y_n) + a_2 [f(x_n, y_n) + \alpha h f_x(x_n, y_n) + \beta h f(x_n, y_n) f_y(x_n, y_n)]\Big) + O(h^3)">\[
+= y(x_n) + h\Big(a_1 f(x_n, y_n) + a_2 [f(x_n, y_n) + \alpha h f_x(x_n, y_n) + \beta h f(x_n, y_n) f_y(x_n, y_n)]\Big) + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="= y(x_n) + h(a_1 + a_2) f(x_n, y_n) + h^2 a_2[\alpha f_x(x_n, y_n) + \beta f(x_n, y_n) f_y(x_n, y_n)] + O(h^3)">\[
+= y(x_n) + h(a_1 + a_2) f(x_n, y_n) + h^2 a_2[\alpha f_x(x_n, y_n) + \beta f(x_n, y_n) f_y(x_n, y_n)] + O(h^3)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>与Taylor展开比较系数：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+a_1 + a_2 = 1 \\
+a_2 \alpha = \frac{1}{2} \\
+a_2 \beta = \frac{1}{2}
+\end{cases}">\[
+\begin{cases}
+a_1 + a_2 = 1 \\
+a_2 \alpha = \frac{1}{2} \\
+a_2 \beta = \frac{1}{2}
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>3个方程，4个未知数</strong> → 有<strong>一族解</strong>！</p>
+<h4 id="常见的rk2方法">常见的RK2方法</h4>
+<p><strong>1. 改进Euler法（Heun方法）</strong></p>
+<p>取 <span class="math inline" data-latex="\alpha = \beta = 1, a_1 = a_2 = \frac{1}{2}">\(\alpha = \beta = 1, a_1 = a_2 = \frac{1}{2}\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + h, y_n + h k_1) \\
+y_{n+1} = y_n + \frac{h}{2}(k_1 + k_2)
+\end{cases}
+}">\[
+\boxed{
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + h, y_n + h k_1) \\
+y_{n+1} = y_n + \frac{h}{2}(k_1 + k_2)
+\end{cases}
+}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>几何意义</strong>：在区间起点和终点各计算一次斜率，取平均值。</p>
+<p><strong>2. 中点法</strong></p>
+<p>取 <span class="math inline" data-latex="\alpha = \beta = \frac{1}{2}, a_1 = 0, a_2 = 1">\(\alpha = \beta = \frac{1}{2}, a_1 = 0, a_2 = 1\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2} k_1\right) \\
+y_{n+1} = y_n + h k_2
+\end{cases}
+}">\[
+\boxed{
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2} k_1\right) \\
+y_{n+1} = y_n + h k_2
+\end{cases}
+}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>几何意义</strong>：用区间中点的斜率代表整个区间。</p>
+<h4 id="rk2与预估校正的关系">RK2与预估校正的关系</h4>
+<p>注意到<strong>改进Euler法(Heun)</strong>与<strong>Euler-梯形P-C</strong>形式非常相似！</p>
+<p><strong>改进Euler法 (Heun RK2)</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + h, y_n + h k_1) \\
+y_{n+1} = y_n + \frac{h}{2}(k_1 + k_2)
+\end{cases}">\[
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f(x_n + h, y_n + h k_1) \\
+y_{n+1} = y_n + \frac{h}{2}(k_1 + k_2)
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>Euler-梯形预估校正法</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+\text{预估: } y_{n+1}^{(0)} = y_n + h f(x_n, y_n) \\
+\text{校正: } y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)})]
+\end{cases}">\[
+\begin{cases}
+\text{预估: } y_{n+1}^{(0)} = y_n + h f(x_n, y_n) \\
+\text{校正: } y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)})]
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>对比分析</strong>：</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>步骤</th>
+<th>Heun RK2</th>
+<th>Euler-梯形P-C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>第1步</strong></td>
+<td>计算起点斜率：<span class="math inline" data-latex="k_1 = f(x_n, y_n)">\(k_1 = f(x_n, y_n)\)</span></td>
+<td>预估：<span class="math inline" data-latex="y_{n+1}^{(0)} = y_n + h f(x_n, y_n)">\(y_{n+1}^{(0)} = y_n + h f(x_n, y_n)\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>第2步</strong></td>
+<td>用 <span class="math inline" data-latex="k_1">\(k_1\)</span> 推进到终点，计算 <span class="math inline" data-latex="k_2 = f(x_n + h, y_n + h k_1)">\(k_2 = f(x_n + h, y_n + h k_1)\)</span></td>
+<td>计算预估值处的斜率：<span class="math inline" data-latex="f(x_{n+1}, y_{n+1}^{(0)})">\(f(x_{n+1}, y_{n+1}^{(0)})\)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>第3步</strong></td>
+<td>取平均：<span class="math inline" data-latex="y_{n+1} = y_n + \frac{h}{2}(k_1 + k_2)">\(y_{n+1} = y_n + \frac{h}{2}(k_1 + k_2)\)</span></td>
+<td>校正：<span class="math inline" data-latex="y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)})]">\(y_{n+1} = y_n + \frac{h}{2}[f(x_n, y_n) + f(x_{n+1}, y_{n+1}^{(0)})]\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键观察</strong>： - Heun的 <span class="math inline" data-latex="k_1">\(k_1\)</span> 就是 <span class="math inline" data-latex="f(x_n, y_n)">\(f(x_n, y_n)\)</span> - Heun的 <span class="math inline" data-latex="y_n + hk_1">\(y_n + hk_1\)</span> 就是P-C的预估值 <span class="math inline" data-latex="y_{n+1}^{(0)}">\(y_{n+1}^{(0)}\)</span> - Heun的 <span class="math inline" data-latex="k_2">\(k_2\)</span> 就是 <span class="math inline" data-latex="f(x_{n+1}, y_{n+1}^{(0)})">\(f(x_{n+1}, y_{n+1}^{(0)})\)</span></p>
+<p>它们本质上是<strong>同一个方法的不同视角</strong>！</p>
+<hr />
+<h2 id="经典四阶runge-kutta方法-rk4">5. 经典四阶Runge-Kutta方法 (RK4)</h2>
+<h3 id="公式">5.1 公式</h3>
+<p>这是<strong>最广泛使用</strong>的ODE求解器之一：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2} k_1\right) \\
+k_3 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2} k_2\right) \\
+k_4 = f(x_n + h, y_n + h k_3) \\
+y_{n+1} = y_n + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+\end{cases}
+}">\[
+\boxed{
+\begin{cases}
+k_1 = f(x_n, y_n) \\
+k_2 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2} k_1\right) \\
+k_3 = f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2} k_2\right) \\
+k_4 = f(x_n + h, y_n + h k_3) \\
+y_{n+1} = y_n + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+\end{cases}
+}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<h3 id="几何解释">5.2 几何解释</h3>
+<figure class="highlight nestedtext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs nestedtext"><span class="hljs-attribute">区间 [x_n, x_&#123;n+1&#125;]</span><span class="hljs-punctuation">:</span><br><span class="hljs-punctuation">    </span><br>    <span class="hljs-attribute">k_1</span><span class="hljs-punctuation">:</span> <span class="hljs-string">起点斜率</span><br>         <span class="hljs-attribute">↓</span><br><span class="hljs-attribute">    k_2</span><span class="hljs-punctuation">:</span> <span class="hljs-string">用k_1到达中点，计算中点斜率</span><br>         <span class="hljs-attribute">↓</span><br><span class="hljs-attribute">    k_3</span><span class="hljs-punctuation">:</span> <span class="hljs-string">用k_2重新计算中点斜率（校正）</span><br>         <span class="hljs-attribute">↓</span><br><span class="hljs-attribute">    k_4</span><span class="hljs-punctuation">:</span> <span class="hljs-string">用k_3到达终点，计算终点斜率</span><br>         <span class="hljs-attribute">↓</span><br><span class="hljs-attribute">    加权平均</span><span class="hljs-punctuation">:</span> <span class="hljs-string">(1·k_1 + 2·k_2 + 2·k_3 + 1·k_4) / 6</span><br></code></pre></td></tr></table></figure>
+<p><strong>权重分配</strong>：</p>
+<ul>
+<li>起点和终点（<span class="math inline" data-latex="k_1, k_4">\(k_1, k_4\)</span>）：权重 1/6</li>
+<li>中点（<span class="math inline" data-latex="k_2, k_3">\(k_2, k_3\)</span>）：权重各 2/6 = 1/3</li>
+</ul>
+<p>这相当于<strong>Simpson积分规则</strong>的离散版本！</p>
+<h3 id="精度分析">5.3 精度分析</h3>
+<p><strong>定理 5.1</strong><br />
+经典RK4方法的局部截断误差为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="R_{n+1} = O(h^5)">\[
+R_{n+1} = O(h^5)
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>因此整体误差为 <span class="math inline" data-latex="O(h^4)">\(O(h^4)\)</span>，是 <strong>4阶方法</strong>。</p>
+<p><strong>证明思路</strong>：通过Taylor展开匹配 <span class="math inline" data-latex="y(x_{n+1})">\(y(x_{n+1})\)</span> 的前5项，系数矩阵有11个方程，经典RK4选择了一组特别简洁的解。（完整推导涉及大量代数，此处省略）</p>
+<h3 id="计算效率">5.4 计算效率</h3>
+<table>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>精度阶</th>
+<th>每步函数评估</th>
+<th>总计算量 (达到同样精度)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Euler</td>
+<td>1阶</td>
+<td>1次</td>
+<td><span class="math inline" data-latex="O(h^{-1})">\(O(h^{-1})\)</span></td>
+</tr>
+<tr class="even">
+<td>梯形/RK2</td>
+<td>2阶</td>
+<td>2次</td>
+<td><span class="math inline" data-latex="O(h^{-1/2})">\(O(h^{-1/2})\)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>RK4</strong></td>
+<td><strong>4阶</strong></td>
+<td><strong>4次</strong></td>
+<td><strong><span class="math inline" data-latex="O(h^{-1/4})">\(O(h^{-1/4})\)</span></strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际意义</strong>：若要精度提高10倍，RK4只需步长缩小 <span class="math inline" data-latex="10^{1/4} \approx 1.78">\(10^{1/4} \approx 1.78\)</span> 倍，而Euler需要10倍！</p>
+<hr />
+<h2 id="稳定性分析">6. 稳定性分析</h2>
+<h3 id="测试方程">6.1 测试方程</h3>
+<p>对于 <span class="math inline" data-latex="y&#39; = \lambda y">\(y' = \lambda y\)</span>，令 <span class="math inline" data-latex="z = h\lambda">\(z = h\lambda\)</span>，各方法的增长因子为：</p>
+<table>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>增长因子 <span class="math inline" data-latex="G(z)">\(G(z)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>显式Euler</td>
+<td><span class="math inline" data-latex="1 + z">\(1 + z\)</span></td>
+</tr>
+<tr class="even">
+<td>RK2 (Heun)</td>
+<td><span class="math inline" data-latex="1 + z + \frac{z^2}{2}">\(1 + z + \frac{z^2}{2}\)</span></td>
+</tr>
+<tr class="odd">
+<td>RK4</td>
+<td><span class="math inline" data-latex="1 + z + \frac{z^2}{2} + \frac{z^3}{6} + \frac{z^4}{24}">\(1 + z + \frac{z^2}{2} + \frac{z^3}{6} + \frac{z^4}{24}\)</span></td>
+</tr>
+<tr class="even">
+<td>精确解</td>
+<td><span class="math inline" data-latex="e^z">\(e^z\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>观察</strong>：RK4的增长因子是 <span class="math inline" data-latex="e^z">\(e^z\)</span> 的<strong>前5项Taylor展开</strong>，这正是它4阶精度的根源！</p>
+<h3 id="稳定域">6.2 稳定域</h3>
+<p>要求 <span class="math inline" data-latex="|G(z)| \leq 1">\(|G(z)| \leq 1\)</span>：</p>
+<ul>
+<li><strong>RK2</strong>: <span class="math inline" data-latex="|1 + z + \frac{z^2}{2}| \leq 1">\(|1 + z + \frac{z^2}{2}| \leq 1\)</span> → 稳定域约为 <span class="math inline" data-latex="z \in [-2, 0]">\(z \in [-2, 0]\)</span></li>
+<li><strong>RK4</strong>: <span class="math inline" data-latex="|1 + z + \frac{z^2}{2} + \frac{z^3}{6} + \frac{z^4}{24}| \leq 1">\(|1 + z + \frac{z^2}{2} + \frac{z^3}{6} + \frac{z^4}{24}| \leq 1\)</span> → 稳定域约为 <span class="math inline" data-latex="z \in [-2.78, 0]">\(z \in [-2.78, 0]\)</span></li>
+</ul>
+<p><strong>结论</strong>：</p>
+<ul>
+<li>RK方法都是<strong>条件稳定</strong>的（非A-稳定）</li>
+<li>高阶RK方法稳定域更大，但仍需步长限制</li>
+<li>对于刚性问题，应使用<strong>隐式RK方法</strong>（超出本文范围）</li>
+</ul>
+<hr />
+<h2 id="参考文献">参考文献</h2>
+<ol type="1">
+<li>Hairer, E., Nørsett, S. P., &amp; Wanner, G. (1993). <em>Solving Ordinary Differential Equations I: Nonstiff Problems</em> (2nd ed.). Springer.</li>
+<li>Butcher, J. C. (2016). <em>Numerical Methods for Ordinary Differential Equations</em> (3rd ed.). Wiley.</li>
+<li>Ascher, U. M., &amp; Petzold, L. R. (1998). <em>Computer Methods for Ordinary Differential Equations and Differential-Algebraic Equations</em>. SIAM.</li>
+<li>Press, W. H., et al. (2007). <em>Numerical Recipes: The Art of Scientific Computing</em> (3rd ed.). Cambridge University Press.</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Yike/" class="print-no-link">#Yike</a>
+      
+        <a href="/tags/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="print-no-link">#数值计算</a>
+      
+        <a href="/tags/%E5%B8%B8%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" class="print-no-link">#常微分方程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>常微分方程求解之预估校正与Runge-Kutta方法</div>
+      <div>https://www.ohnn.cn/2025/12/02/predictor_corrector_rk/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Yike</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/03/parabolic_pde_schemes/" title="抛物型偏微分方程的数值解法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">抛物型偏微分方程的数值解法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/02/trapezoidal_method/" title="常微分方程求解之梯形法">
+                        <span class="hidden-mobile">常微分方程求解之梯形法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备2025102965号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34011102003812"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>皖公网安备34011102003812号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="/js/vendor/nprogress/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="/js/vendor/nprogress/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="/js/vendor/jquery/jquery.min.js" ></script>
+<script  src="/js/vendor/bootstrap/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="/js/vendor/typed/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/tocbot/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=/js/vendor/clipboard/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/anchor/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('/js/vendor/fancybox/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="/js/vendor/mathjax/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mathjax-config.js"></script>
+<script src="/js/floating-clock.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
