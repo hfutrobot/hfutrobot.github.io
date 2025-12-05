@@ -27,7 +27,7 @@
 <meta property="og:description" content="本文系统介绍二维椭圆型偏微分方程的五点差分格式，从一般形式出发推导差分格式，再特化为常系数等步长情况。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-04T08:50:00.000Z">
-<meta property="article:modified_time" content="2025-12-04T13:44:48.967Z">
+<meta property="article:modified_time" content="2025-12-05T14:08:32.392Z">
 <meta property="article:author" content="Yike">
 <meta property="article:tag" content="Yike">
 <meta property="article:tag" content="偏微分方程">
@@ -81,7 +81,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-25MQ85GRQB"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -91,6 +91,31 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-25MQ85GRQB", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-25MQ85GRQB');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
 
 
   
@@ -249,7 +274,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          3.2k 字
         
       </span>
     
@@ -260,7 +285,7 @@
         
         
         
-          21 分钟
+          28 分钟
         
       </span>
     
@@ -783,7 +808,7 @@ u_{1,1} \\ u_{2,1} \\ u_{1,2} \\ u_{2,2}
 <summary>
 <b>📘 计算例子</b>（点击展开）
 </summary>
-<p><strong>问题</strong>：求解 Poisson 方程，左右边界为 Neumann 条件</p>
+<p><strong>问题</strong>：求解 Poisson 方程，左右边界为 Neumann 条件，上下边界为 Dirichlet 条件</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\begin{cases}
 -\Delta u = 2, &amp; (x,y) \in (0,1) \times (0,1) \\
@@ -803,11 +828,31 @@ u(x, 0) = 0, \quad u(x, 1) = 0
           </svg>
         </button>
       </div></p>
-<p><strong>网格剖分</strong>：取 <span class="math inline" data-latex="n_x = n_y = 2">\(n_x = n_y = 2\)</span>，<span class="math inline" data-latex="h = 1/2">\(h = 1/2\)</span>，内部节点 1 个 <span class="math inline" data-latex="(1/2, 1/2)">\((1/2, 1/2)\)</span>。</p>
-<p><strong>左边界</strong> <span class="math inline" data-latex="x=0">\(x=0\)</span>：由 <span class="math inline" data-latex="u_x(0,y)=0">\(u_x(0,y)=0\)</span>，引入虚拟节点 <span class="math inline" data-latex="u_{-1,j}">\(u_{-1,j}\)</span></p>
+<p><strong>网格剖分</strong>：取 <span class="math inline" data-latex="n_x = n_y = 2">\(n_x = n_y = 2\)</span>，<span class="math inline" data-latex="h = 1/2">\(h = 1/2\)</span>。</p>
+<p>节点网格（<span class="math inline" data-latex="i">\(i\)</span> 为 <span class="math inline" data-latex="x">\(x\)</span> 方向，<span class="math inline" data-latex="j">\(j\)</span> 为 <span class="math inline" data-latex="y">\(y\)</span> 方向）：</p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="\frac{u_{1,j} - u_{-1,j}}{2h} = 0 \quad \Rightarrow \quad u_{-1,j} = u_{1,j}">\[
-\frac{u_{1,j} - u_{-1,j}}{2h} = 0 \quad \Rightarrow \quad u_{-1,j} = u_{1,j}
+        <span class="math display" data-latex="\begin{array}{ccc}
+(0,2) &amp; (1,2) &amp; (2,2) \\
+(0,1) &amp; (1,1) &amp; (2,1) \\
+(0,0) &amp; (1,0) &amp; (2,0)
+\end{array}
+\quad \Rightarrow \quad
+\begin{array}{ccc}
+u_{0,2}=0 &amp; u_{1,2}=0 &amp; u_{2,2}=0 \\
+u_{0,1}=? &amp; u_{1,1}=? &amp; u_{2,1}=? \\
+u_{0,0}=0 &amp; u_{1,0}=0 &amp; u_{2,0}=0
+\end{array}">\[
+\begin{array}{ccc}
+(0,2) & (1,2) & (2,2) \\
+(0,1) & (1,1) & (2,1) \\
+(0,0) & (1,0) & (2,0)
+\end{array}
+\quad \Rightarrow \quad
+\begin{array}{ccc}
+u_{0,2}=0 & u_{1,2}=0 & u_{2,2}=0 \\
+u_{0,1}=? & u_{1,1}=? & u_{2,1}=? \\
+u_{0,0}=0 & u_{1,0}=0 & u_{2,0}=0
+\end{array}
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -816,10 +861,17 @@ u(x, 0) = 0, \quad u(x, 1) = 0
           </svg>
         </button>
       </div></p>
-<p><strong>右边界</strong> <span class="math inline" data-latex="x=1">\(x=1\)</span>：由 <span class="math inline" data-latex="u_x(1,y)=0">\(u_x(1,y)=0\)</span>，引入虚拟节点 <span class="math inline" data-latex="u_{3,j}">\(u_{3,j}\)</span></p>
+<p><strong>待求节点</strong>：<span class="math inline" data-latex="u_{0,1}">\(u_{0,1}\)</span>（左边界），<span class="math inline" data-latex="u_{1,1}">\(u_{1,1}\)</span>（内部），<span class="math inline" data-latex="u_{2,1}">\(u_{2,1}\)</span>（右边界）共 3 个。</p>
+<p><strong>虚拟节点关系</strong>：</p>
+<ul>
+<li>左边界 <span class="math inline" data-latex="x=0">\(x=0\)</span>：<span class="math inline" data-latex="u_x(0,y)=0 \Rightarrow \dfrac{u_{1,j} - u_{-1,j}}{2h} = 0 \Rightarrow u_{-1,j} = u_{1,j}">\(u_x(0,y)=0 \Rightarrow \dfrac{u_{1,j} - u_{-1,j}}{2h} = 0 \Rightarrow u_{-1,j} = u_{1,j}\)</span></li>
+<li>右边界 <span class="math inline" data-latex="x=1">\(x=1\)</span>：<span class="math inline" data-latex="u_x(1,y)=0 \Rightarrow \dfrac{u_{3,j} - u_{1,j}}{2h} = 0 \Rightarrow u_{3,j} = u_{1,j}">\(u_x(1,y)=0 \Rightarrow \dfrac{u_{3,j} - u_{1,j}}{2h} = 0 \Rightarrow u_{3,j} = u_{1,j}\)</span></li>
+</ul>
+<p><strong>列方程</strong>（<span class="math inline" data-latex="-h^2 f = -h^2 \cdot 2 = -0.5">\(-h^2 f = -h^2 \cdot 2 = -0.5\)</span>）：</p>
+<p><span class="math inline" data-latex="(0,1)">\((0,1)\)</span> <strong>左边界节点</strong>：</p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="u_{3,j} = u_{1,j}">\[
-u_{3,j} = u_{1,j}
+        <span class="math display" data-latex="u_{-1,1} + u_{1,1} + u_{0,0} + u_{0,2} - 4u_{0,1} = -0.5">\[
+u_{-1,1} + u_{1,1} + u_{0,0} + u_{0,2} - 4u_{0,1} = -0.5
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -828,10 +880,10 @@ u_{3,j} = u_{1,j}
           </svg>
         </button>
       </div></p>
-<p><strong>在 <span class="math inline" data-latex="(0, 1/2)">\((0, 1/2)\)</span> 处</strong>（边界节点）的五点格式：</p>
+<p>代入 <span class="math inline" data-latex="u_{-1,1} = u_{1,1}">\(u_{-1,1} = u_{1,1}\)</span>，<span class="math inline" data-latex="u_{0,0} = u_{0,2} = 0">\(u_{0,0} = u_{0,2} = 0\)</span>：</p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="u_{-1,1} + u_{1,1} + u_{0,0} + u_{0,2} - 4u_{0,1} = -h^2 \cdot 2 = -0.5">\[
-u_{-1,1} + u_{1,1} + u_{0,0} + u_{0,2} - 4u_{0,1} = -h^2 \cdot 2 = -0.5
+        <span class="math display" data-latex="2u_{1,1} - 4u_{0,1} = -0.5 \tag{1}">\[
+2u_{1,1} - 4u_{0,1} = -0.5 \tag{1}
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -840,10 +892,10 @@ u_{-1,1} + u_{1,1} + u_{0,0} + u_{0,2} - 4u_{0,1} = -h^2 \cdot 2 = -0.5
           </svg>
         </button>
       </div></p>
-<p>代入 <span class="math inline" data-latex="u_{-1,1} = u_{1,1}">\(u_{-1,1} = u_{1,1}\)</span>，<span class="math inline" data-latex="u_{0,0} = 0">\(u_{0,0} = 0\)</span>，<span class="math inline" data-latex="u_{0,2} = 0">\(u_{0,2} = 0\)</span>：</p>
+<p><span class="math inline" data-latex="(1,1)">\((1,1)\)</span> <strong>内部节点</strong>：</p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="2u_{1,1} - 4u_{0,1} = -0.5">\[
-2u_{1,1} - 4u_{0,1} = -0.5
+        <span class="math display" data-latex="u_{0,1} + u_{2,1} + u_{1,0} + u_{1,2} - 4u_{1,1} = -0.5">\[
+u_{0,1} + u_{2,1} + u_{1,0} + u_{1,2} - 4u_{1,1} = -0.5
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -852,7 +904,112 @@ u_{-1,1} + u_{1,1} + u_{0,0} + u_{0,2} - 4u_{0,1} = -h^2 \cdot 2 = -0.5
           </svg>
         </button>
       </div></p>
-<p><strong>注意</strong>：纯 Neumann 问题解不唯一（相差常数），需附加条件如 <span class="math inline" data-latex="\int_\Omega u \, dA = 0">\(\int_\Omega u \, dA = 0\)</span>。</p>
+<p>代入 <span class="math inline" data-latex="u_{1,0} = u_{1,2} = 0">\(u_{1,0} = u_{1,2} = 0\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{0,1} + u_{2,1} - 4u_{1,1} = -0.5 \tag{2}">\[
+u_{0,1} + u_{2,1} - 4u_{1,1} = -0.5 \tag{2}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><span class="math inline" data-latex="(2,1)">\((2,1)\)</span> <strong>右边界节点</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{1,1} + u_{3,1} + u_{2,0} + u_{2,2} - 4u_{2,1} = -0.5">\[
+u_{1,1} + u_{3,1} + u_{2,0} + u_{2,2} - 4u_{2,1} = -0.5
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="u_{3,1} = u_{1,1}">\(u_{3,1} = u_{1,1}\)</span>，<span class="math inline" data-latex="u_{2,0} = u_{2,2} = 0">\(u_{2,0} = u_{2,2} = 0\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="2u_{1,1} - 4u_{2,1} = -0.5 \tag{3}">\[
+2u_{1,1} - 4u_{2,1} = -0.5 \tag{3}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>观察对称性</strong>：由方程 (1) 和 (3) 可知 <span class="math inline" data-latex="u_{0,1} = u_{2,1}">\(u_{0,1} = u_{2,1}\)</span>。</p>
+<p><strong>矩阵形式</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+-4 &amp; 2 &amp; 0 \\
+1 &amp; -4 &amp; 1 \\
+0 &amp; 2 &amp; -4
+\end{bmatrix}
+\begin{bmatrix}
+u_{0,1} \\ u_{1,1} \\ u_{2,1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.5 \\ -0.5 \\ -0.5
+\end{bmatrix}">\[
+\begin{bmatrix}
+-4 & 2 & 0 \\
+1 & -4 & 1 \\
+0 & 2 & -4
+\end{bmatrix}
+\begin{bmatrix}
+u_{0,1} \\ u_{1,1} \\ u_{2,1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.5 \\ -0.5 \\ -0.5
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解</strong>：</p>
+<p>由对称性设 <span class="math inline" data-latex="u_{0,1} = u_{2,1} = a">\(u_{0,1} = u_{2,1} = a\)</span>，<span class="math inline" data-latex="u_{1,1} = b">\(u_{1,1} = b\)</span>。方程组简化为：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+-4a + 2b = -0.5 \\
+2a - 4b = -0.5
+\end{cases}">\[
+\begin{cases}
+-4a + 2b = -0.5 \\
+2a - 4b = -0.5
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>两式相加：<span class="math inline" data-latex="-2a - 2b = -1 \Rightarrow a + b = 0.5">\(-2a - 2b = -1 \Rightarrow a + b = 0.5\)</span></p>
+<p>两式相减：<span class="math inline" data-latex="-6a + 6b = 0 \Rightarrow a = b">\(-6a + 6b = 0 \Rightarrow a = b\)</span></p>
+<p>解得：<span class="math inline" data-latex="a = b = 0.25">\(a = b = 0.25\)</span></p>
+<p><strong>最终结果</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{u_{0,1} = u_{1,1} = u_{2,1} = 0.25}">\[
+\boxed{u_{0,1} = u_{1,1} = u_{2,1} = 0.25}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>验证</strong>：此问题的解析解为 <span class="math inline" data-latex="u(x,y) = y(1-y)">\(u(x,y) = y(1-y)\)</span>，在 <span class="math inline" data-latex="y=0.5">\(y=0.5\)</span> 处取值 <span class="math inline" data-latex="0.5 \times 0.5 = 0.25">\(0.5 \times 0.5 = 0.25\)</span>，与数值解完全吻合！</p>
 </details>
 <h3 id="robin-边界">5.3 Robin 边界</h3>
 <p><strong>条件</strong>：<span class="math inline" data-latex="\alpha u + \beta \frac{\partial u}{\partial n} = g">\(\alpha u + \beta \frac{\partial u}{\partial n} = g\)</span></p>
@@ -883,11 +1040,30 @@ u(1, y) + \dfrac{\partial u}{\partial x}(1, y) = 0 & \text{（右边界 Robin �
         </button>
       </div></p>
 <p><strong>网格剖分</strong>：取 <span class="math inline" data-latex="n_x = n_y = 2">\(n_x = n_y = 2\)</span>，<span class="math inline" data-latex="h = 1/2">\(h = 1/2\)</span>。</p>
-<p><strong>右边界处理</strong>：在 <span class="math inline" data-latex="x=1">\(x=1\)</span> 处，<span class="math inline" data-latex="u + u_x = 0">\(u + u_x = 0\)</span></p>
-<p>引入虚拟节点 <span class="math inline" data-latex="u_{3,j}">\(u_{3,j}\)</span>，用中心差分：</p>
+<p>节点网格（<span class="math inline" data-latex="i">\(i\)</span> 为 <span class="math inline" data-latex="x">\(x\)</span> 方向，<span class="math inline" data-latex="j">\(j\)</span> 为 <span class="math inline" data-latex="y">\(y\)</span> 方向）：</p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="u_{2,j} + \frac{u_{3,j} - u_{1,j}}{2h} = 0 \quad \Rightarrow \quad u_{3,j} = u_{1,j} - 2h \cdot u_{2,j}">\[
-u_{2,j} + \frac{u_{3,j} - u_{1,j}}{2h} = 0 \quad \Rightarrow \quad u_{3,j} = u_{1,j} - 2h \cdot u_{2,j}
+        <span class="math display" data-latex="\begin{array}{ccc}
+(0,2) &amp; (1,2) &amp; (2,2) \\
+(0,1) &amp; (1,1) &amp; (2,1) \\
+(0,0) &amp; (1,0) &amp; (2,0)
+\end{array}
+\quad \Rightarrow \quad
+\begin{array}{ccc}
+u_{0,2}=1 &amp; u_{1,2}=1 &amp; u_{2,2}=? \\
+u_{0,1}=1 &amp; u_{1,1}=? &amp; u_{2,1}=? \\
+u_{0,0}=1 &amp; u_{1,0}=1 &amp; u_{2,0}=?
+\end{array}">\[
+\begin{array}{ccc}
+(0,2) & (1,2) & (2,2) \\
+(0,1) & (1,1) & (2,1) \\
+(0,0) & (1,0) & (2,0)
+\end{array}
+\quad \Rightarrow \quad
+\begin{array}{ccc}
+u_{0,2}=1 & u_{1,2}=1 & u_{2,2}=? \\
+u_{0,1}=1 & u_{1,1}=? & u_{2,1}=? \\
+u_{0,0}=1 & u_{1,0}=1 & u_{2,0}=?
+\end{array}
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -896,7 +1072,54 @@ u_{2,j} + \frac{u_{3,j} - u_{1,j}}{2h} = 0 \quad \Rightarrow \quad u_{3,j} = u_{
           </svg>
         </button>
       </div></p>
-<p><strong>在右边界节点 <span class="math inline" data-latex="(2, 1)">\((2, 1)\)</span> 处</strong>列五点格式：</p>
+<p><strong>边界条件分析</strong>：</p>
+<ul>
+<li>左边界（<span class="math inline" data-latex="x=0">\(x=0\)</span>）：Dirichlet，<span class="math inline" data-latex="u_{0,j} = 1">\(u_{0,j} = 1\)</span></li>
+<li>下边界（<span class="math inline" data-latex="y=0">\(y=0\)</span>）：Dirichlet，<span class="math inline" data-latex="u_{i,0} = 1">\(u_{i,0} = 1\)</span></li>
+<li>上边界（<span class="math inline" data-latex="y=1">\(y=1\)</span>）：Dirichlet，<span class="math inline" data-latex="u_{i,2} = 1">\(u_{i,2} = 1\)</span></li>
+<li>右边界（<span class="math inline" data-latex="x=1">\(x=1\)</span>）：Robin，<span class="math inline" data-latex="u + u_x = 0">\(u + u_x = 0\)</span></li>
+</ul>
+<p><strong>待求节点</strong>：<span class="math inline" data-latex="u_{1,1}">\(u_{1,1}\)</span>（内部），<span class="math inline" data-latex="u_{2,0}">\(u_{2,0}\)</span>, <span class="math inline" data-latex="u_{2,1}">\(u_{2,1}\)</span>, <span class="math inline" data-latex="u_{2,2}">\(u_{2,2}\)</span>（右边界）共 4 个。</p>
+<p><strong>右边界虚拟节点关系</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{2,j} + \frac{u_{3,j} - u_{1,j}}{2h} = 0 \quad \Rightarrow \quad u_{3,j} = u_{1,j} - 2h \cdot u_{2,j} = u_{1,j} - u_{2,j}">\[
+u_{2,j} + \frac{u_{3,j} - u_{1,j}}{2h} = 0 \quad \Rightarrow \quad u_{3,j} = u_{1,j} - 2h \cdot u_{2,j} = u_{1,j} - u_{2,j}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>列方程</strong>（<span class="math inline" data-latex="f=0">\(f=0\)</span>，格式为 <span class="math inline" data-latex="u_{i-1,j} + u_{i+1,j} + u_{i,j-1} + u_{i,j+1} - 4u_{i,j} = 0">\(u_{i-1,j} + u_{i+1,j} + u_{i,j-1} + u_{i,j+1} - 4u_{i,j} = 0\)</span>）：</p>
+<p><span class="math inline" data-latex="(1,1)">\((1,1)\)</span> <strong>内部节点</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{0,1} + u_{2,1} + u_{1,0} + u_{1,2} - 4u_{1,1} = 0">\[
+u_{0,1} + u_{2,1} + u_{1,0} + u_{1,2} - 4u_{1,1} = 0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="u_{0,1} = 1">\(u_{0,1} = 1\)</span>，<span class="math inline" data-latex="u_{1,0} = 1">\(u_{1,0} = 1\)</span>，<span class="math inline" data-latex="u_{1,2} = 1">\(u_{1,2} = 1\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{2,1} - 4u_{1,1} = -3 \tag{1}">\[
+u_{2,1} - 4u_{1,1} = -3 \tag{1}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><span class="math inline" data-latex="(2,0)">\((2,0)\)</span> <strong>右下角节点</strong>（右边界 + 下边界交点）：</p>
+<p>这是角点，下边界给出 <span class="math inline" data-latex="u_{2,0} = 1">\(u_{2,0} = 1\)</span>（Dirichlet 优先）。</p>
+<p><span class="math inline" data-latex="(2,1)">\((2,1)\)</span> <strong>右边界节点</strong>：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="u_{1,1} + u_{3,1} + u_{2,0} + u_{2,2} - 4u_{2,1} = 0">\[
 u_{1,1} + u_{3,1} + u_{2,0} + u_{2,2} - 4u_{2,1} = 0
@@ -908,10 +1131,10 @@ u_{1,1} + u_{3,1} + u_{2,0} + u_{2,2} - 4u_{2,1} = 0
           </svg>
         </button>
       </div></p>
-<p>代入 <span class="math inline" data-latex="u_{3,1} = u_{1,1} - 2h \cdot u_{2,1} = u_{1,1} - u_{2,1}">\(u_{3,1} = u_{1,1} - 2h \cdot u_{2,1} = u_{1,1} - u_{2,1}\)</span>，以及 <span class="math inline" data-latex="u_{2,0} = 1">\(u_{2,0} = 1\)</span>，<span class="math inline" data-latex="u_{2,2} = 1">\(u_{2,2} = 1\)</span>：</p>
+<p>代入 <span class="math inline" data-latex="u_{3,1} = u_{1,1} - u_{2,1}">\(u_{3,1} = u_{1,1} - u_{2,1}\)</span>，<span class="math inline" data-latex="u_{2,0} = 1">\(u_{2,0} = 1\)</span>：</p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + 1 - 4u_{2,1} = 0">\[
-u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + 1 - 4u_{2,1} = 0
+        <span class="math display" data-latex="u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + u_{2,2} - 4u_{2,1} = 0">\[
+u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + u_{2,2} - 4u_{2,1} = 0
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -921,8 +1144,8 @@ u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + 1 - 4u_{2,1} = 0
         </button>
       </div></p>
 <p><div class="math-formula-wrapper">
-        <span class="math display" data-latex="2u_{1,1} - 5u_{2,1} = -2">\[
-2u_{1,1} - 5u_{2,1} = -2
+        <span class="math display" data-latex="2u_{1,1} - 5u_{2,1} + u_{2,2} = -1 \tag{2}">\[
+2u_{1,1} - 5u_{2,1} + u_{2,2} = -1 \tag{2}
 \]</span>
         <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -931,7 +1154,96 @@ u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + 1 - 4u_{2,1} = 0
           </svg>
         </button>
       </div></p>
-<p>结合其他内部节点方程，求解线性方程组。</p>
+<p><span class="math inline" data-latex="(2,2)">\((2,2)\)</span> <strong>右上角节点</strong>（右边界 + 上边界交点）：</p>
+<p>这是角点，上边界给出 <span class="math inline" data-latex="u_{2,2} = 1">\(u_{2,2} = 1\)</span>（Dirichlet 优先）。</p>
+<p><strong>简化后的方程组</strong>（2个未知数 <span class="math inline" data-latex="u_{1,1}">\(u_{1,1}\)</span>, <span class="math inline" data-latex="u_{2,1}">\(u_{2,1}\)</span>）：</p>
+<p>代入 <span class="math inline" data-latex="u_{2,2} = 1">\(u_{2,2} = 1\)</span> 到方程 (2)：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+u_{2,1} - 4u_{1,1} = -3 &amp; (1) \\
+2u_{1,1} - 5u_{2,1} = -2 &amp; (2&#39;)
+\end{cases}">\[
+\begin{cases}
+u_{2,1} - 4u_{1,1} = -3 & (1) \\
+2u_{1,1} - 5u_{2,1} = -2 & (2')
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>矩阵形式</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{bmatrix}
+-4 &amp; 1 \\
+2 &amp; -5
+\end{bmatrix}
+\begin{bmatrix}
+u_{1,1} \\ u_{2,1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+-3 \\ -2
+\end{bmatrix}">\[
+\begin{bmatrix}
+-4 & 1 \\
+2 & -5
+\end{bmatrix}
+\begin{bmatrix}
+u_{1,1} \\ u_{2,1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+-3 \\ -2
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解</strong>：</p>
+<p>由方程 (1)：<span class="math inline" data-latex="u_{2,1} = 4u_{1,1} - 3">\(u_{2,1} = 4u_{1,1} - 3\)</span></p>
+<p>代入方程 (2’)：<span class="math inline" data-latex="2u_{1,1} - 5(4u_{1,1} - 3) = -2">\(2u_{1,1} - 5(4u_{1,1} - 3) = -2\)</span></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="2u_{1,1} - 20u_{1,1} + 15 = -2 \implies -18u_{1,1} = -17 \implies u_{1,1} = \frac{17}{18}">\[
+2u_{1,1} - 20u_{1,1} + 15 = -2 \implies -18u_{1,1} = -17 \implies u_{1,1} = \frac{17}{18}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_{2,1} = 4 \times \frac{17}{18} - 3 = \frac{68}{18} - \frac{54}{18} = \frac{14}{18} = \frac{7}{9}">\[
+u_{2,1} = 4 \times \frac{17}{18} - 3 = \frac{68}{18} - \frac{54}{18} = \frac{14}{18} = \frac{7}{9}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>最终结果</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\boxed{u_{1,1} = \frac{17}{18} \approx 0.944, \quad u_{2,1} = \frac{7}{9} \approx 0.778}">\[
+\boxed{u_{1,1} = \frac{17}{18} \approx 0.944, \quad u_{2,1} = \frac{7}{9} \approx 0.778}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
 </details>
 <hr />
 <h2 id="参考文献">参考文献</h2>
@@ -961,13 +1273,6 @@ u_{1,1} + (u_{1,1} - u_{2,1}) + 1 + 1 - 4u_{2,1} = 0
         
   <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/" class="category-chain-item">数值计算</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97/%E5%81%8F%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" class="category-chain-item">偏微分方程</a>
-  
-  
-
   
 
       </span>

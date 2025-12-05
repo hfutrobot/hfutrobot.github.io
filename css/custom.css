@@ -307,12 +307,83 @@ html[data-user-color-scheme="light"] figure.highlight figcaption {
   box-shadow: var(--card-shadow);
 }
 
-/* 表格卡片化 */
+/* 表格美化 - 高级配色 */
 .markdown-body table {
-  border-radius: var(--card-radius);
+  border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--line-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: none;
+  border-collapse: collapse;
+  margin: 1.5rem auto;
+  width: auto;
+  display: table;
+}
+
+/* 表头 - 柔和蓝灰 */
+.markdown-body table th {
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  color: #1e3a5f !important;
+  font-weight: 600;
+  padding: 0.85rem 1.25rem;
+  border: none;
+  border-bottom: 1px solid #93c5fd;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* 单元格 */
+.markdown-body table td {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+/* 交替行 */
+.markdown-body table tbody tr:nth-child(even) td {
+  background-color: #f8fafc;
+}
+
+/* 悬停效果 - 只针对tbody */
+.markdown-body table tbody tr:hover td {
+  background-color: #e0f2fe;
+}
+
+/* 最后一行 */
+.markdown-body table tr:last-child td {
+  border-bottom: none;
+}
+
+/* 深色模式 */
+[data-user-color-scheme="dark"] .markdown-body table th {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  color: #e2e8f0 !important;
+}
+
+[data-user-color-scheme="dark"] .markdown-body table td {
+  background-color: #1e293b;
+  border-bottom-color: #334155;
+}
+
+[data-user-color-scheme="dark"] .markdown-body table tbody tr:nth-child(even) td {
+  background-color: #0f172a;
+}
+
+[data-user-color-scheme="dark"] .markdown-body table tbody tr:hover td {
+  background-color: #334155;
+}
+
+/* 折叠块内的表格居中 */
+.markdown-body details table {
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
+/* 折叠块内容不溢出 */
+.markdown-body details {
+  overflow: visible;
 }
 
 /* 导航栏优化 */
@@ -967,4 +1038,15 @@ button:hover {
 /* 移除Webkit默认的summary三角形 */
 .markdown-body details summary::-webkit-details-marker {
   display: none;
+}
+
+/* 修复公式悬停的背景变色问题 */
+.markdown-body .math[data-latex],
+.markdown-body .math.inline[data-latex] {
+  background-color: transparent !important;
+}
+
+.markdown-body .math[data-latex]:hover,
+.markdown-body .math.inline[data-latex]:hover {
+  background-color: transparent !important;
 }

@@ -27,7 +27,7 @@
 <meta property="og:description" content="本文系统介绍两点边值问题的一般形式及其数值求解方法，重点讨论有限差分法和积分插值法的理论基础、离散格式推导和误差分析。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-03T11:54:00.000Z">
-<meta property="article:modified_time" content="2025-12-04T13:44:48.967Z">
+<meta property="article:modified_time" content="2025-12-05T14:08:32.392Z">
 <meta property="article:author" content="Yike">
 <meta property="article:tag" content="Yike">
 <meta property="article:tag" content="偏微分方程">
@@ -80,7 +80,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-25MQ85GRQB"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -90,6 +90,31 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-25MQ85GRQB", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-25MQ85GRQB');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
 
 
   
@@ -323,7 +348,12 @@ u(a) = \alpha, \quad u(b) = \beta
           </svg>
         </button>
       </div></p>
-<p>其中： - <span class="math inline" data-latex="p(x), q(x), f(x)">\(p(x), q(x), f(x)\)</span> 为已知函数，<span class="math inline" data-latex="p(x) &gt; 0">\(p(x) > 0\)</span>，<span class="math inline" data-latex="q(x) \geq 0">\(q(x) \geq 0\)</span> - <span class="math inline" data-latex="\alpha, \beta">\(\alpha, \beta\)</span> 为边界值 - <span class="math inline" data-latex="u(x)">\(u(x)\)</span> 为待求函数</p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline" data-latex="p(x), q(x), f(x)">\(p(x), q(x), f(x)\)</span> 为已知函数，<span class="math inline" data-latex="p(x) &gt; 0">\(p(x) > 0\)</span>，<span class="math inline" data-latex="q(x) \geq 0">\(q(x) \geq 0\)</span></li>
+<li><span class="math inline" data-latex="\alpha, \beta">\(\alpha, \beta\)</span> 为边界值</li>
+<li><span class="math inline" data-latex="u(x)">\(u(x)\)</span> 为待求函数</li>
+</ul>
 <h3 id="边界条件类型">1.2 边界条件类型</h3>
 <p><strong>第一类边界条件（Dirichlet）</strong>：</p>
 <p><div class="math-formula-wrapper">
@@ -399,8 +429,19 @@ h = \frac{b-a}{n}, \quad x_i = a + ih, \quad i = 0, 1, \ldots, n
           </svg>
         </button>
       </div></p>
-<p><strong>节点分类</strong>： - <strong>总节点数</strong>：<span class="math inline" data-latex="n+1">\(n+1\)</span> 个（<span class="math inline" data-latex="x_0, x_1, \ldots, x_n">\(x_0, x_1, \ldots, x_n\)</span>） - <strong>边界节点</strong>：<span class="math inline" data-latex="x_0 = a">\(x_0 = a\)</span>，<span class="math inline" data-latex="x_n = b">\(x_n = b\)</span>（边界值已知或由边界条件确定） - <strong>内部节点数</strong>：<span class="math inline" data-latex="n-1">\(n-1\)</span> 个，即 <span class="math inline" data-latex="x_1, x_2, \ldots, x_{n-1}">\(x_1, x_2, \ldots, x_{n-1}\)</span>（待求）</p>
-<p>在实际求解中： - <strong><span class="math inline" data-latex="n">\(n\)</span> 是我们选择的参数</strong>（剖分的段数） - <strong><span class="math inline" data-latex="h">\(h\)</span> 是根据 <span class="math inline" data-latex="n">\(n\)</span> 计算的</strong>：<span class="math inline" data-latex="h = \frac{b-a}{n}">\(h = \frac{b-a}{n}\)</span> - <strong>内部节点数</strong>为 <span class="math inline" data-latex="n-1">\(n-1\)</span> - 节点位置 <span class="math inline" data-latex="x_i">\(x_i\)</span> 由 <span class="math inline" data-latex="n">\(n\)</span> 和 <span class="math inline" data-latex="h">\(h\)</span> 确定</p>
+<p><strong>节点分类</strong>：</p>
+<ul>
+<li><strong>总节点数</strong>：<span class="math inline" data-latex="n+1">\(n+1\)</span> 个（<span class="math inline" data-latex="x_0, x_1, \ldots, x_n">\(x_0, x_1, \ldots, x_n\)</span>）</li>
+<li><strong>边界节点</strong>：<span class="math inline" data-latex="x_0 = a">\(x_0 = a\)</span>，<span class="math inline" data-latex="x_n = b">\(x_n = b\)</span>（边界值已知或由边界条件确定）</li>
+<li><strong>内部节点数</strong>：<span class="math inline" data-latex="n-1">\(n-1\)</span> 个，即 <span class="math inline" data-latex="x_1, x_2, \ldots, x_{n-1}">\(x_1, x_2, \ldots, x_{n-1}\)</span>（待求）</li>
+</ul>
+<p>在实际求解中：</p>
+<ul>
+<li><strong><span class="math inline" data-latex="n">\(n\)</span> 是我们选择的参数</strong>（剖分的段数）</li>
+<li><strong><span class="math inline" data-latex="h">\(h\)</span> 是根据 <span class="math inline" data-latex="n">\(n\)</span> 计算的</strong>：<span class="math inline" data-latex="h = \frac{b-a}{n}">\(h = \frac{b-a}{n}\)</span></li>
+<li><strong>内部节点数</strong>为 <span class="math inline" data-latex="n-1">\(n-1\)</span></li>
+<li>节点位置 <span class="math inline" data-latex="x_i">\(x_i\)</span> 由 <span class="math inline" data-latex="n">\(n\)</span> 和 <span class="math inline" data-latex="h">\(h\)</span> 确定</li>
+</ul>
 <p><strong>记号</strong>：<span class="math inline" data-latex="u_i \approx u(x_i)">\(u_i \approx u(x_i)\)</span>，<span class="math inline" data-latex="p_i = p(x_i)">\(p_i = p(x_i)\)</span>，<span class="math inline" data-latex="q_i = q(x_i)">\(q_i = q(x_i)\)</span>，<span class="math inline" data-latex="f_i = f(x_i)">\(f_i = f(x_i)\)</span></p>
 <hr />
 <h3 id="step-2差分逼近">2.3 Step 2：差分逼近</h3>
@@ -579,7 +620,11 @@ F_i &= f_i
           </svg>
         </button>
       </div></p>
-<p><strong>注意</strong>： - 对 <span class="math inline" data-latex="i = 1, 2, \ldots, n">\(i = 1, 2, \ldots, n\)</span> 列方程（<span class="math inline" data-latex="n">\(n\)</span> 个方程，<span class="math inline" data-latex="n">\(n\)</span> 个未知数） - 边界条件将在下一步处理</p>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>对 <span class="math inline" data-latex="i = 1, 2, \ldots, n">\(i = 1, 2, \ldots, n\)</span> 列方程（<span class="math inline" data-latex="n">\(n\)</span> 个方程，<span class="math inline" data-latex="n">\(n\)</span> 个未知数）</li>
+<li>边界条件将在下一步处理</li>
+</ul>
 <hr />
 <h3 id="step-4处理边界条件">2.5 Step 4：处理边界条件</h3>
 <p>边界条件的处理直接影响方程组的形式。</p>
@@ -917,7 +962,12 @@ R_i = \frac{h^2}{12}p_i u^{(4)}(\xi_i) + O(h^3) = O(h^2)
 <h2 id="积分插值法">3. 积分插值法</h2>
 <h3 id="基本思想与动机">3.1 基本思想与动机</h3>
 <p>积分插值法是一种<strong>先积分再离散</strong>的方法，与有限差分法的思路不同。</p>
-<p><strong>核心步骤</strong>： 1. 将微分方程在小区间上<strong>积分</strong>（减少对解的光滑性要求） 2. 用<strong>插值多项式</strong>逼近未知函数（利用已知的节点值） 3. 建立代数方程组</p>
+<p><strong>核心步骤</strong>：</p>
+<ol type="1">
+<li>将微分方程在小区间上<strong>积分</strong>（减少对解的光滑性要求）</li>
+<li>用<strong>插值多项式</strong>逼近未知函数（利用已知的节点值）</li>
+<li>建立代数方程组</li>
+</ol>
 <p><strong>优势</strong>：相比直接差分，积分后再离散往往能获得更高精度。</p>
 <hr />
 <h3 id="方法推导半步长积分法">3.2 方法推导（半步长积分法）</h3>
@@ -971,7 +1021,11 @@ R_i = \frac{h^2}{12}p_i u^{(4)}(\xi_i) + O(h^3) = O(h^2)
           </svg>
         </button>
       </div></p>
-<p><strong>关键问题</strong>： - 半节点处的导数：<span class="math inline" data-latex="\frac{du}{dx}\bigg|_{x_{i\pm\frac{1}{2}}}">\(\frac{du}{dx}\bigg|_{x_{i\pm\frac{1}{2}}}\)</span> 如何表示？ - 积分项：<span class="math inline" data-latex="\int qu\,dx">\(\int qu\,dx\)</span> 和 <span class="math inline" data-latex="\int f\,dx">\(\int f\,dx\)</span> 如何计算？</p>
+<p><strong>关键问题</strong>：</p>
+<ul>
+<li>半节点处的导数：<span class="math inline" data-latex="\frac{du}{dx}\bigg|_{x_{i\pm\frac{1}{2}}}">\(\frac{du}{dx}\bigg|_{x_{i\pm\frac{1}{2}}}\)</span> 如何表示？</li>
+<li>积分项：<span class="math inline" data-latex="\int qu\,dx">\(\int qu\,dx\)</span> 和 <span class="math inline" data-latex="\int f\,dx">\(\int f\,dx\)</span> 如何计算？</li>
+</ul>
 <hr />
 <h4 id="线性插值逼近导数">3.2.2 线性插值逼近导数</h4>
 <p>在区间 <span class="math inline" data-latex="[x_{i-1}, x_i]">\([x_{i-1}, x_i]\)</span> 上，用<strong>线性插值</strong>：</p>

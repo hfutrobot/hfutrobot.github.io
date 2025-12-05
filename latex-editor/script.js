@@ -340,8 +340,8 @@ function exportSVG() {
         if (!svgClone.getAttribute('width')) svgClone.setAttribute('width', bbox.width);
         if (!svgClone.getAttribute('height')) svgClone.setAttribute('height', bbox.height);
 
-        // Explicitly set color to black if not set (often inherits from body)
-        svgClone.style.color = getComputedStyle(svg).color;
+        // Always use black color for export (don't inherit theme color)
+        svgClone.style.color = '#000000';
 
         var svgData = new XMLSerializer().serializeToString(svgClone);
         var blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
@@ -354,7 +354,11 @@ function exportSVG() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+
+        // Delay revoking URL to allow browser time to complete the download
+        setTimeout(function () {
+            URL.revokeObjectURL(url);
+        }, 1000);
 
         showToast('SVG 导出成功');
     } catch (error) {
@@ -397,8 +401,8 @@ function exportPNG() {
             svgClone.insertBefore(styleClone, svgClone.firstChild);
         });
 
-        // Explicitly set color
-        svgClone.style.color = getComputedStyle(svg).color;
+        // Always use black color for export (don't inherit theme color)
+        svgClone.style.color = '#000000';
 
         // Get accurate pixel dimensions
         var bbox = svg.getBoundingClientRect();

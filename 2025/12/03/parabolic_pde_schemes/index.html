@@ -27,7 +27,7 @@
 <meta property="og:description" content="本文系统介绍求解抛物型偏微分方程（如热传导方程）的5种经典差分格式，包括显式格式、隐式格式、Crank-Nicolson格式、Richardson格式和双层加权格式，并详细分析它们的稳定性和精度。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-03T02:41:00.000Z">
-<meta property="article:modified_time" content="2025-12-04T13:44:48.968Z">
+<meta property="article:modified_time" content="2025-12-05T14:08:32.392Z">
 <meta property="article:author" content="Yike">
 <meta property="article:tag" content="Yike">
 <meta property="article:tag" content="偏微分方程">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.ohnn.cn","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":"G-25MQ85GRQB"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -89,6 +89,31 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-25MQ85GRQB", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-25MQ85GRQB');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
 
 
   
@@ -247,7 +272,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.9k 字
+          4.6k 字
         
       </span>
     
@@ -258,7 +283,7 @@
         
         
         
-          33 分钟
+          39 分钟
         
       </span>
     
@@ -316,7 +341,11 @@
           </svg>
         </button>
       </div></p>
-<p>其中： - <span class="math inline" data-latex="u(x, t)">\(u(x, t)\)</span>：温度分布 - <span class="math inline" data-latex="\alpha &gt; 0">\(\alpha > 0\)</span>：热扩散系数</p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline" data-latex="u(x, t)">\(u(x, t)\)</span>：温度分布</li>
+<li><span class="math inline" data-latex="\alpha &gt; 0">\(\alpha > 0\)</span>：热扩散系数</li>
+</ul>
 <p><strong>初边值条件</strong>：</p>
 <p><div class="math-formula-wrapper">
         <span class="math display" data-latex="\begin{cases}
@@ -536,10 +565,130 @@ R_i^n = \alpha \left( \frac{\alpha \tau}{2} - \frac{h^2}{12} \right) \frac{\part
           </svg>
         </button>
       </div></p>
-<p><strong>结论</strong>： - 当一般情况时，误差为 <strong><span class="math inline" data-latex="O(\tau) + O(h^2)">\(O(\tau) + O(h^2)\)</span></strong>。 - <strong>特殊情况</strong>：若取 <span class="math inline" data-latex="r = \frac{\tau}{h^2} = \frac{1}{6\alpha}">\(r = \frac{\tau}{h^2} = \frac{1}{6\alpha}\)</span>，则括号内为零，精度提升为 <span class="math inline" data-latex="O(\tau^2) + O(h^4)">\(O(\tau^2) + O(h^4)\)</span>。</p>
+<p><strong>结论</strong>：</p>
+<ul>
+<li>当一般情况时，误差为 <strong><span class="math inline" data-latex="O(\tau) + O(h^2)">\(O(\tau) + O(h^2)\)</span></strong>。</li>
+<li><strong>特殊情况</strong>：若取 <span class="math inline" data-latex="r = \frac{\tau}{h^2} = \frac{1}{6\alpha}">\(r = \frac{\tau}{h^2} = \frac{1}{6\alpha}\)</span>，则括号内为零，精度提升为 <span class="math inline" data-latex="O(\tau^2) + O(h^4)">\(O(\tau^2) + O(h^4)\)</span>。</li>
+</ul>
+<details>
+<summary>
+<b>📘 计算例子</b>（点击展开）
+</summary>
+<p><strong>问题</strong>：求解热传导方程</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+\dfrac{\partial u}{\partial t} = \dfrac{\partial^2 u}{\partial x^2}, &amp; x \in (0,1), \quad t &gt; 0 \\
+u(0, t) = 0, \quad u(1, t) = 0 &amp; \text{（边界条件）} \\
+u(x, 0) = \sin(\pi x) &amp; \text{（初始条件）}
+\end{cases}">\[
+\begin{cases}
+\dfrac{\partial u}{\partial t} = \dfrac{\partial^2 u}{\partial x^2}, & x \in (0,1), \quad t > 0 \\
+u(0, t) = 0, \quad u(1, t) = 0 & \text{（边界条件）} \\
+u(x, 0) = \sin(\pi x) & \text{（初始条件）}
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>精确解</strong>：<span class="math inline" data-latex="u(x,t) = e^{-\pi^2 t}\sin(\pi x)">\(u(x,t) = e^{-\pi^2 t}\sin(\pi x)\)</span></p>
+<p><strong>网格剖分</strong>：取 <span class="math inline" data-latex="M=4">\(M=4\)</span>（空间 4 段），<span class="math inline" data-latex="h = 0.25">\(h = 0.25\)</span>，<span class="math inline" data-latex="\alpha = 1">\(\alpha = 1\)</span>。</p>
+<p>为满足稳定性条件 <span class="math inline" data-latex="r = \frac{\tau}{h^2} \leq \frac{1}{2}">\(r = \frac{\tau}{h^2} \leq \frac{1}{2}\)</span>，取 <span class="math inline" data-latex="r = 0.4">\(r = 0.4\)</span>，则 <span class="math inline" data-latex="\tau = r h^2 = 0.4 \times 0.0625 = 0.025">\(\tau = r h^2 = 0.4 \times 0.0625 = 0.025\)</span>。</p>
+<p>节点网格：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{array}{c|ccccc}
+&amp; x_0=0 &amp; x_1=0.25 &amp; x_2=0.5 &amp; x_3=0.75 &amp; x_4=1 \\
+\hline
+t_0=0 &amp; 0 &amp; 0.707 &amp; 1.000 &amp; 0.707 &amp; 0 \\
+t_1=0.025 &amp; ? &amp; ? &amp; ? &amp; ? &amp; ?
+\end{array}">\[
+\begin{array}{c|ccccc}
+& x_0=0 & x_1=0.25 & x_2=0.5 & x_3=0.75 & x_4=1 \\
+\hline
+t_0=0 & 0 & 0.707 & 1.000 & 0.707 & 0 \\
+t_1=0.025 & ? & ? & ? & ? & ?
+\end{array}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>初始值</strong>（<span class="math inline" data-latex="n=0">\(n=0\)</span>）：</p>
+<ul>
+<li><span class="math inline" data-latex="u_0^0 = \sin(0) = 0">\(u_0^0 = \sin(0) = 0\)</span></li>
+<li><span class="math inline" data-latex="u_1^0 = \sin(0.25\pi) = 0.7071">\(u_1^0 = \sin(0.25\pi) = 0.7071\)</span></li>
+<li><span class="math inline" data-latex="u_2^0 = \sin(0.5\pi) = 1.0000">\(u_2^0 = \sin(0.5\pi) = 1.0000\)</span></li>
+<li><span class="math inline" data-latex="u_3^0 = \sin(0.75\pi) = 0.7071">\(u_3^0 = \sin(0.75\pi) = 0.7071\)</span></li>
+<li><span class="math inline" data-latex="u_4^0 = \sin(\pi) = 0">\(u_4^0 = \sin(\pi) = 0\)</span></li>
+</ul>
+<p><strong>显式格式计算</strong>（<span class="math inline" data-latex="n=0 \to n=1">\(n=0 \to n=1\)</span>）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="u_i^{n+1} = (1-2r)u_i^n + r u_{i+1}^n + r u_{i-1}^n = 0.2 u_i^n + 0.4 u_{i+1}^n + 0.4 u_{i-1}^n">\[
+u_i^{n+1} = (1-2r)u_i^n + r u_{i+1}^n + r u_{i-1}^n = 0.2 u_i^n + 0.4 u_{i+1}^n + 0.4 u_{i-1}^n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>计算内部节点：</p>
+<ul>
+<li><span class="math inline" data-latex="u_1^1 = 0.2 \times 0.7071 + 0.4 \times 1.0000 + 0.4 \times 0 = 0.5414">\(u_1^1 = 0.2 \times 0.7071 + 0.4 \times 1.0000 + 0.4 \times 0 = 0.5414\)</span></li>
+<li><span class="math inline" data-latex="u_2^1 = 0.2 \times 1.0000 + 0.4 \times 0.7071 + 0.4 \times 0.7071 = 0.7657">\(u_2^1 = 0.2 \times 1.0000 + 0.4 \times 0.7071 + 0.4 \times 0.7071 = 0.7657\)</span></li>
+<li><span class="math inline" data-latex="u_3^1 = 0.2 \times 0.7071 + 0.4 \times 0 + 0.4 \times 1.0000 = 0.5414">\(u_3^1 = 0.2 \times 0.7071 + 0.4 \times 0 + 0.4 \times 1.0000 = 0.5414\)</span></li>
+</ul>
+<p><strong>与精确解对比</strong>（<span class="math inline" data-latex="t=0.025">\(t=0.025\)</span>）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>节点</th>
+<th>数值解</th>
+<th>精确解 <span class="math inline" data-latex="e^{-\pi^2 \times 0.025}\sin(\pi x_i)">\(e^{-\pi^2 \times 0.025}\sin(\pi x_i)\)</span></th>
+<th>误差</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline" data-latex="x_1">\(x_1\)</span></td>
+<td>0.5414</td>
+<td>0.5511</td>
+<td>0.0097</td>
+</tr>
+<tr class="even">
+<td><span class="math inline" data-latex="x_2">\(x_2\)</span></td>
+<td>0.7657</td>
+<td>0.7794</td>
+<td>0.0137</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline" data-latex="x_3">\(x_3\)</span></td>
+<td>0.5414</td>
+<td>0.5511</td>
+<td>0.0097</td>
+</tr>
+</tbody>
+</table>
+</details>
 <h3 id="优缺点">2.5 优缺点</h3>
-<p>✅ <strong>优点</strong>： - 编程简单，计算量小 - 每步只需矩阵-向量乘法</p>
-<p>❌ <strong>缺点</strong>： - <strong>条件稳定</strong>：<span class="math inline" data-latex="r \leq 1/2">\(r \leq 1/2\)</span>，时间步长受严格限制 - 空间步长减半，时间步长需减小至1/4 - 时间精度仅一阶</p>
+<p>✅ <strong>优点</strong>：</p>
+<ul>
+<li>编程简单，计算量小</li>
+<li>每步只需矩阵-向量乘法</li>
+</ul>
+<p>❌ <strong>缺点</strong>：</p>
+<ul>
+<li><strong>条件稳定</strong>：<span class="math inline" data-latex="r \leq 1/2">\(r \leq 1/2\)</span>，时间步长受严格限制</li>
+<li>空间步长减半，时间步长需减小至1/4</li>
+<li>时间精度仅一阶</li>
+</ul>
 <hr />
 <h2 id="隐式格式btcs---backward-time-central-space">3. 隐式格式（BTCS - Backward Time Central Space）</h2>
 <h3 id="格式推导-1">3.1 格式推导</h3>
@@ -661,8 +810,17 @@ R_i^n = O(\tau) + O(h^2)
       </div></p>
 <p>与显式格式相同，时间一阶，空间二阶。</p>
 <h3 id="优缺点-1">3.5 优缺点</h3>
-<p>✅ <strong>优点</strong>： - <strong>无条件稳定</strong>：可以使用任意大的 <span class="math inline" data-latex="\tau">\(\tau\)</span> - 空间二阶精度</p>
-<p>❌ <strong>缺点</strong>： - 每步需求解三对角线性方程组（计算量大） - 时间仍为一阶精度 - 实现稍复杂</p>
+<p>✅ <strong>优点</strong>：</p>
+<ul>
+<li><strong>无条件稳定</strong>：可以使用任意大的 <span class="math inline" data-latex="\tau">\(\tau\)</span></li>
+<li>空间二阶精度</li>
+</ul>
+<p>❌ <strong>缺点</strong>：</p>
+<ul>
+<li>每步需求解三对角线性方程组（计算量大）</li>
+<li>时间仍为一阶精度</li>
+<li>实现稍复杂</li>
+</ul>
 <hr />
 <h2 id="crank-nicolson格式cn格式">4. Crank-Nicolson格式（CN格式）</h2>
 <h3 id="格式推导-2">4.1 格式推导</h3>
@@ -847,9 +1005,171 @@ R_i^n = O((\tau)^2) + O(h^2)
         </button>
       </div></p>
 <p><strong>时间和空间都是二阶精度！</strong></p>
+<details>
+<summary>
+<b>📘 计算例子</b>（点击展开）
+</summary>
+<p><strong>问题</strong>：求解热传导方程（与显式格式相同的问题）</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\begin{cases}
+\dfrac{\partial u}{\partial t} = \dfrac{\partial^2 u}{\partial x^2}, &amp; x \in (0,1), \quad t &gt; 0 \\
+u(0, t) = 0, \quad u(1, t) = 0 &amp; \text{（边界条件）} \\
+u(x, 0) = \sin(\pi x) &amp; \text{（初始条件）}
+\end{cases}">\[
+\begin{cases}
+\dfrac{\partial u}{\partial t} = \dfrac{\partial^2 u}{\partial x^2}, & x \in (0,1), \quad t > 0 \\
+u(0, t) = 0, \quad u(1, t) = 0 & \text{（边界条件）} \\
+u(x, 0) = \sin(\pi x) & \text{（初始条件）}
+\end{cases}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>精确解</strong>：<span class="math inline" data-latex="u(x,t) = e^{-\pi^2 t}\sin(\pi x)">\(u(x,t) = e^{-\pi^2 t}\sin(\pi x)\)</span></p>
+<p><strong>网格剖分</strong>：取 <span class="math inline" data-latex="M=4">\(M=4\)</span>（空间 4 段），<span class="math inline" data-latex="h = 0.25">\(h = 0.25\)</span>，<span class="math inline" data-latex="\alpha = 1">\(\alpha = 1\)</span>。</p>
+<p>取 <span class="math inline" data-latex="\tau = 0.025">\(\tau = 0.025\)</span>，则 <span class="math inline" data-latex="r = \frac{\tau}{h^2} = \frac{0.025}{0.0625} = 0.4">\(r = \frac{\tau}{h^2} = \frac{0.025}{0.0625} = 0.4\)</span>。</p>
+<p><strong>初始值</strong>（<span class="math inline" data-latex="n=0">\(n=0\)</span>）：</p>
+<ul>
+<li><span class="math inline" data-latex="u_0^0 = 0">\(u_0^0 = 0\)</span>，<span class="math inline" data-latex="u_1^0 = 0.7071">\(u_1^0 = 0.7071\)</span>，<span class="math inline" data-latex="u_2^0 = 1.0000">\(u_2^0 = 1.0000\)</span>，<span class="math inline" data-latex="u_3^0 = 0.7071">\(u_3^0 = 0.7071\)</span>，<span class="math inline" data-latex="u_4^0 = 0">\(u_4^0 = 0\)</span></li>
+</ul>
+<p><strong>Crank-Nicolson 格式的矩阵方程</strong>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="-\frac{r}{2} u_{i-1}^{n+1} + (1+r) u_i^{n+1} - \frac{r}{2} u_{i+1}^{n+1} = \frac{r}{2} u_{i-1}^n + (1-r) u_i^n + \frac{r}{2} u_{i+1}^n">\[
+-\frac{r}{2} u_{i-1}^{n+1} + (1+r) u_i^{n+1} - \frac{r}{2} u_{i+1}^{n+1} = \frac{r}{2} u_{i-1}^n + (1-r) u_i^n + \frac{r}{2} u_{i+1}^n
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>代入 <span class="math inline" data-latex="r = 0.4">\(r = 0.4\)</span>，即 <span class="math inline" data-latex="\frac{r}{2} = 0.2">\(\frac{r}{2} = 0.2\)</span>，<span class="math inline" data-latex="1+r = 1.4">\(1+r = 1.4\)</span>，<span class="math inline" data-latex="1-r = 0.6">\(1-r = 0.6\)</span>：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A \mathbf{u}^1 = B \mathbf{u}^0">\[
+A \mathbf{u}^1 = B \mathbf{u}^0
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p>其中：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="A = \begin{bmatrix}
+1.4 &amp; -0.2 &amp; 0 \\
+-0.2 &amp; 1.4 &amp; -0.2 \\
+0 &amp; -0.2 &amp; 1.4
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+0.6 &amp; 0.2 &amp; 0 \\
+0.2 &amp; 0.6 &amp; 0.2 \\
+0 &amp; 0.2 &amp; 0.6
+\end{bmatrix}">\[
+A = \begin{bmatrix}
+1.4 & -0.2 & 0 \\
+-0.2 & 1.4 & -0.2 \\
+0 & -0.2 & 1.4
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+0.6 & 0.2 & 0 \\
+0.2 & 0.6 & 0.2 \\
+0 & 0.2 & 0.6
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>计算右端向量</strong> <span class="math inline" data-latex="\mathbf{b} = B \mathbf{u}^0">\(\mathbf{b} = B \mathbf{u}^0\)</span>（边界项 <span class="math inline" data-latex="u_0^0 = u_4^0 = 0">\(u_0^0 = u_4^0 = 0\)</span>）：</p>
+<p><div class="math-formula-wrapper">
+        <span class="math display" data-latex="\mathbf{b} = \begin{bmatrix}
+0.6 \times 0.7071 + 0.2 \times 1.0000 \\
+0.2 \times 0.7071 + 0.6 \times 1.0000 + 0.2 \times 0.7071 \\
+0.2 \times 1.0000 + 0.6 \times 0.7071
+\end{bmatrix} = \begin{bmatrix}
+0.6243 \\
+0.8828 \\
+0.6243
+\end{bmatrix}">\[
+\mathbf{b} = \begin{bmatrix}
+0.6 \times 0.7071 + 0.2 \times 1.0000 \\
+0.2 \times 0.7071 + 0.6 \times 1.0000 + 0.2 \times 0.7071 \\
+0.2 \times 1.0000 + 0.6 \times 0.7071
+\end{bmatrix} = \begin{bmatrix}
+0.6243 \\
+0.8828 \\
+0.6243
+\end{bmatrix}
+\]</span>
+        <button class="math-copy-btn" title="复制 LaTeX 代码" aria-label="复制 LaTeX 代码">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div></p>
+<p><strong>求解三对角方程组</strong> <span class="math inline" data-latex="A \mathbf{u}^1 = \mathbf{b}">\(A \mathbf{u}^1 = \mathbf{b}\)</span>（使用追赶法）：</p>
+<p>解得：</p>
+<ul>
+<li><span class="math inline" data-latex="u_1^1 = 0.5506">\(u_1^1 = 0.5506\)</span></li>
+<li><span class="math inline" data-latex="u_2^1 = 0.7788">\(u_2^1 = 0.7788\)</span></li>
+<li><span class="math inline" data-latex="u_3^1 = 0.5506">\(u_3^1 = 0.5506\)</span></li>
+</ul>
+<p><strong>与精确解对比</strong>（<span class="math inline" data-latex="t=0.025">\(t=0.025\)</span>）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>节点</th>
+<th>数值解</th>
+<th>精确解 <span class="math inline" data-latex="e^{-\pi^2 \times 0.025}\sin(\pi x_i)">\(e^{-\pi^2 \times 0.025}\sin(\pi x_i)\)</span></th>
+<th>误差</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline" data-latex="x_1">\(x_1\)</span></td>
+<td>0.5506</td>
+<td>0.5511</td>
+<td>0.0005</td>
+</tr>
+<tr class="even">
+<td><span class="math inline" data-latex="x_2">\(x_2\)</span></td>
+<td>0.7788</td>
+<td>0.7794</td>
+<td>0.0006</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline" data-latex="x_3">\(x_3\)</span></td>
+<td>0.5506</td>
+<td>0.5511</td>
+<td>0.0005</td>
+</tr>
+</tbody>
+</table>
+<p><strong>对比显式格式</strong>：在相同网格下，Crank-Nicolson格式的误差约为显式格式的 1/20，体现了二阶时间精度的优势。</p>
+</details>
 <h3 id="优缺点-2">4.5 优缺点</h3>
-<p>✅ <strong>优点</strong>： - <strong>无条件稳定</strong> - <strong>时间和空间都是二阶精度</strong> - 是求解抛物型方程的<strong>最佳选择之一</strong></p>
-<p>❌ <strong>缺点</strong>： - 需求解三对角线性方程组 - 实现稍复杂</p>
+<p>✅ <strong>优点</strong>：</p>
+<ul>
+<li><strong>无条件稳定</strong></li>
+<li><strong>时间和空间都是二阶精度</strong></li>
+<li>是求解抛物型方程的<strong>最佳选择之一</strong></li>
+</ul>
+<p>❌ <strong>缺点</strong>：</p>
+<ul>
+<li>需求解三对角线性方程组</li>
+<li>实现稍复杂</li>
+</ul>
 <hr />
 <h2 id="richardson格式">5. Richardson格式</h2>
 <h3 id="格式推导-3">5.1 格式推导</h3>
@@ -915,8 +1235,16 @@ R_i^n = O((\tau)^2) + O(h^2)
       </div></p>
 <p><strong>时间和空间都是二阶精度！</strong></p>
 <h3 id="优缺点-3">5.4 优缺点</h3>
-<p>✅ <strong>优点</strong>： - 时间和空间都是二阶精度 - 显式格式，易于编程</p>
-<p>❌ <strong>缺点</strong>： - <strong>无条件不稳定</strong>，实际中<strong>不可用</strong> - 需要两个初始时间层的值</p>
+<p>✅ <strong>优点</strong>：</p>
+<ul>
+<li>时间和空间都是二阶精度</li>
+<li>显式格式，易于编程</li>
+</ul>
+<p>❌ <strong>缺点</strong>：</p>
+<ul>
+<li><strong>无条件不稳定</strong>，实际中<strong>不可用</strong></li>
+<li>需要两个初始时间层的值</li>
+</ul>
 <hr />
 <h2 id="双层加权格式-two-level-weighted-scheme">6. 双层加权格式 (Two-Level Weighted Scheme)</h2>
 <h3 id="格式推导-4">6.1 格式推导</h3>
@@ -1145,8 +1473,16 @@ R_i^{n+1/2} = - \alpha \frac{h^2}{12} \left[ 6\alpha r (2\theta - 1) + 1 \right]
       </div> 此时主误差项消失，格式的空间精度提升为 <strong><span class="math inline" data-latex="O(h^4)">\(O(h^4)\)</span></strong>！这就是著名的 <strong>Douglas 格式</strong>（或高精度隐式格式）。</li>
 </ol>
 <h3 id="优缺点-4">6.4 优缺点</h3>
-<p>✅ <strong>优点</strong>： - <strong>通用性强</strong>：一个公式涵盖多种格式 - <strong>灵活性</strong>：可通过调整 <span class="math inline" data-latex="\theta">\(\theta\)</span> 平衡稳定性和精度</p>
-<p>❌ <strong>缺点</strong>： - 当 <span class="math inline" data-latex="\theta \neq 0">\(\theta \neq 0\)</span> 时，仍需解方程组 - <span class="math inline" data-latex="\theta \neq 1/2">\(\theta \neq 1/2\)</span> 时只有一阶时间精度</p>
+<p>✅ <strong>优点</strong>：</p>
+<ul>
+<li><strong>通用性强</strong>：一个公式涵盖多种格式</li>
+<li><strong>灵活性</strong>：可通过调整 <span class="math inline" data-latex="\theta">\(\theta\)</span> 平衡稳定性和精度</li>
+</ul>
+<p>❌ <strong>缺点</strong>：</p>
+<ul>
+<li>当 <span class="math inline" data-latex="\theta \neq 0">\(\theta \neq 0\)</span> 时，仍需解方程组</li>
+<li><span class="math inline" data-latex="\theta \neq 1/2">\(\theta \neq 1/2\)</span> 时只有一阶时间精度</li>
+</ul>
 <hr />
 <h2 id="五种格式的对比">7. 五种格式的对比</h2>
 <table style="width:100%;">
