@@ -1,0 +1,65 @@
+/* 代码块左对齐样式 - 强制覆盖 */
+
+/* 强制所有元素左对齐 */
+.markdown-body figure.highlight,
+.markdown-body figure.highlight *,
+figure.highlight,
+figure.highlight *,
+.highlight,
+.highlight * {
+  text-align: left !important;
+}
+
+/* 针对 Fluid 主题的代码块表格布局 */
+figure.highlight table {
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+figure.highlight tbody {
+  text-align: left !important;
+}
+
+figure.highlight tr {
+  text-align: left !important;
+}
+
+/* 行号列 */
+figure.highlight td.gutter {
+  text-align: right !important;
+}
+
+/* 代码列 - 关键！ */
+figure.highlight td.code {
+  text-align: left !important;
+}
+
+figure.highlight td.code pre {
+  text-align: left !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* pre 和 code 标签 */
+.markdown-body pre,
+.markdown-body pre code,
+.markdown-body code.hljs,
+pre code.hljs,
+code.hljs {
+  text-align: left !important;
+}
+
+/* 移除可能影响布局的样式 */
+.markdown-body .highlight {
+  text-align: left !important;
+}
+
+/* 代码内容 */
+.hljs {
+  text-align: left !important;
+}
+
+/* 确保代码块内所有文本左对齐 */
+.hljs * {
+  text-align: left !important;
+}

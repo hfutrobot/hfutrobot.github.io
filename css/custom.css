@@ -1050,3 +1050,19 @@ button:hover {
 .markdown-body .math.inline[data-latex]:hover {
   background-color: transparent !important;
 }
+
+/* ========== 代码块左对齐修复 ========== */
+/* 覆盖table td的center对齐，代码块需要左对齐 */
+figure.highlight table td,
+figure.highlight table td.code,
+.markdown-body figure.highlight table td {
+  text-align: left !important;
+}
+
+/* 代码内容强制左对齐 */
+figure.highlight td.code pre,
+figure.highlight td.code code,
+.markdown-body figure.highlight td.code pre,
+.markdown-body figure.highlight td.code code {
+  text-align: left !important;
+}
